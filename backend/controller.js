@@ -30,7 +30,7 @@ function registroUsuario(usuario, callback) {
 function iniciarSesion(datosUsuario, callback) {
     const sql = 'SELECT * FROM usuario WHERE correo_electronico = ?';
     const valores = [datosUsuario.correo_electronico];
-  
+    console.log(valores);
     db.query(sql, valores, (err, resultados) => {
         console.log(valores);
         if (err) {
@@ -47,7 +47,9 @@ function iniciarSesion(datosUsuario, callback) {
                     if (error) {
                         console.log("Error al comparar contraseñas: ", error);
                         callback(error, null);
-                    }  else {
+                    } else if (!coincide) {
+                        callback({ mensaje: "Contraseña incorrecta" }, null);
+                    } else {
                         const token = jwt.sign({ usuarioId: usuario.id }, 'tu_secreto', { expiresIn: '1h' });
                         callback(null, { mensaje: "Inicio de sesión exitoso", token });
                     }
@@ -56,6 +58,7 @@ function iniciarSesion(datosUsuario, callback) {
         }
     });
 }
+
 
 
 module.exports = {
