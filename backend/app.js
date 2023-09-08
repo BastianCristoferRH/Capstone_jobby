@@ -5,10 +5,11 @@ const db = require('./db');
 const { registroUsuario } = require('./controller');
 
 const app = express();
+app.use(bodyParser.json());
 app.use(cors());
 
 
-app.post('/registro',(req ,ress)=>{
+app.post('/registro',(req ,res)=>{
     const datosUsuario = req.body;
 
     registroUsuario(datosUsuario,(error,resultado)=>{
@@ -24,8 +25,7 @@ app.post('/registro',(req ,ress)=>{
 
 const puerto = 3000; 
 
-app.listen(puerto,()=>{
-    console.log("api funcionado en el puerto ${puerto}");
-
+app.listen(puerto, () => {
+    console.log(`api funcionando en el puerto ${puerto}`);
 });
 
