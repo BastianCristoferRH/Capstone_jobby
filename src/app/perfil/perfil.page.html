@@ -5,10 +5,14 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-card>
-    <ion-card-content>
-      <ion-label>Correo Electrónico:</ion-label>
-      <ion-text></ion-text>
-    </ion-card-content>
-  </ion-card>
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Perfil</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="ion-padding">
+    <h2>Bienvenido, {{ correoElectronico }}</h2>
+    <!-- Otras informaciones del perfil aquí -->
+  </div>
 </ion-content>

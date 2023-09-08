@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -9,7 +10,7 @@ import { AuthService } from '../auth.service';
 export class LoginPage implements OnInit {
   correo_electronico: string = '';
   password: string = '';
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
   }
@@ -18,7 +19,8 @@ export class LoginPage implements OnInit {
       (response: any) => {
         if (response && response.mensaje) {
           console.log('Inicio de sesión exitoso:', response.mensaje);
-          // Redirige a la página principal o realiza otras acciones necesarias.
+          this.authService.getCorreoElectronico();
+          this.router.navigateByUrl('/perfil');
         } else {
           console.error('Respuesta inesperada del servidor:', response);
         }
@@ -27,6 +29,7 @@ export class LoginPage implements OnInit {
         console.error('Error al iniciar sesión:', error);
       }
     );
+
   }
 
 }
