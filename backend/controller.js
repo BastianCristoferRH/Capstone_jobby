@@ -30,9 +30,8 @@ function registroUsuario(usuario, callback) {
 function iniciarSesion(datosUsuario, callback) {
     const sql = 'SELECT * FROM usuario WHERE correo_electronico = ?';
     const valores = [datosUsuario.correo_electronico];
-    console.log(valores);
+
     db.query(sql, valores, (err, resultados) => {
-        console.log(valores);
         if (err) {
             console.log("Error al consultar la base de datos: ", err);
             callback(err, null);
@@ -41,19 +40,14 @@ function iniciarSesion(datosUsuario, callback) {
                 callback({ mensaje: "Correo electrónico o contraseña incorrectos" }, null);
             } else {
                 const usuario = resultados[0];
-                console.log(datosUsuario.password);
-                console.log(usuario.password);
-                bcrypt.compare(datosUsuario.password, usuario.password, (error, coincide) => {
-                    if (error) {
-                        console.log("Error al comparar contraseñas: ", error);
-                        callback(error, null);
-                    } else if (!coincide) {
-                        callback({ mensaje: "Contraseña incorrecta" }, null);
-                    } else {
-                        const token = jwt.sign({ usuarioId: usuario.id }, 'tu_secreto', { expiresIn: '1h' });
-                        callback(null, { mensaje: "Inicio de sesión exitoso", token });
-                    }
-                });
+
+                // Comparación de contraseñas en texto plano
+                if (datosUsuario.password === usuario.password) {
+                    const token = jwt.sign({ usuarioId: usuario.id }, 'tu_secreto', { expiresIn: '1h' });
+                    callback(null, { mensaje: "Inicio de sesión exitoso", token });
+                } else {
+                    callback({ mensaje: "Contraseña incorrecta" }, null);
+                }
             }
         }
     });

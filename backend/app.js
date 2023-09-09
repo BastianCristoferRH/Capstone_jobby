@@ -28,7 +28,7 @@ app.post('/login', (req, res) => {
 
     iniciarSesion(datosUsuario, (error, resultado) => {
         if (error) {
-            console.log("Error en el inicio de sesión: ", datosUsuario);
+            console.log("Error en el inicio de sesión: ", error);
             res.status(401).json(error);
         } else {
             console.log("Inicio de sesión exitoso");
