@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 
 function registroUsuario(usuario, callback) {
-    const sql = 'INSERT usuario (correo_electronico, nombre, apellidos, telefono, fecha_creacion, fecha_nacimiento, conexion, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    const sql = 'INSERT usuario (correo_electronico, nombre, apellidos, telefono, fecha_creacion, fecha_nacimiento, password) VALUES (?, ?, ?, ?, ?, ?, ?)';
     const valores = [
         usuario.correo_electronico,
         usuario.nombre,
@@ -12,7 +12,6 @@ function registroUsuario(usuario, callback) {
         usuario.telefono,
         usuario.fecha_creacion,
         usuario.fecha_nacimiento,
-        usuario.conexion,
         usuario.password,
     ];
 
@@ -41,9 +40,9 @@ function iniciarSesion(datosUsuario, callback) {
             } else {
                 const usuario = resultados[0];
 
-                // Comparación de contraseñas en texto plano
+
                 if (datosUsuario.password === usuario.password) {
-                    const token = jwt.sign({ usuarioId: usuario.id }, 'tu_secreto', { expiresIn: '1h' });
+                    const token = jwt.sign({ usuarioId: usuario.correo_electronico }, 'tu_secreto', { expiresIn: '1h' }); //cambie el usuario id
                     callback(null, { mensaje: "Inicio de sesión exitoso", token });
                 } else {
                     callback({ mensaje: "Contraseña incorrecta" }, null);
@@ -53,9 +52,30 @@ function iniciarSesion(datosUsuario, callback) {
     });
 }
 
+function obtenerDatosUsuarioPorCorreo(correoElectronico, callback) {
+    const sql = 'SELECT * FROM usuario WHERE correo_electronico = ?';
+    const valores = [correoElectronico];
+
+    db.query(sql, valores, (err, resultados) => {
+        if (err) {
+            console.log("Error al obtener los datos del usuario: ", err);
+            callback(err, null);
+        } else {
+            if (resultados.length === 0) {
+                callback({ mensaje: "Usuario no encontrado" }, null);
+            } else {
+                const datosUsuario = resultados[0];
+                callback(null, datosUsuario);
+            }
+        }
+    });
+}
+
+
 
 
 module.exports = {
     registroUsuario,
     iniciarSesion,
+    obtenerDatosUsuarioPorCorreo,
 };
