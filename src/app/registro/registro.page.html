@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Registro</ion-title>
+    <ion-title>JOBBY</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -9,11 +9,11 @@
     <div>
       <ion-grid fixed class="ion-padding-top">
         <ion-row>
-          <ion-col size="2"></ion-col>
-          <ion-col size="8" class="ion-padding">
+          <ion-col size="1"></ion-col>
+          <ion-col size="10" class="ion-padding">
             <form #registroForm="ngForm" (ngSubmit)="registrar()">
 
-              <h3>Registrarse</h3>
+              <h3>REGISTRARSE</h3>
 
               <ion-item class="ion-padding-top animate__animated animate__fadeIn">
                 <ion-label position="floating">Correo electrónico</ion-label>
@@ -40,13 +40,13 @@
                 <ion-input type="number" name="telefono" [(ngModel)]="telefono" required></ion-input>
               </ion-item>
               <ion-item class="ion-padding-top">
-                <ion-label position="top">Fecha de Nacimiento</ion-label>
+                <ion-label position="top">Nacimiento</ion-label>
                 <ion-input type="date" name="fechaNacimiento" [(ngModel)]="fechaNacimiento"></ion-input>
               </ion-item>
 
               <div class="ion-padding-top animate__animated animate__fadeIn">
                 <ion-button type="submit" expand="block" class="blueBackGr">Registrar</ion-button>
-                <ion-button expand="block" routerLink="../login" color="warning">Volver</ion-button>
+                <ion-button class="volver-button" expand="block" routerLink="../login">Iniciar sesión</ion-button>
               </div>
             </form>
           </ion-col>

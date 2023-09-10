@@ -1,21 +1,37 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Iniciar Sesión</ion-title>
+    <ion-title>JOBBY</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <div class="ion-padding">
-    <form (ngSubmit)="login()" #loginForm="ngForm">
-      <ion-item>
-        <ion-label position="floating">Correo Electrónico</ion-label>
-        <ion-input type="email" name="email" [(ngModel)]="correo_electronico" required></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Contraseña</ion-label>
-        <ion-input type="password" name="password" [(ngModel)]="password" required></ion-input>
-      </ion-item>
-      <ion-button type="submit" expand="full">Iniciar Sesión</ion-button>
-    </form>
+    <ion-grid fixed class="ion-padding-top">
+      <ion-row>
+        <ion-col size="1"></ion-col>
+        <ion-col size="10" class="ion-padding">
+          <form (ngSubmit)="login()" #loginForm="ngForm">
+            <h3>INICIAR SESIÓN</h3>
+
+            <ion-item class="ion-padding-top animate__animated animate__fadeIn">
+              <ion-label position="floating">Correo Electrónico</ion-label>
+              <ion-input type="email" name="email" [(ngModel)]="correo_electronico" required></ion-input>
+            </ion-item>
+            <ion-item class="ion-padding-top animate__animated animate__fadeIn">
+              <ion-label position="floating">Contraseña</ion-label>
+              <ion-input type="password" name="password" [(ngModel)]="password" required></ion-input>
+            </ion-item>
+            
+            <!-- Agregar un espacio adicional con un div -->
+            <div class="ion-padding-top"></div>
+
+            
+            <ion-button expand="full" class="blueBackGr" (click)="login()">Iniciar Sesión</ion-button>
+            <ion-button expand="full" class="whiteButton" routerLink="/registro">Registrarse</ion-button>
+          </form>
+        </ion-col>
+        <ion-col size="2"></ion-col>
+      </ion-row>
+    </ion-grid>
   </div>
 </ion-content>
