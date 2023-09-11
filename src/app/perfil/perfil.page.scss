@@ -1,0 +1,21 @@
+/* Estilos para el menú desplegable */
+ion-menu {
+    --ion-background-color: white;
+}
+
+.menu-content {
+    ion-list {
+        ion-item {
+            color: black;
+
+            &.logout-button {
+                background-color: transparent;
+                color: black;
+            }
+        }
+    }
+}
+
+p{
+    color: black;
+}

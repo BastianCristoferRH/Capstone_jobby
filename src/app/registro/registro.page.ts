@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registro',
@@ -15,9 +16,15 @@ export class RegistroPage implements OnInit {
   fechaNacimiento: string = '';
   telefono: number = 0;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) {}
 
-  ngOnInit() { }
+  ngOnInit() {
+
+    if (this.authService.isAuthenticated()) {
+      
+      this.router.navigateByUrl('/perfil');
+    }
+  }
 
   registrar() {
     if (this.contrasena !== this.confirmarContrasena) {
@@ -32,17 +39,14 @@ export class RegistroPage implements OnInit {
       telefono: this.telefono,
       fecha_creacion: new Date(),
       fecha_nacimiento: this.fechaNacimiento,
-      conexion: '0',
       password: this.contrasena,
     };
 
     this.authService.registrarUsuario(usuario).subscribe(
       (resultado) => {
-
         console.log("Registro exitoso:", resultado);
       },
       (error) => {
-
         console.error("Error al registrar:", error);
       }
     );

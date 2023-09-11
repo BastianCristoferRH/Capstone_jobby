@@ -1,18 +1,35 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Perfil</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+<ion-menu side="end" contentId="main-content">
+  <ion-header>
     <ion-toolbar>
-      <ion-title size="large">Perfil</ion-title>
+      <ion-title>Menú</ion-title>
     </ion-toolbar>
   </ion-header>
+  <ion-content class="ion-padding">
+    <ion-list>
+      <ion-item class="ion-item-menu" (click)="perfil_menu()">
+        Perfil
+      </ion-item>
+      <ion-item class="ion-item-menu">
+        Servicios
+      </ion-item>
+      <ion-item class="ion-item-menu" (click)="logout()">
+        Cerrar Sesión
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
 
-  <div class="ion-padding">
-    <h2>Bienvenido, {{ correoElectronico }}</h2>
-    <!-- Otras informaciones del perfil aquí -->
-  </div>
-</ion-content>
+<div class="ion-page" id="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>JOBBY</ion-title>
+      <ion-buttons slot="end">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <p>Bienvenido, {{ datosUsuario?.nombre }}</p>
+    <p>Correo Electrónico: {{ datosUsuario?.correo_electronico }}</p>
+  </ion-content>
+</div>

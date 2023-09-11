@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { registroUsuario, iniciarSesion } = require('./controller');
+const { registroUsuario, iniciarSesion,obtenerDatosUsuarioPorCorreo } = require('./controller');
 
 const app = express();
 app.use(bodyParser.json());
@@ -28,7 +28,7 @@ app.post('/login', (req, res) => {
 
     iniciarSesion(datosUsuario, (error, resultado) => {
         if (error) {
-            console.log("Error en el inicio de sesión: ", datosUsuario);
+            console.log("Error en el inicio de sesión: ", error);
             res.status(401).json(error);
         } else {
             console.log("Inicio de sesión exitoso");
@@ -51,6 +51,20 @@ app.post('/agregar_servicio', (req, res) => {
       }
     });
   });
+
+app.get('/usuario/:correo', (req, res) => {
+    const correoElectronico = req.params.correo;
+
+    obtenerDatosUsuarioPorCorreo(correoElectronico, (error, datosUsuario) => {
+        if (error) {
+            console.log("Error al obtener los datos del usuario: ", error);
+            res.status(404).json(error);
+        } else {
+            console.log("Datos del usuario obtenidos con éxito: ", datosUsuario);
+            res.status(200).json(datosUsuario);
+        }
+    });
+});
 
 const puerto = 3000;
 
