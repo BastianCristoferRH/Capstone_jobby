@@ -99,4 +99,6 @@ function agregarServicio(req, res) {
 module.exports = {
     registroUsuario,
     iniciarSesion,
+    agregarServicio,
+    obtenerDatosUsuarioPorCorreo
 };
