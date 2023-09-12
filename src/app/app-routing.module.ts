@@ -24,9 +24,15 @@ const routes: Routes = [
     path: 'perfil/:userId', 
     loadChildren: () => import('./perfil/perfil.module').then( m => m.PerfilPageModule),
     canActivate: [AuthGuard],
-  },  {
+  },
+  {
     path: 'perfiltrabajador',
     loadChildren: () => import('./perfiltrabajador/perfiltrabajador.module').then( m => m.PerfiltrabajadorPageModule)
+  },
+
+  {
+    path: 'agregar-servicio',
+    loadChildren: () => import('./agregar-servicio/agregar-servicio.module').then( m => m.AgregarServicioPageModule)
   },
 
 ];

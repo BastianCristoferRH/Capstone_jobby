@@ -1,0 +1,48 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>agregar_servicio</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">agregar_servicio</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <form (submit)="addService()">
+    <!-- El campo id_des_serv es autoincrementable y no se incluye en el formulario. Lo manejará la base de datos automáticamente. -->
+  
+    <label for="des_serv">Descripción del Servicio:</label>
+    <textarea id="des_serv" name="des_serv" [(ngModel)]="servicio.des_serv" required></textarea>
+  
+    <label for="presencial">Presencial:</label>
+    <input type="checkbox" id="presencial" name="presencial" [(ngModel)]="servicio.presencial">
+  
+    <!-- El campo id_trabajador se considerará automáticamente al estar el trabajador logeado en el sistema. -->
+  
+    <label for="id_serv">Seleccionar Servicio:</label>
+    <select id="id_serv" name="id_serv" [(ngModel)]="servicio.id_serv" required>
+      <option value="1">Servicio 1</option>
+      <option value="2">Servicio 2</option>
+      <!-- Agrega más opciones según tus servicios disponibles -->
+    </select>
+  
+    <label for="id_comuna">Seleccionar Comuna:</label>
+    <select id="id_comuna" name="id_comuna" [(ngModel)]="servicio.id_comuna" required>
+      <option value="1">Comuna 1</option>
+      <option value="2">Comuna 2</option>
+      <!-- Agrega más opciones según tus comunas disponibles -->
+    </select>
+  
+    <label for="id_region">Seleccionar Región:</label>
+    <select id="id_region" name="id_region" [(ngModel)]="servicio.id_region" required>
+      <option value="1">Región 1</option>
+      <option value="2">Región 2</option>
+      <!-- Agrega más opciones según tus regiones disponibles -->
+    </select>
+  
+    <button type="submit">Agregar Servicio</button>
+  </form>
+</ion-content>
