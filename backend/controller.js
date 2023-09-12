@@ -70,28 +70,43 @@ function obtenerDatosUsuarioPorCorreo(correoElectronico, callback) {
         }
     });
 }
-function agregarServicio(req, res) {
+//function agregarServicio(req, res) {
     // Recuperar los datos del cuerpo de la solicitud
-    const { id_serv, id_comuna, id_region } = req.body;
+  //  const {  des_serv, presencial, id_trabajador, id_serv, id_comuna, id_region } = req.body;
   
     // Validar los datos (agregar más validaciones según tus necesidades)
-    if (!id_serv || !id_comuna || !id_region) {
-      return res.status(400).json({ error: 'Faltan campos obligatorios' });
-    }
+    //if (!des_serv || typeof presencial !== 'boolean' || !id_trabajador ||!id_serv || !id_comuna || !id_region) {
+      //return res.status(400).json({ error: 'Faltan campos obligatorios' });
+   // }
   
     // Insertar el servicio en la base de datos
-    const servicio = { id_serv, id_comuna, id_region };
+ //   const servicio = {  des_serv, presencial, id_trabajador, id_serv, id_comuna, id_region };
   
-    db.query('INSERT INTO descrip_servicio SET ?', servicio, (err, result) => {
-      if (err) {
-        console.error('Error al agregar el servicio', err);
-        res.status(500).json({ error: 'Error al agregar el servicio' });
-      } else {
-        console.log('Servicio agregado con éxito');
-        res.status(200).json({ message: 'Servicio agregado con éxito' });
-      }
-    });
-  }
+   // db.query('INSERT INTO descrip_servicio SET ?', servicio, (err, result) => {
+     // if (err) {
+       // console.error('Error al agregar el servicio', err);
+        //res.status(500).json({ error: 'Error al agregar el servicio' });
+      //} else {
+        //console.log('Servicio agregado con éxito');
+        //res.status(200).json({ message: 'Servicio agregado con éxito' });
+     // }
+    //});
+  //}
+  function agregarServicio(serviceData, callback) {
+    // Validar el token del trabajador aquí (debe implementarse)
+  
+    // Insertar el servicio en la base de datos
+    db.query('INSERT INTO descrip_servicio (des_serv, presencial, id_trabajador, id_serv, id_comuna, id_region) VALUES (?, ?, ?, ?, ?, ?)', [serviceData.des_serv, serviceData.presencial, serviceData.id_trabajador, serviceData.id_serv, serviceData.id_comuna, serviceData.id_region], (err, result) => {
+        if (err) {
+            console.error('Error al agregar el servicio:', err);
+            callback({ error: 'Error interno al agregar el servicio', details: err.message }, null);
+          } else {
+            console.log('Servicio agregado con éxito');
+            callback(null, { message: 'Servicio agregado con éxito' });
+          }
+  // ...
+})};
+  
 
 
 

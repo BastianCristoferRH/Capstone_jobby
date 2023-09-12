@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AgregarServicioPage implements OnInit {
 
+  servicio: any = {}; 
   serviceData = {
     id_serv: '',
     id_comuna: '',
