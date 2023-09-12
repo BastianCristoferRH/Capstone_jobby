@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
+<<<<<<< HEAD
 import { AlertController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+=======
+import { Router } from '@angular/router';
+>>>>>>> 2295d4863f3639ccb2433934e18b5b58cd0db556
 
 @Component({
   selector: 'app-registro',
@@ -13,6 +17,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class RegistroPage implements OnInit {
   registroForm!: FormGroup; // Inicializar la propiedad con "!"
 
+<<<<<<< HEAD
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
@@ -30,6 +35,16 @@ export class RegistroPage implements OnInit {
       telefono: [0, [Validators.required]],
       imagen: ['']
     });
+=======
+  constructor(private authService: AuthService, private router: Router) {}
+
+  ngOnInit() {
+
+    if (this.authService.isAuthenticated()) {
+      
+      this.router.navigateByUrl('/perfil');
+    }
+>>>>>>> 2295d4863f3639ccb2433934e18b5b58cd0db556
   }
 
   registrar() {
@@ -63,15 +78,23 @@ export class RegistroPage implements OnInit {
       apellidos: this.registroForm.get('apellidos')?.value,
       telefono: telefono,
       fecha_creacion: new Date(),
+<<<<<<< HEAD
       fecha_nacimiento: fechaNacimiento,
       conexion: '0',
       password: contrasena,
       img: this.registroForm.get('imagen')?.value
+=======
+      fecha_nacimiento: this.fechaNacimiento,
+      password: this.contrasena,
+>>>>>>> 2295d4863f3639ccb2433934e18b5b58cd0db556
     };
 
     this.authService.registrarUsuario(usuario).subscribe(
       (resultado) => {
+<<<<<<< HEAD
         this.presentAlert('¡Bien!, te has registrado correctamente');
+=======
+>>>>>>> 2295d4863f3639ccb2433934e18b5b58cd0db556
         console.log("Registro exitoso:", resultado);
       },
       (error) => {
@@ -79,6 +102,7 @@ export class RegistroPage implements OnInit {
       }
     );
   }
+<<<<<<< HEAD
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
@@ -101,4 +125,6 @@ export class RegistroPage implements OnInit {
 
     await alert.present();
   }
+=======
+>>>>>>> 2295d4863f3639ccb2433934e18b5b58cd0db556
 }

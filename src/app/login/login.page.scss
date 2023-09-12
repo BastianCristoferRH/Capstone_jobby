@@ -1,0 +1,52 @@
+ion-content {
+    --background: white;
+
+}
+
+h3 {
+    text-align: center;
+    font-weight: bold;
+
+}
+
+ion-grid {
+    text-align: center;
+
+}
+
+form {
+    color: black;
+    border: 2px solid black;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 5);
+
+}
+
+ion-button {
+    --background: black;
+    --color: white;
+    border: 1px solid black;
+    border-radius: 8px;
+
+
+}
+
+form {
+    color: black;
+    border: 1px solid black;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+ion-item {
+    --background: white;
+    --color: black;
+
+}
+
+.whiteButton {
+    --background: white;
+    --color: black;
+    border-radius: 5%;
+    border: 1px solid black;
+}

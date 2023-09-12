@@ -1,13 +1,28 @@
+<<<<<<< HEAD
+=======
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>JOBBY</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+>>>>>>> 2295d4863f3639ccb2433934e18b5b58cd0db556
 <ion-content [fullscreen]="true">
   <ion-content>
     <div>
       <ion-grid fixed class="ion-padding-top">
         <ion-row>
+<<<<<<< HEAD
           <ion-col size="2"></ion-col>
           <ion-col size="8" class="ion-padding">
             <form [formGroup]="registroForm" (ngSubmit)="registrar()">
+=======
+          <ion-col size="1"></ion-col>
+          <ion-col size="10" class="ion-padding">
+            <form #registroForm="ngForm" (ngSubmit)="registrar()">
+>>>>>>> 2295d4863f3639ccb2433934e18b5b58cd0db556
 
-              <h3>Registrarse</h3>
+              <h3>REGISTRARSE</h3>
 
               <ion-input type="email" fill="solid" plabel="Email" labelPlacement="floating" helperText="Enter a valid email" errorText="Invalid email" formControlName="correoElectronico"></ion-input>
 
@@ -29,6 +44,7 @@
                 <ion-input label="Teléfono" labelPlacement="floating" type="number" formControlName="telefono" required></ion-input>
               </ion-item>
               <ion-item class="ion-padding-top">
+<<<<<<< HEAD
                 <ion-input label="Fecha de Nacimiento" labelPlacement="floating" type="date" formControlName="fechaNacimiento"></ion-input>
               </ion-item>
 
@@ -43,6 +59,15 @@
                 <ion-button shape="round" type="submit" expand="block" class="blueBackGr" [disabled]="registroForm.invalid">Registrar</ion-button>
 
                 <ion-button shape="round" expand="block" routerLink="../login" color="warning">Volver</ion-button>
+=======
+                <ion-label position="top">Nacimiento</ion-label>
+                <ion-input type="date" name="fechaNacimiento" [(ngModel)]="fechaNacimiento"></ion-input>
+              </ion-item>
+
+              <div class="ion-padding-top animate__animated animate__fadeIn">
+                <ion-button type="submit" expand="block" class="blueBackGr">Registrar</ion-button>
+                <ion-button class="volver-button" expand="block" routerLink="../login">Iniciar sesión</ion-button>
+>>>>>>> 2295d4863f3639ccb2433934e18b5b58cd0db556
               </div>
             </form>
           </ion-col>

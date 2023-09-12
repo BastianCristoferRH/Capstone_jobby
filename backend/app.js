@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { registroUsuario, iniciarSesion } = require('./controller');
+const { registroUsuario, iniciarSesion,obtenerDatosUsuarioPorCorreo } = require('./controller');
 
 const app = express();
 app.use(bodyParser.json());
@@ -33,6 +33,20 @@ app.post('/login', (req, res) => {
         } else {
             console.log("Inicio de sesión exitoso");
             res.status(200).json(resultado);
+        }
+    });
+});
+
+app.get('/usuario/:correo', (req, res) => {
+    const correoElectronico = req.params.correo;
+
+    obtenerDatosUsuarioPorCorreo(correoElectronico, (error, datosUsuario) => {
+        if (error) {
+            console.log("Error al obtener los datos del usuario: ", error);
+            res.status(404).json(error);
+        } else {
+            console.log("Datos del usuario obtenidos con éxito: ", datosUsuario);
+            res.status(200).json(datosUsuario);
         }
     });
 });
