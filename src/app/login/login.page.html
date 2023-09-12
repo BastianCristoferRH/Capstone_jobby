@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>JOBBY</ion-title>
+    <ion-title>Iniciar sesión</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -14,20 +14,18 @@
             <h3>INICIAR SESIÓN</h3>
 
             <ion-item class="ion-padding-top animate__animated animate__fadeIn">
-              <ion-label position="floating">Correo Electrónico</ion-label>
-              <ion-input type="email" name="email" [(ngModel)]="correo_electronico" required></ion-input>
+              <ion-input label="Correo electronico" labelPlacement="floating" type="email" name="email" [(ngModel)]="correo_electronico" required></ion-input>
             </ion-item>
             <ion-item class="ion-padding-top animate__animated animate__fadeIn">
-              <ion-label position="floating">Contraseña</ion-label>
-              <ion-input type="password" name="password" [(ngModel)]="password" required></ion-input>
+              <ion-input label="Contraseña" labelPlacement="floating" type="password" name="password" [(ngModel)]="password" required></ion-input>
             </ion-item>
             
             <!-- Agregar un espacio adicional con un div -->
             <div class="ion-padding-top"></div>
 
             
-            <ion-button expand="full" class="blueBackGr" (click)="login()">Iniciar Sesión</ion-button>
-            <ion-button expand="full" class="whiteButton" routerLink="/registro">Registrarse</ion-button>
+            <ion-button type="submit" expand="full" class="blueBackGr" (click)="login()">Iniciar Sesión</ion-button>
+            <ion-button type="submit" expand="full" class="whiteButton" routerLink="/registro">Registrarse</ion-button>
           </form>
         </ion-col>
         <ion-col size="2"></ion-col>
