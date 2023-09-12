@@ -10,6 +10,9 @@ export class AgregarServicioPage implements OnInit {
 
   servicio: any = {}; 
   serviceData = {
+    des_serv:'',
+    presencial:'',
+    id_trabajador:'',
     id_serv: '',
     id_comuna: '',
     id_region: ''
@@ -18,7 +21,7 @@ export class AgregarServicioPage implements OnInit {
 
   addService() {
     // Enviar la solicitud POST a tu API Express
-    this.http.post('/agregar_servicio', this.serviceData)
+    this.http.post('http://localhost:3000/agregar_servicio', this.serviceData)
       .subscribe(response => {
         // Manejar la respuesta del servidor, por ejemplo, mostrar un mensaje de éxito
         console.log('Servicio agregado con éxito', response);
