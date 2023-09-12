@@ -107,6 +107,29 @@ function obtenerDatosUsuarioPorCorreo(correoElectronico, callback) {
           }
   // ...
 })};
+
+function enviarSolicitud(solicitudData, callback) {
+    const sql = 'INSERT INTO solicitud (id_trabajador, id_des_serv, correo_electronico, titulo_solicitud, estado, fecha_solicitud) VALUES (?, ?, ?, ?, ?, ?)';
+    const valores = [
+      solicitudData.id_trabajador,
+      solicitudData.id_des_serv,
+      solicitudData.correo_electronico,
+      solicitudData.titulo_solicitud,
+      solicitudData.estado,
+      new Date()
+    ];
+  
+    db.query(sql, valores, (err, resultado) => {
+      if (err) {
+        console.error('Error al agregar la solicitud:', err);
+        callback({ error: 'Error interno al agregar la solicitud', details: err.message }, null);
+      } else {
+        console.log('Solicitud agregada con éxito');
+        callback(null, { message: 'Solicitud enviada con éxito' });
+      }
+    });
+  }
+  
   
 
 
@@ -116,5 +139,6 @@ module.exports = {
     registroUsuario,
     iniciarSesion,
     agregarServicio,
-    obtenerDatosUsuarioPorCorreo
+    obtenerDatosUsuarioPorCorreo,
+    enviarSolicitud
 };

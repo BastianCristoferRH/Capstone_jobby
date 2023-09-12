@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { registroUsuario, iniciarSesion,obtenerDatosUsuarioPorCorreo,agregarServicio } = require('./controller');
+const { registroUsuario, iniciarSesion,obtenerDatosUsuarioPorCorreo,agregarServicio,enviarSolicitud } = require('./controller');
 
 const app = express();
 app.use(bodyParser.json());
@@ -80,6 +80,22 @@ app.get('/usuario/:correo', (req, res) => {
         }
     });
 });
+
+
+app.post('/enviar-solicitud', (req, res) => {
+  const solicitudData = req.body;
+
+  enviarSolicitud(solicitudData, (error, resultado) => {
+    if (error) {
+      console.log("Error al enviar la solicitud:", error);
+      res.status(500).json({ error: 'Error al enviar la solicitud', details: error });
+    } else {
+      console.log("Solicitud enviada con éxito");
+      res.status(200).json(resultado);
+    }
+  });
+});
+
 
 const puerto = 3000;
 

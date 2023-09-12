@@ -64,5 +64,10 @@ export class AuthService {
   getUserProfile(correoElectronico: string) {  
     return this.http.get(`http://localhost:3000/${correoElectronico}`);
   }
+
+  enviarSolicitud(solicitudData: any) {
+    const url = 'http://localhost:3000/enviar-solicitud'; 
+    return this.http.post(url, solicitudData);
+  }
 }
 
