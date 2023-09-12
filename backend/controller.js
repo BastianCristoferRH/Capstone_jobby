@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 
 function registroUsuario(usuario, callback) {
-    const sql = 'INSERT usuario (correo_electronico, nombre, apellidos, telefono, fecha_creacion, fecha_nacimiento, conexion, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    const sql = 'INSERT usuario (correo_electronico, nombre, apellidos, telefono, fecha_creacion, fecha_nacimiento, conexion, password, img) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)';
     const valores = [
         usuario.correo_electronico,
         usuario.nombre,
@@ -14,6 +14,7 @@ function registroUsuario(usuario, callback) {
         usuario.fecha_nacimiento,
         usuario.conexion,
         usuario.password,
+        usuario.img,
     ];
 
     db.query(sql, valores, (err, resultado) => {

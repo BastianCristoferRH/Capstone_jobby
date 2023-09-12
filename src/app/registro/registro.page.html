@@ -1,9 +1,3 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Registro</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
   <ion-content>
     <div>
@@ -11,42 +5,44 @@
         <ion-row>
           <ion-col size="2"></ion-col>
           <ion-col size="8" class="ion-padding">
-            <form #registroForm="ngForm" (ngSubmit)="registrar()">
+            <form [formGroup]="registroForm" (ngSubmit)="registrar()">
 
               <h3>Registrarse</h3>
 
+              <ion-input type="email" fill="solid" plabel="Email" labelPlacement="floating" helperText="Enter a valid email" errorText="Invalid email" formControlName="correoElectronico"></ion-input>
+
+              <ion-input label="Contraseña" labelPlacement="floating" fill="solid" helperText="Debe tener mínimo 7 caracteres" errorText="Debe tener mínimo 7 caracteres" type="password" formControlName="contrasena" required></ion-input>
+
               <ion-item class="ion-padding-top animate__animated animate__fadeIn">
-                <ion-label position="floating">Correo electrónico</ion-label>
-                <ion-input type="email" name="correoElectronico" [(ngModel)]="correoElectronico" required></ion-input>
+                <ion-input label="Confirma contraseña" labelPlacement="floating" fill="solid" helperText="Debe ser igual a la anterior" errorText="Debe ser igual a la anterior" type="password" formControlName="confirmarContrasena" required></ion-input>
+              </ion-item>
+
+              <ion-item class="ion-padding-top animate__animated animate__fadeIn">
+                <ion-label position="floating"></ion-label>
+                <ion-input label="Primer Nombre" labelPlacement="floating" type="text" formControlName="primerNombre" required></ion-input>
+              </ion-item>
+
+              <ion-item class="ion-padding-top animate__animated animate__fadeIn">
+                <ion-input label="Apellidos" labelPlacement="floating" type="text" formControlName="apellidos" required></ion-input>
               </ion-item>
               <ion-item class="ion-padding-top animate__animated animate__fadeIn">
-                <ion-label position="floating">Contraseña</ion-label>
-                <ion-input type="password" name="contrasena" [(ngModel)]="contrasena" required></ion-input>
-              </ion-item>
-              <ion-item class="ion-padding-top animate__animated animate__fadeIn">
-                <ion-label position="floating">Confirmar Contraseña</ion-label>
-                <ion-input type="password" name="confirmarContrasena" [(ngModel)]="confirmarContrasena" required></ion-input>
-              </ion-item>
-              <ion-item class="ion-padding-top animate__animated animate__fadeIn">
-                <ion-label position="floating">Primer Nombre</ion-label>
-                <ion-input type="text" name="primerNombre" [(ngModel)]="primerNombre" required></ion-input>
-              </ion-item>
-              <ion-item class="ion-padding-top animate__animated animate__fadeIn">
-                <ion-label position="floating">Apellidos</ion-label>
-                <ion-input type="text" name="apellidos" [(ngModel)]="apellidos" required></ion-input>
-              </ion-item>
-              <ion-item class="ion-padding-top animate__animated animate__fadeIn">
-                <ion-label position="floating">Teléfono</ion-label>
-                <ion-input type="number" name="telefono" [(ngModel)]="telefono" required></ion-input>
+                <ion-input label="Teléfono" labelPlacement="floating" type="number" formControlName="telefono" required></ion-input>
               </ion-item>
               <ion-item class="ion-padding-top">
-                <ion-label position="top">Fecha de Nacimiento</ion-label>
-                <ion-input type="date" name="fechaNacimiento" [(ngModel)]="fechaNacimiento"></ion-input>
+                <ion-input label="Fecha de Nacimiento" labelPlacement="floating" type="date" formControlName="fechaNacimiento"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Imagen:</ion-label>
+                <input type="file" (change)="onFileSelected($event)" accept="image/*">
+                <!-- Campo oculto para almacenar la URL de la imagen -->
+                <input type="hidden" formControlName="imagen">
               </ion-item>
 
               <div class="ion-padding-top animate__animated animate__fadeIn">
-                <ion-button type="submit" expand="block" class="blueBackGr">Registrar</ion-button>
-                <ion-button expand="block" routerLink="../login" color="warning">Volver</ion-button>
+                <ion-button shape="round" type="submit" expand="block" class="blueBackGr" [disabled]="registroForm.invalid">Registrar</ion-button>
+
+                <ion-button shape="round" expand="block" routerLink="../login" color="warning">Volver</ion-button>
               </div>
             </form>
           </ion-col>
