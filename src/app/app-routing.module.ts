@@ -24,7 +24,11 @@ const routes: Routes = [
     path: 'perfil/:userId', 
     loadChildren: () => import('./perfil/perfil.module').then( m => m.PerfilPageModule),
     canActivate: [AuthGuard],
+  },  {
+    path: 'perfiltrabajador',
+    loadChildren: () => import('./perfiltrabajador/perfiltrabajador.module').then( m => m.PerfiltrabajadorPageModule)
   },
+
 ];
 
 @NgModule({

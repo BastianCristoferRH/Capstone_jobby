@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
-<<<<<<< HEAD
 import { AlertController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-=======
 import { Router } from '@angular/router';
->>>>>>> 2295d4863f3639ccb2433934e18b5b58cd0db556
 
 @Component({
   selector: 'app-registro',
@@ -17,26 +14,12 @@ import { Router } from '@angular/router';
 export class RegistroPage implements OnInit {
   registroForm!: FormGroup; // Inicializar la propiedad con "!"
 
-<<<<<<< HEAD
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private router: Router
   ) {}
-
-  ngOnInit() {
-    this.registroForm = this.formBuilder.group({
-      correoElectronico: ['', [Validators.required, Validators.email]],
-      contrasena: ['', [Validators.required, Validators.minLength(7)]],
-      confirmarContrasena: ['', [Validators.required]],
-      primerNombre: ['', [Validators.required]],
-      apellidos: ['', [Validators.required]],
-      fechaNacimiento: ['', [Validators.required]],
-      telefono: [0, [Validators.required]],
-      imagen: ['']
-    });
-=======
-  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
 
@@ -44,8 +27,39 @@ export class RegistroPage implements OnInit {
       
       this.router.navigateByUrl('/perfil');
     }
->>>>>>> 2295d4863f3639ccb2433934e18b5b58cd0db556
+
+    this.registroForm = this.formBuilder.group({
+      correoElectronico: ['', [Validators.required, Validators.email]],
+      contrasena: ['', [Validators.required, Validators.minLength(7)]],
+      confirmarContrasena: ['', [Validators.required]], // Validación personalizada aquí
+      primerNombre: ['', [Validators.required]],
+      apellidos: ['', [Validators.required]],
+      fechaNacimiento: ['', [Validators.required]],
+      telefono: ['', [Validators.required,Validators.minLength(7)]],
+      imagen: ['']
+    }, {
+      validators: this.matchPassword // Aplicar validación personalizada al FormGroup
+    });
+   }
+
+   matchPassword(group: FormGroup): { [key: string]: boolean } | null {
+    const password = group.get('contrasena')?.value;
+    const confirmPassword = group.get('confirmarContrasena')?.value;
+
+    // Compara los valores de los campos
+    if (password !== confirmPassword) {
+      group.get('confirmarContrasena')?.setErrors({ 'passwordMismatch': true });
+      return { 'passwordMismatch': true };
+    } else {
+      group.get('confirmarContrasena')?.setErrors(null);
+    }
+
+    return null;
   }
+
+  
+
+  
 
   registrar() {
     if (this.registroForm.invalid) {
@@ -61,12 +75,14 @@ export class RegistroPage implements OnInit {
     
     
     if (!contrasena || !confirmarContrasena || !telefono || !fechaNacimiento) {
-      console.log("Faltan valores en el formulario");
+      console.log("Error al registrar ");
+      this.presentAlert1('Debes llenar los campos obligatorios del registro');
       return;
     }
 
     if (contrasena !== confirmarContrasena) {
       console.log("Las contraseñas no coinciden");
+      this.presentAlert2('Revisa las contraseñas ingresadas');
       return;
     }
 
@@ -78,31 +94,22 @@ export class RegistroPage implements OnInit {
       apellidos: this.registroForm.get('apellidos')?.value,
       telefono: telefono,
       fecha_creacion: new Date(),
-<<<<<<< HEAD
       fecha_nacimiento: fechaNacimiento,
-      conexion: '0',
       password: contrasena,
       img: this.registroForm.get('imagen')?.value
-=======
-      fecha_nacimiento: this.fechaNacimiento,
-      password: this.contrasena,
->>>>>>> 2295d4863f3639ccb2433934e18b5b58cd0db556
     };
 
     this.authService.registrarUsuario(usuario).subscribe(
       (resultado) => {
-<<<<<<< HEAD
         this.presentAlert('¡Bien!, te has registrado correctamente');
-=======
->>>>>>> 2295d4863f3639ccb2433934e18b5b58cd0db556
         console.log("Registro exitoso:", resultado);
       },
       (error) => {
+        this.presentAlert3('Ingresa un correo distinto, este ya ha sido registrado.');
         console.error("Error al registrar:", error);
       }
     );
   }
-<<<<<<< HEAD
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
@@ -125,6 +132,38 @@ export class RegistroPage implements OnInit {
 
     await alert.present();
   }
-=======
->>>>>>> 2295d4863f3639ccb2433934e18b5b58cd0db556
+
+  async presentAlert1(mensaje: string) {
+    const alert = await this.alertController.create({
+      cssClass: 'personalizada',
+      header: 'Error al registrar',
+      message: mensaje,
+      buttons: [{ text: 'OK'}]
+    });
+
+    await alert.present();
+  }
+
+  async presentAlert2(mensaje: string) {
+    const alert = await this.alertController.create({
+      cssClass: 'personalizada',
+      header: 'Las contraseñas no coinciden',
+      message: mensaje,
+      buttons: [{ text: 'OK'}]
+    });
+
+    await alert.present();
+  }
+
+  async presentAlert3(mensaje: string) {
+    const alert = await this.alertController.create({
+      cssClass: 'personalizada',
+      header: 'Correo registrado',
+      message: mensaje,
+      buttons: [{ text: 'OK'}]
+    });
+
+    await alert.present();
+  }
+
 }
