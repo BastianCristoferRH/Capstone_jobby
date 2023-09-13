@@ -29,9 +29,24 @@
     </ion-toolbar>
   </ion-header>
   <ion-content>
-    <p>dato:{{ datosUsuario.nombre }}</p>
-    <p>{{ datosUsuario.apellidos }}</p>
-    <p>{{datosUsuario.correo_electronico}}</p>
-    <button (click)="navigateToSolicitud()">Enviar Solicitud</button>
+    <ion-content>
+      <ion-card>
+        <ion-card-content>
+          <ion-item>
+            <ion-label position="floating">Título de la Solicitud</ion-label>
+            <ion-input [(ngModel)]="titulo" name="titulo" type="text" required></ion-input>
+          </ion-item>
+    
+          <ion-item>
+            <ion-label position="floating">Descripción</ion-label>
+            <ion-textarea [(ngModel)]="descripcion" name="descripcion" required></ion-textarea>
+           
+          </ion-item>
+          <p>{{ this.datosServicio[0].id_trabajador }}</p>
+        </ion-card-content>
+      </ion-card>
+      
+    </ion-content>
+   
   </ion-content>
 </div>

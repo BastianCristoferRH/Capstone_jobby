@@ -17,12 +17,29 @@ export class PerfilPage implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) { }
+  
 
   ngOnInit() {
- 
+    this.route.params.subscribe(params => {
+      this.correoElectronico = params['userId']; // Utiliza 'correoElectronico'
+      this.loadUserProfile(this.correoElectronico); // Pasa 'correoElectronico' en lugar de 'userId'
+    });
+   
   }
 
-  
+
+  loadUserProfile(correoElectronico: string) {
+    this.authService.getUserProfile(correoElectronico).subscribe(
+      (profileData: any) => {
+        this.datosUsuario = profileData;
+      },
+      (error: any) => {
+        console.error('Error al cargar el perfil del usuario:', error);
+      }
+    );
+  }
+
+
 
   logout() {
     this.authService.logout();
@@ -36,11 +53,17 @@ export class PerfilPage implements OnInit {
         this.navigateToUserProfile(correoElectronico);
       }
     } else {
-      this.router.navigateByUrl('/login'); 
+      this.router.navigateByUrl('/login');
     }
   }
 
   private navigateToUserProfile(correoElectronico: string) {
     this.router.navigate(['/perfil', correoElectronico]);
   }
+
+  navigateToSolicitud() {
+    this.router.navigate(['/solicitud', this.correoElectronico]); // Usar 'this.correoElectronico'
+  }
+
+
 }

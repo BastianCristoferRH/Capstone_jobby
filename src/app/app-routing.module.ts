@@ -34,6 +34,11 @@ const routes: Routes = [
     path: 'agregar-servicio',
     loadChildren: () => import('./agregar-servicio/agregar-servicio.module').then( m => m.AgregarServicioPageModule)
   },
+  {
+    path: 'solicitud/:correoElectronico', 
+    loadChildren: () => import('./solicitud/solicitud.module').then( m => m.SolicitudPageModule)
+  },
+
 
 ];
 

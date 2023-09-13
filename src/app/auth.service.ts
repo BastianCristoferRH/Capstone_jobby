@@ -61,13 +61,19 @@ export class AuthService {
     this.clearToken();
   }
 
-  getUserProfile(correoElectronico: string) {  
-    return this.http.get(`http://localhost:3000/${correoElectronico}`);
+  getUserProfile(userId: string) {  
+    return this.http.get(`http://localhost:3000/usuario/${userId}`); 
   }
 
-  enviarSolicitud(solicitudData: any) {
-    const url = 'http://localhost:3000/enviar-solicitud'; 
+  enviarSolicitud(correoDestinatario: string, solicitudData: any) {
+    const url = `http://localhost:3000/enviar-solicitud/${correoDestinatario}`; 
     return this.http.post(url, solicitudData);
   }
+
+  loadTrabajadorData(correoElectronico: string) {
+    return this.http.get(`http://localhost:3000/obtener-datos-trabajador/${correoElectronico}`); 
+  }
+
+
 }
 

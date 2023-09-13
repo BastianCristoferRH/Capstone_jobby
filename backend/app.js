@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { registroUsuario, iniciarSesion,obtenerDatosUsuarioPorCorreo,agregarServicio,enviarSolicitud } = require('./controller');
+const { registroUsuario, iniciarSesion,obtenerDatosUsuarioPorCorreo,agregarServicio,enviarSolicitud,obtenerDatosTrabajadorPorCorreo } = require('./controller');
 
 const app = express();
 app.use(bodyParser.json());
@@ -82,9 +82,9 @@ app.get('/usuario/:correo', (req, res) => {
 });
 
 
-app.post('/enviar-solicitud', (req, res) => {
+app.post('/enviar-solicitud/:correoDestinatario', (req, res) => {
+  const correoDestinatario = req.params.correoDestinatario;
   const solicitudData = req.body;
-
   enviarSolicitud(solicitudData, (error, resultado) => {
     if (error) {
       console.log("Error al enviar la solicitud:", error);
@@ -92,6 +92,21 @@ app.post('/enviar-solicitud', (req, res) => {
     } else {
       console.log("Solicitud enviada con éxito");
       res.status(200).json(resultado);
+    }
+  });
+});
+
+app.get('/obtener-datos-trabajador/:correo', (req, res) => { // get de los datos encesario para obtener los datos del trabajador 
+  const correoElectronico = req.params.correo;
+
+  
+  obtenerDatosTrabajadorPorCorreo(correoElectronico, (error, resultados) => {
+    if (error) {
+      console.log("Error al obtener los datos del trabajador: ", error);
+      res.status(404).json(error);
+    } else {
+      console.log("Datos del trabajador obtenidos con éxito: ", resultados);
+      res.status(200).json(resultados);
     }
   });
 });
