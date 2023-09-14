@@ -19,6 +19,7 @@ const routes: Routes = [
   {
     path: 'login',
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+ 
   },
   {
     path: 'perfil/:userId', 
@@ -27,16 +28,19 @@ const routes: Routes = [
   },
   {
     path: 'perfiltrabajador',
-    loadChildren: () => import('./perfiltrabajador/perfiltrabajador.module').then( m => m.PerfiltrabajadorPageModule)
+    loadChildren: () => import('./perfiltrabajador/perfiltrabajador.module').then( m => m.PerfiltrabajadorPageModule),
+    canActivate: [AuthGuard],
   },
 
   {
     path: 'agregar-servicio',
-    loadChildren: () => import('./agregar-servicio/agregar-servicio.module').then( m => m.AgregarServicioPageModule)
+    loadChildren: () => import('./agregar-servicio/agregar-servicio.module').then( m => m.AgregarServicioPageModule),
+    canActivate: [AuthGuard],
   },
   {
     path: 'solicitud/:correoElectronico', 
-    loadChildren: () => import('./solicitud/solicitud.module').then( m => m.SolicitudPageModule)
+    loadChildren: () => import('./solicitud/solicitud.module').then( m => m.SolicitudPageModule),
+    canActivate: [AuthGuard],
   },
 
 

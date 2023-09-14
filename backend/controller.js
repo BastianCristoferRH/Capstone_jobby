@@ -112,14 +112,15 @@ function agregarServicio(serviceData, callback) {
 };
 
 function enviarSolicitud(solicitudData, callback) {
-  const sql = 'INSERT INTO solicitud (id_trabajador, id_des_serv, correo_electronico, titulo_solicitud, estado, fecha_solicitud) VALUES (?, ?, ?, ?, ?, ?)';
+  const sql = 'INSERT INTO solicitud (id_trabajador, id_des_serv, correo_electronico, titulo_solicitud, estado, fecha_solicitud,des_solicitud) VALUES (?, ?, ?, ?, ?, ?, ?)';
   const valores = [
     solicitudData.id_trabajador,
     solicitudData.id_des_serv,
     solicitudData.correo_electronico,
     solicitudData.titulo_solicitud,
     solicitudData.estado,
-    new Date()
+    new Date(),
+    solicitudData.des_solicitud,
   ];
 
   db.query(sql, valores, (err, resultado) => {

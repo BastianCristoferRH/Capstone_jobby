@@ -29,24 +29,29 @@
     </ion-toolbar>
   </ion-header>
   <ion-content>
-    <ion-content>
-      <ion-card>
-        <ion-card-content>
-          <ion-item>
-            <ion-label position="floating">Título de la Solicitud</ion-label>
-            <ion-input [(ngModel)]="titulo" name="titulo" type="text" required></ion-input>
-          </ion-item>
-    
-          <ion-item>
-            <ion-label position="floating">Descripción</ion-label>
-            <ion-textarea [(ngModel)]="descripcion" name="descripcion" required></ion-textarea>
-           
-          </ion-item>
-          <p>{{ this.datosServicio[0].id_trabajador }}</p>
-        </ion-card-content>
-      </ion-card>
+    <ion-card>
+      <ion-card-content>
       
-    </ion-content>
-   
+        <ion-item>
+          <ion-label position="floating">Título de la Solicitud</ion-label>
+          <ion-input [(ngModel)]="titulo" name="titulo" type="text" required></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Servicio</ion-label>
+          <ion-select [(ngModel)]="servicioSeleccionado" name="servicioSeleccionado" interface="popover">
+            <ion-select-option *ngFor="let servicio of datosServicio; let i = index" [value]="servicio.name_serv">
+              {{ servicio.name_serv }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Descripción</ion-label>
+          <ion-textarea [(ngModel)]="descripcion" name="descripcion" required></ion-textarea>
+        </ion-item>
+        <ion-button expand="full" (click)="enviarSolicitud()">Enviar Solicitud</ion-button>
+
+      </ion-card-content>
+    </ion-card>
   </ion-content>
 </div>
