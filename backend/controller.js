@@ -99,7 +99,7 @@ function agregarServicio(serviceData, callback) {
   // Validar el token del trabajador aquí (debe implementarse)
 
   // Insertar el servicio en la base de datos
-  db.query('INSERT INTO descrip_servicio (des_serv, presencial, id_trabajador, id_serv, id_comuna, id_region) VALUES (?, ?, ?, ?, ?, ?)', [serviceData.des_serv, serviceData.presencial, serviceData.id_trabajador, serviceData.id_serv, serviceData.id_comuna, serviceData.id_region], (err, result) => {
+  db.query('INSERT INTO descrip_servicio (id_des_serv,des_serv, presencial, id_trabajador, id_serv, id_comuna, id_region) VALUES (?, ?, ?, ?, ?, ?, ?)', [serviceData.id_des_serv,serviceData.des_serv, serviceData.presencial, serviceData.id_trabajador, serviceData.id_serv, serviceData.id_comuna, serviceData.id_region], (err, result) => {
     if (err) {
       console.error('Error al agregar el servicio:', err);
       callback({ error: 'Error interno al agregar el servicio', details: err.message }, null);
@@ -161,9 +161,69 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) { // es pa
 }
 
 
+function obtenerRegiones(callback) {
+  const query = 'SELECT * FROM region';
+  db.query(query,(error, result) => {
+    if (error) {
+      console.log("Error al obtener regiones", error);
+      callback(error,null)
+      return;
+      
+    }else{
+      callback(null,result)
+    }
+    
+  });
 
+}
 
+function obtenerComunas(callback) {
+  const query = 'SELECT * FROM comuna';
+  db.query(query,(error, result) => {
+    if (error) {
+      console.log("Error al obtener Comunas", error);
+      callback(error,null)
+      return;
+      
+    }else{
+      callback(null,result)
+    }
+    
+  });
 
+}
+
+function obtenerServicios(callback) {
+  const query = 'SELECT * FROM servicio';
+  db.query(query, (error, result)=> {
+    if (error) {
+      console.log("Error al obtener servicios",error);
+      callback(error,null);
+      return;
+      
+    }else{
+      callback(null,result)
+    }
+  })
+
+}
+
+function listarServicios(callback){
+  const query = `SELECT ds.des_serv, ds.presencial, t.correo_electronico, t.disponibilidad, name_serv, name_comuna, name_region 
+  FROM descrip_servicio ds JOIN trabajador t ON(ds.id_trabajador = t.id_trabajador) 
+  JOIN servicio s ON(ds.id_serv = s.id_serv) 
+  JOIN region r ON(ds.id_region = r.id_region)
+  JOIN  comuna c ON (ds.id_comuna = c.id_comuna)`;
+  db.query(query, (error, result) => {
+    if (error) {
+      console.log("Error al obtener listado de servicios", error);
+      callback(error,null);
+      return;
+    }else{
+      callback(null,result)
+    }
+  })
+}
 
 
 
@@ -173,5 +233,9 @@ module.exports = {
   agregarServicio,
   obtenerDatosUsuarioPorCorreo,
   enviarSolicitud,
-  obtenerDatosTrabajadorPorCorreo
+  obtenerDatosTrabajadorPorCorreo,
+  obtenerRegiones,
+  obtenerComunas,
+  obtenerServicios,
+  listarServicios
 };
