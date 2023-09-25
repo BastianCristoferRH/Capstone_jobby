@@ -136,29 +136,38 @@ function enviarSolicitud(solicitudData, callback) {
 
 function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) { // es para la solicitud
   const sql = `
-    SELECT trabajador.id_trabajador, descrip_servicio.id_des_serv, servicio.name_serv
-    FROM trabajador
-    JOIN descrip_servicio ON descrip_servicio.id_trabajador = trabajador.id_trabajador
-    JOIN servicio ON servicio.id_serv = descrip_servicio.id_serv
-    WHERE trabajador.correo_electronico = ?
+  SELECT trabajador.id_trabajador,
+  descrip_servicio.id_des_serv,
+  servicio.name_serv,
+  descrip_servicio.des_serv,
+  usuario.correo_electronico,
+  usuario.nombre,
+  usuario.apellidos,
+  usuario.img,
+  usuario.telefono,
+  usuario.fecha_nacimiento
+      FROM trabajador
+      JOIN descrip_servicio ON descrip_servicio.id_trabajador = trabajador.id_trabajador
+      JOIN servicio ON servicio.id_serv = descrip_servicio.id_serv
+      JOIN usuario ON usuario.correo_electronico = trabajador.correo_electronico  
+      WHERE trabajador.correo_electronico = ?
   `;
   const valores = [correoElectronico];
 
-  db.query(sql, valores, (err, resultados) => {
+  db.query(sql, valores, (err, datosTrabajador) => {
     if (err) {
-      console.error('Error al obtener los datos del trabajador:', err);
-      callback({ error: 'Error interno al obtener los datos del trabajador', details: err.message }, null);
+      console.error('Error al obtener los servicios solicitados:', err);
+      callback({ error: 'Error interno al obtener los servicios solicitados', details: err.message }, null);
     } else {
-      if (resultados.length === 0) {
-        console.log('Trabajador no encontrado');
-        callback({ mensaje: 'Trabajador no encontrado' }, null);
-      } else {
-        console.log('Datos del trabajador obtenidos con éxito');
-        callback(null, resultados);
-      }
+      console.log('Servicios solicitados obtenidos con éxito');
+      callback(null, datosTrabajador);
     }
   });
+  
 }
+
+
+
 
 
 

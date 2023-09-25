@@ -46,6 +46,8 @@ export class PerfilPage implements OnInit {
     this.router.navigateByUrl('/login');
   }
 
+  
+
   perfil_menu() {
     if (this.authService.isAuthenticated()) {
       const correoElectronico = this.authService.getCorreoElectronico();
@@ -55,6 +57,11 @@ export class PerfilPage implements OnInit {
     } else {
       this.router.navigateByUrl('/login');
     }
+  }
+
+
+  perfil_trabajador() {
+    this.router.navigate(['/trabajador', this.correoElectronico]); // Usar 'this.correoElectronico'
   }
 
   private navigateToUserProfile(correoElectronico: string) {

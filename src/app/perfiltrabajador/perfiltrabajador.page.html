@@ -1,13 +1,72 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>perfiltrabajador</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+<ion-menu side="end" contentId="main-content">
+  <ion-header>
     <ion-toolbar>
-      <ion-title size="large">perfiltrabajador</ion-title>
+      <ion-title>Menú</ion-title>
     </ion-toolbar>
   </ion-header>
+  <ion-content class="ion-padding">
+    <ion-list>
+      <ion-item class="ion-item-menu" (click)="perfil_menu()">
+        Perfil
+      </ion-item>
+      <ion-item class="ion-item-menu" (click)="perfil_menu()">
+        Perfil Trabajador
+      </ion-item>
+      <ion-item class="ion-item-menu">
+        Servicios
+      </ion-item>
+      <ion-item class="ion-item-menu" (click)="logout()">
+        Cerrar Sesión
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+
+
+
+<div class="ion-page" id="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Perfil Trabajador</ion-title>
+      <ion-buttons slot="end">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+
+<ion-content [fullscreen]="true" class="custom-content">
+
+  <ion-row responsive-sm>
+    <ion-col col-12 width-50 class="ion-text-center"> <!-- Utiliza la clase ion-text-center -->
+      <img class="user-avatar" src="../../assets/img/user.jpg">
+      <ion-icon name="create"></ion-icon>
+    </ion-col>
+  </ion-row>
+
+<div class="datos"> 
+  <h3>{{datosTrabajador[0]?.nombre}} {{datosTrabajador[0]?.apellidos}}</h3>
+  <p>Correo de contacto: {{datosTrabajador[0]?.correo_electronico}}</p>
+  <p>Telefono de contacto: {{datosTrabajador[0]?.telefono}}</p>
+</div>
+
+<div style="text-align: center; padding-bottom: 5px;">
+  <ion-button>Solicitar servicio</ion-button>
+</div>
+
+<ion-list class="custom-lista">
+  <h4 style="color: black; text-align: center;">Servicios para ofrecer</h4>
+  <ion-item *ngFor="let datos of datosTrabajador" class="custom-list-item">
+    <ion-label>
+      <p>{{datos.name_serv}}</p>
+      <p>{{datos.des_serv}}</p>
+    </ion-label>
+    
+  </ion-item>
+</ion-list>
+
+
+
+
 </ion-content>

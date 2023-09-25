@@ -100,16 +100,17 @@ app.get('/obtener-datos-trabajador/:correo', (req, res) => { // get de los datos
   const correoElectronico = req.params.correo;
 
   
-  obtenerDatosTrabajadorPorCorreo(correoElectronico, (error, resultados) => {
+  obtenerDatosTrabajadorPorCorreo(correoElectronico, (error, datosTrabajador) => {
     if (error) {
       console.log("Error al obtener los datos del trabajador: ", error);
       res.status(404).json(error);
     } else {
-      console.log("Datos del trabajador obtenidos con éxito: ", resultados);
-      res.status(200).json(resultados);
+      console.log("Datos del trabajador obtenidos con éxito: ", datosTrabajador);
+      res.status(200).json(datosTrabajador);
     }
   });
 });
+
 
 
 const puerto = 3000;

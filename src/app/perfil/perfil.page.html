@@ -9,6 +9,9 @@
       <ion-item class="ion-item-menu" (click)="perfil_menu()">
         Perfil
       </ion-item>
+      <ion-item class="ion-item-menu" (click)="perfil_trabajador()">
+        Perfil Trabajador
+      </ion-item>
       <ion-item class="ion-item-menu">
         Servicios
       </ion-item>
@@ -19,19 +22,33 @@
   </ion-content>
 </ion-menu>
 
+
+
+
 <div class="ion-page" id="main-content">
   <ion-header>
     <ion-toolbar>
-      <ion-title>JOBBY</ion-title>
+      <ion-title>Perfil Usuario</ion-title>
       <ion-buttons slot="end">
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
+
   <ion-content>
-    <p>dato:{{ datosUsuario.nombre }}</p>
-    <p>{{ datosUsuario.apellidos }}</p>
-    <p>{{datosUsuario.correo_electronico}}</p>
-    <button (click)="navigateToSolicitud()">Enviar Solicitud</button>
+
+    <ion-row responsive-sm>
+      <ion-col col-12 width-50 class="ion-text-center"> <!-- Utiliza la clase ion-text-center -->
+        <img class="user-avatar" src="../../assets/img/user.jpg">
+        <ion-icon name="create"></ion-icon>
+      </ion-col>
+    </ion-row>
+    
+    <div class="datos" style="text-align: center;"> 
+    <h3>{{ datosUsuario.nombre }} {{ datosUsuario.apellidos }}</h3>
+    <p>Correo electronico: {{datosUsuario.correo_electronico}}</p>
+    <p>Telefono de contacto: {{datosUsuario.telefono}}</p>
+    <ion-button color="warning">Modificar datos</ion-button>
+    </div>
   </ion-content>
 </div>

@@ -27,7 +27,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'perfiltrabajador',
+    path: 'trabajador/:correoElectronico',
     loadChildren: () => import('./perfiltrabajador/perfiltrabajador.module').then( m => m.PerfiltrabajadorPageModule),
     canActivate: [AuthGuard],
   },
