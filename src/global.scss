@@ -27,16 +27,14 @@
 
 
 ion-content {
-    --background: white;
-
+    --background: transparent url('https://4kwallpapers.com/images/wallpapers/landscape-macbook-3840x2160-10760.jpg') center center / cover no-repeat;
 }
+
+
+
 
 ion-header {
-    --background: black;
-    --color: white;
-
+    ion-toolbar {
+        --background: orange;
+    }
 }
-label{
-    font-weight: bolder;
-}
-

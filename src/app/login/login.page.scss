@@ -1,52 +1,48 @@
-ion-content {
-    --background: white;
-
+.logo-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
 }
 
-h3 {
-    text-align: center;
-    font-weight: bold;
-
+ion-title {
+    font-family: 'NombreDeTuFuente', sans-serif;
+    font-weight: 800;
+    font-style: italic;
+    letter-spacing: 2px;
+    font-size: 150%;
 }
 
-ion-grid {
-    text-align: center;
-
-}
-
-form {
-    color: black;
-    border: 2px solid black;
+.form-container {
+    background-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 5);
+    border: 1px solid #ccc;
 
 }
 
-ion-button {
-    --background: black;
-    --color: white;
-    border: 1px solid black;
-    border-radius: 8px;
-
-
+.btn_login,
+.btn_registro {
+    --background: orange;
+    color: white;
 }
 
-form {
-    color: black;
-    border: 1px solid black;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
+
 
 ion-item {
-    --background: white;
-    --color: black;
+    --background: rgba(255, 255, 255, 0.5);
+    --border-color: transparent !important;
+    color: black !important;
+    margin-top: 2%;
 
 }
 
-.whiteButton {
-    --background: white;
-    --color: black;
-    border-radius: 5%;
-    border: 1px solid black;
+h3.form-title {
+    text-align: center; 
+    font-weight: bold;
+    color: orange;
+   
+    font-size: 24px;
+
 }
