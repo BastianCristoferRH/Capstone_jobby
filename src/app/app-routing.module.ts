@@ -43,11 +43,37 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'listar-servicios',
+    loadChildren: () => import('./listar-servicios/listar-servicios.module').then( m => m.ListarServiciosPageModule)
+  },
+
+  {
+    path: 'agregar-servicio',
+    loadChildren: () => import('./agregar-servicio/agregar-servicio.module').then( m => m.AgregarServicioPageModule),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'solicitud/:correoElectronico', 
+    loadChildren: () => import('./solicitud/solicitud.module').then( m => m.SolicitudPageModule),
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'servicio-solicitado/:correoElectronico',
     loadChildren: () => import('./servicios-solicitados/servicios-solicitados.module').then( m => m.ServiciosSolicitadosPageModule),
     canActivate: [AuthGuard],
   },
 
+
+
+];
+
+@NgModule({
+  imports: [
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+  ],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
 
 
 ];

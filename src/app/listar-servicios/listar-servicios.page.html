@@ -1,0 +1,28 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>listar-servicios</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">listar-servicios</ion-title>
+
+    </ion-toolbar>
+  </ion-header>
+  <div class="row" *ngFor="let servicio of listaServicios">
+    <div class="column">
+      <h2>{{ servicio.des_serv }}</h2>
+      <p>Presencial: {{ servicio.presencial === '1' ? 'Sí' : 'No' }}</p>
+      <p>Correo Electrónico: {{ servicio.correo_electronico }}</p>
+      <p>Disponibilidad: {{ servicio.disponibilidad }}</p>
+      <p>Nombre del Servicio: {{ servicio.name_serv }}</p>
+      <p>Comuna: {{ servicio.name_comuna }}</p>
+      <p>Región: {{ servicio.name_region }}</p>
+      <button>Solicitar servicio</button>
+    </div>
+    
+  </div>
+</ion-content>

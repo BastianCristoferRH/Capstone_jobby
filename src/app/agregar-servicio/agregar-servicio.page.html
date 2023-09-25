@@ -11,38 +11,44 @@
     </ion-toolbar>
   </ion-header>
 
-  <form (submit)="addService()">
-    <!-- El campo id_des_serv es autoincrementable y no se incluye en el formulario. Lo manejará la base de datos automáticamente. -->
+  <form (submit)="addService()" class="service-form">
+    <h2>Agregar Servicio</h2>
   
-    <label for="des_serv">Descripción del Servicio:</label>
-    <textarea id="des_serv" name="des_serv" [(ngModel)]="servicio.des_serv" required></textarea>
+    <div class="form-group">
+      <label for="des_serv">Descripción del Servicio:</label>
+      <textarea id="des_serv" name="des_serv" [(ngModel)]="servicio.des_serv" required></textarea>
+    </div>
   
-    <label for="presencial">Presencial:</label>
-    <input type="checkbox" id="presencial" name="presencial" [(ngModel)]="servicio.presencial">
+    <div class="form-group">
+      <label for="presencial">Presencial:</label>
+      <input type="checkbox" id="presencial" name="presencial" [(ngModel)]="servicio.presencial">
+    </div>
   
-    <!-- El campo id_trabajador se considerará automáticamente al estar el trabajador logeado en el sistema. -->
+    <div class="form-group">
+      <label for="id_serv">Seleccionar Servicio:</label>
+      <select id="id_serv" name="id_serv" [(ngModel)]="servicio.id_serv" required>
+        <option value="" disabled selected>Selecciona un servicio</option>
+        <option *ngFor="let servicio of servicios" [value]="servicio.id">{{ servicio.name_serv }}</option>
+        <!-- Agrega más opciones según tus servicios disponibles -->
+      </select>
+    </div>
   
-    <label for="id_serv">Seleccionar Servicio:</label>
-    <select id="id_serv" name="id_serv" [(ngModel)]="servicio.id_serv" required>
-      <option value="1">Servicio 1</option>
-      <option value="2">Servicio 2</option>
-      <!-- Agrega más opciones según tus servicios disponibles -->
-    </select>
+    <div class="form-group">
+      <label for="id_comuna">Seleccionar Comuna:</label>
+      <select id="id_comuna" name="id_comuna" [(ngModel)]="servicio.id_comuna" required>
+        <option value="" disabled selected>Selecciona una comuna</option>
+        <option *ngFor="let comuna of comunas" [value]="comuna.id">{{ comuna.name_comuna }}</option>
+      </select>
+    </div>
   
-    <label for="id_comuna">Seleccionar Comuna:</label>
-    <select id="id_comuna" name="id_comuna" [(ngModel)]="servicio.id_comuna" required>
-      <option value="1">Comuna 1</option>
-      <option value="2">Comuna 2</option>
-      <!-- Agrega más opciones según tus comunas disponibles -->
-    </select>
+    <div class="form-group">
+      <label for="id_region">Seleccionar Región:</label>
+      <select id="id_region" name="id_region" [(ngModel)]="servicio.id_region" required>
+        <option value="" disabled selected>Selecciona una región</option>
+        <option *ngFor="let region of regiones" [value]="region.id">{{ region.name_region }}</option>
+      </select>
+    </div>
   
-    <label for="id_region">Seleccionar Región:</label>
-    <select id="id_region" name="id_region" [(ngModel)]="servicio.id_region" required>
-      <option value="1">Región 1</option>
-      <option value="2">Región 2</option>
-      <!-- Agrega más opciones según tus regiones disponibles -->
-    </select>
-  
-    <button type="submit">Agregar Servicio</button>
+    <button type="submit" class="submit-button">Agregar Servicio</button>
   </form>
 </ion-content>

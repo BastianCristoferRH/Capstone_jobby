@@ -2,7 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, aceptarSolicitud } = require('./controller');
+const { registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, aceptarSolicitud,obtenerRegiones,obtenerComunas,obtenerServicios,listarServicios } = require('./controller');
+const { ifError } = require('assert');
+
 
 const app = express();
 app.use(bodyParser.json());
@@ -110,9 +112,67 @@ app.get('/obtener-datos-trabajador/:correo', (req, res) => { // get de los datos
   });
 });
 
+app.get('/obtener-regiones', (req, res) => {
+
+  obtenerRegiones((error, result) => {
+    if (error) {
+      console.log("Error al obtener las regiones", error);
+      res.status(404).json(error);
+
+
+    } else {
+      console.log("Regiones obtenidas con exito", result);
+      res.status(200).json(result)
+    }
+  })
+
+
+})
+app.get('/obtener-comunas', (req, res) => {
+
+  obtenerComunas((error, result) => {
+    if (error) {
+      console.log("Error al obtener las Comunas", error);
+      res.status(404).json(error);
+
+
+    } else {
+      console.log("Comunas obtenidas con exito", result);
+      res.status(200).json(result);
+    }
+  })
+
+
+})
+
+app.get('/obtener-servicios', (req, res) => {
+  obtenerServicios((error, result) => {
+    if (error) {
+      console.log("Error al obtener los servicios", error);
+      res.status(404).json(error);
+
+    } else {
+      console.log("Servicios obtenidos con exito", result);
+      res.status(200).json(result);
+    }
+  })
+})
+
+app.get('/listar-servicios', (req, res) => {
+  listarServicios((error, result) => {
+    if (error) {
+      console.log("Error al obtener el listado de servicios", error);
+      res.status(404).json(error);
+    } else {
+      console.log("Listado de servicios obtenido con exito", result);
+      res.status(200).json(result);
+    }
+  })
+})
+
+
 app.get('/servicios-solicitados/:correoElectronico', (req, res) => {
   const correoElectronico = req.params.correoElectronico;
-
   obtenerServiciosSolicitadosPorTrabajador(correoElectronico, (error, resultados) => {
     if (error) {
       console.log("Error al obtener los servicios solicitados: ", error);
