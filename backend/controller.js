@@ -99,7 +99,7 @@ function agregarServicio(serviceData, callback) {
   // Validar el token del trabajador aquí (debe implementarse)
 
   // Insertar el servicio en la base de datos
-  db.query('INSERT INTO descrip_servicio (des_serv, presencial, id_trabajador, id_serv, id_comuna, id_region) VALUES (?, ?, ?, ?, ?, ?)', [serviceData.des_serv, serviceData.presencial, serviceData.id_trabajador, serviceData.id_serv, serviceData.id_comuna, serviceData.id_region], (err, result) => {
+  db.query('INSERT INTO descrip_servicio (id_des_serv,des_serv, presencial, id_trabajador, id_serv, id_comuna, id_region) VALUES (?, ?, ?, ?, ?, ?, ?)', [serviceData.id_des_serv,serviceData.des_serv, serviceData.presencial, serviceData.id_trabajador, serviceData.id_serv, serviceData.id_comuna, serviceData.id_region], (err, result) => {
     if (err) {
       console.error('Error al agregar el servicio:', err);
       callback({ error: 'Error interno al agregar el servicio', details: err.message }, null);
@@ -166,10 +166,121 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) { // es pa
   
 }
 
+function obtenerServiciosSolicitadosPorTrabajador(correoElectronico, callback) {
+  const sql = `
+    SELECT 
+      usuario.nombre,
+      usuario.apellidos,
+      usuario.correo_electronico AS correo_cliente,
+      trabajador.correo_electronico AS correo_trabajador,
+      solicitud.titulo_solicitud,
+      solicitud.fecha_solicitud,
+      solicitud.id_solicitud,
+      solicitud.des_solicitud,
+      servicio.name_serv,
+      solicitud.estado,
+      usuario.telefono
+    FROM solicitud
+    JOIN usuario ON usuario.correo_electronico = solicitud.correo_electronico
+    JOIN trabajador ON trabajador.id_trabajador = solicitud.id_trabajador
+    JOIN descrip_servicio ON solicitud.id_des_serv = descrip_servicio.id_des_serv
+    JOIN servicio ON descrip_servicio.id_serv = servicio.id_serv
+    WHERE trabajador.correo_electronico = ?
+  `;
+
+  const valores = [correoElectronico];
+
+  db.query(sql, valores, (err, resultados) => {
+    if (err) {
+      console.error('Error al obtener los servicios solicitados:', err);
+      callback({ error: 'Error interno al obtener los servicios solicitados', details: err.message }, null);
+    } else {
+      console.log('Servicios solicitados obtenidos con éxito');
+      callback(null, resultados);
+    }
+  });
+}
+
+
+function aceptarSolicitud(solicitudId, nuevoEstado, callback) {
+  const sql = 'UPDATE solicitud SET estado = ? WHERE id_solicitud = ?';
+  db.query(sql, [nuevoEstado, solicitudId], (err, result) => {
+    if (err) {
+      console.error('Error al cambiar el estado de la solicitud:', err);
+      callback({ error: 'Error al cambiar el estado de la solicitud' }, null);
+    } else {
+      console.log('Solicitud actualizada con nuevo estado');
+      callback(null, { message: 'Solicitud actualizada con nuevo estado' });
+    }
+  });
+}
 
 
 
 
+function obtenerRegiones(callback) {
+  const query = 'SELECT * FROM region';
+  db.query(query,(error, result) => {
+    if (error) {
+      console.log("Error al obtener regiones", error);
+      callback(error,null)
+      return;
+      
+    }else{
+      callback(null,result)
+    }
+    
+  });
+
+}
+
+function obtenerComunas(callback) {
+  const query = 'SELECT * FROM comuna';
+  db.query(query,(error, result) => {
+    if (error) {
+      console.log("Error al obtener Comunas", error);
+      callback(error,null)
+      return;
+      
+    }else{
+      callback(null,result)
+    }
+    
+  });
+
+}
+
+function obtenerServicios(callback) {
+  const query = 'SELECT * FROM servicio';
+  db.query(query, (error, result)=> {
+    if (error) {
+      console.log("Error al obtener servicios",error);
+      callback(error,null);
+      return;
+      
+    }else{
+      callback(null,result)
+    }
+  })
+
+}
+
+function listarServicios(callback){
+  const query = `SELECT ds.des_serv, ds.presencial, t.correo_electronico, t.disponibilidad, name_serv, name_comuna, name_region 
+  FROM descrip_servicio ds JOIN trabajador t ON(ds.id_trabajador = t.id_trabajador) 
+  JOIN servicio s ON(ds.id_serv = s.id_serv) 
+  JOIN region r ON(ds.id_region = r.id_region)
+  JOIN  comuna c ON (ds.id_comuna = c.id_comuna)`;
+  db.query(query, (error, result) => {
+    if (error) {
+      console.log("Error al obtener listado de servicios", error);
+      callback(error,null);
+      return;
+    }else{
+      callback(null,result)
+    }
+  })
+}
 
 
 
@@ -182,5 +293,11 @@ module.exports = {
   agregarServicio,
   obtenerDatosUsuarioPorCorreo,
   enviarSolicitud,
-  obtenerDatosTrabajadorPorCorreo
+  obtenerDatosTrabajadorPorCorreo,
+  obtenerServiciosSolicitadosPorTrabajador,
+  aceptarSolicitud,
+  obtenerRegiones,
+  obtenerComunas,
+  obtenerServicios,
+  listarServicios
 };

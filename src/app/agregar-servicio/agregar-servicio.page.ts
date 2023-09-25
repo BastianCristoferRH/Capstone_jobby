@@ -8,8 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AgregarServicioPage implements OnInit {
 
-  servicio: any = {}; 
+  servicio: any = {};
+  regiones: any[] = [];
+  comunas: any[]=[]; 
+  servicios: any[] = [];
   serviceData = {
+    id_des_serv:'',
     des_serv:'',
     presencial:'',
     id_trabajador:'',
@@ -20,15 +24,34 @@ export class AgregarServicioPage implements OnInit {
   constructor( private http: HttpClient) { }
 
   addService() {
-    // Enviar la solicitud POST a tu API Express
     this.http.post('http://localhost:3000/agregar_servicio', this.serviceData)
       .subscribe(response => {
-        // Manejar la respuesta del servidor, por ejemplo, mostrar un mensaje de éxito
         console.log('Servicio agregado con éxito', response);
       });
   }
+  cargarRegiones() {
+    this.http.get('http://localhost:3000/obtener-regiones').subscribe((data: any) => {
+      this.regiones = data;
+     });
+  }
+  cargarComunas() {
+    this.http.get('http://localhost:3000/obtener-comunas').subscribe((data: any) => {
+      this.comunas = data;
+     });
+  }
+  cargarServicios() {
+    this.http.get('http://localhost:3000/obtener-servicios').subscribe((data: any) => {
+      this.servicios = data;
+      console.log(this.servicios);
+     });
+  }
 
   ngOnInit() {
+    this.cargarRegiones();
+    this.cargarComunas();
+    this.cargarServicios();
+    console.log(this.servicios);
   }
+
 
 }
