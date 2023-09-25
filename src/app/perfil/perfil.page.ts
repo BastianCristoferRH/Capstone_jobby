@@ -62,7 +62,19 @@ export class PerfilPage implements OnInit {
   }
 
   navigateToSolicitud() {
-    this.router.navigate(['/solicitud', this.correoElectronico]); // Usar 'this.correoElectronico'
+    this.router.navigate(['/solicitud', this.correoElectronico]); 
+  }
+  navegarAServicioSolicitado() {
+
+    const correoElectronico = this.authService.getCorreoElectronico();
+
+    if (correoElectronico) {
+      
+      this.router.navigate(['/servicio-solicitado', correoElectronico]);
+    } else {
+      console.error('Correo electrónico no disponible.');
+     
+    }
   }
 
 

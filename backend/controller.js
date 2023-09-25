@@ -160,6 +160,57 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) { // es pa
   });
 }
 
+function obtenerServiciosSolicitadosPorTrabajador(correoElectronico, callback) {
+  const sql = `
+    SELECT 
+      usuario.nombre,
+      usuario.apellidos,
+      usuario.correo_electronico AS correo_cliente,
+      trabajador.correo_electronico AS correo_trabajador,
+      solicitud.titulo_solicitud,
+      solicitud.fecha_solicitud,
+      solicitud.id_solicitud,
+      solicitud.des_solicitud,
+      servicio.name_serv,
+      solicitud.estado,
+      usuario.telefono
+    FROM solicitud
+    JOIN usuario ON usuario.correo_electronico = solicitud.correo_electronico
+    JOIN trabajador ON trabajador.id_trabajador = solicitud.id_trabajador
+    JOIN descrip_servicio ON solicitud.id_des_serv = descrip_servicio.id_des_serv
+    JOIN servicio ON descrip_servicio.id_serv = servicio.id_serv
+    WHERE trabajador.correo_electronico = ?
+  `;
+
+  const valores = [correoElectronico];
+
+  db.query(sql, valores, (err, resultados) => {
+    if (err) {
+      console.error('Error al obtener los servicios solicitados:', err);
+      callback({ error: 'Error interno al obtener los servicios solicitados', details: err.message }, null);
+    } else {
+      console.log('Servicios solicitados obtenidos con éxito');
+      callback(null, resultados);
+    }
+  });
+}
+
+
+function aceptarSolicitud(solicitudId, nuevoEstado, callback) {
+  const sql = 'UPDATE solicitud SET estado = ? WHERE id_solicitud = ?';
+  db.query(sql, [nuevoEstado, solicitudId], (err, result) => {
+    if (err) {
+      console.error('Error al cambiar el estado de la solicitud:', err);
+      callback({ error: 'Error al cambiar el estado de la solicitud' }, null);
+    } else {
+      console.log('Solicitud actualizada con nuevo estado');
+      callback(null, { message: 'Solicitud actualizada con nuevo estado' });
+    }
+  });
+}
+
+
+
 
 
 
@@ -173,5 +224,7 @@ module.exports = {
   agregarServicio,
   obtenerDatosUsuarioPorCorreo,
   enviarSolicitud,
-  obtenerDatosTrabajadorPorCorreo
+  obtenerDatosTrabajadorPorCorreo,
+  obtenerServiciosSolicitadosPorTrabajador,
+  aceptarSolicitud,
 };

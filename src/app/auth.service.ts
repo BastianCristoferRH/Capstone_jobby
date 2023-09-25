@@ -10,11 +10,11 @@ import { Observable } from 'rxjs';
 export class AuthService {
   private tokenKey = 'auth_token';
   private emailKey = 'auth_email'; // Clave para almacenar el correo electrónico
-
+  private apiUrl = 'http://192.168.1.7:4000';
   constructor(private http: HttpClient) { }
 
   registrarUsuario(usuario: any) {
-    return this.http.post('http://localhost:3000/registro', usuario);
+    return this.http.post(`${this.apiUrl}/registro`, usuario);
   }
 
   login(correo_electronico: string, password: string) {
@@ -22,7 +22,7 @@ export class AuthService {
       correo_electronico: correo_electronico,
       password: password
     };
-    return this.http.post('http://localhost:3000/login', userData).pipe(
+    return this.http.post(`${this.apiUrl}/login`, userData).pipe(
       tap((response: any) => {
         if (response && response.token) {
           this.saveToken(response.token);
@@ -64,7 +64,7 @@ export class AuthService {
   }
 
   getUserProfile(userId: string) {  
-    return this.http.get(`http://localhost:3000/usuario/${userId}`); 
+    return this.http.get(`${this.apiUrl}/usuario/${userId}`); 
   }
 
   enviarSolicitud(
@@ -87,14 +87,24 @@ export class AuthService {
     console.log("HOLA: ",solicitudData.des_solicitud);
 
     // Realiza la solicitud POST al servidor
-    const url = `http://localhost:3000/enviar-solicitud/${correo_trabajador}`; 
+    const url = `${this.apiUrl}/enviar-solicitud/${correo_trabajador}`; 
     return this.http.post(url, solicitudData);
   }
 
 
 
   loadTrabajadorData(correoElectronico: string) {
-    return this.http.get(`http://localhost:3000/obtener-datos-trabajador/${correoElectronico}`); 
+    return this.http.get(`${this.apiUrl}/obtener-datos-trabajador/${correoElectronico}`); 
+  }
+
+  SolicitudesRecibidas(correo_trabajador: String){
+    return this.http.get(`${this.apiUrl}/servicios-solicitados/${correo_trabajador}`)
+  }
+
+  actualizarEstadoSolicitud(solicitudId: number, nuevoEstado: string) {
+    
+    const data = { estado: nuevoEstado };
+    return this.http.put(`${this.apiUrl}/actualizar-solicitud/${solicitudId}`, data);
   }
 
 

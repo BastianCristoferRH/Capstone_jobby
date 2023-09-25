@@ -42,6 +42,12 @@ const routes: Routes = [
     loadChildren: () => import('./solicitud/solicitud.module').then( m => m.SolicitudPageModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'servicio-solicitado/:correoElectronico',
+    loadChildren: () => import('./servicios-solicitados/servicios-solicitados.module').then( m => m.ServiciosSolicitadosPageModule),
+    canActivate: [AuthGuard],
+  },
+
 
 
 ];
