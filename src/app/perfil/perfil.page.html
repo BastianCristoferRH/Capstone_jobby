@@ -6,53 +6,53 @@
   </ion-header>
   <ion-content class="ion-padding">
     <ion-list>
-      <ion-item class="ion-item-menu" (click)="perfil_menu()">
+      <ion-button class="custom-button" (click)="perfil_menu()">
         Perfil
-      </ion-item>
-      <ion-item class="ion-item-menu" (click)="perfil_trabajador()">
+      </ion-button>
+      <ion-button class="custom-button" (click)="perfil_trabajador()">
         Perfil Trabajador
-      </ion-item>
-      <ion-item class="ion-item-menu">
+      </ion-button>
+      <ion-button class="custom-button">
         Servicios
-      </ion-item>
-      <ion-item class="ion-item-menu" (click)="navegarAServicioSolicitado()">
+      </ion-button>
+      <ion-button class="custom-button " (click)="navegarAServicioSolicitado()">
         Listado Servicio
-      </ion-item>
-      <ion-item class="ion-item-menu" (click)="logout()">
+      </ion-button>
+      <ion-button class="custom-button" (click)="logout()">
         Cerrar Sesión
-      </ion-item>
-      
+      </ion-button>
     </ion-list>
   </ion-content>
 </ion-menu>
 
 
-
-
 <div class="ion-page" id="main-content">
   <ion-header>
     <ion-toolbar>
-      <ion-title>Perfil Usuario</ion-title>
+      <ion-title>JOBBY</ion-title>
       <ion-buttons slot="end">
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
 
-  <ion-content>
-
-    <ion-row responsive-sm>
-      <ion-col col-12 width-50 class="ion-text-center"> <!-- Utiliza la clase ion-text-center -->
-        <img class="user-avatar" src="../../assets/img/user.jpg">
-        <ion-icon name="create"></ion-icon>
-      </ion-col>
-    </ion-row>
-    
-    <div class="datos" style="text-align: center;"> 
-    <h3>{{ datosUsuario.nombre }} {{ datosUsuario.apellidos }}</h3>
-    <p>Correo electronico: {{datosUsuario.correo_electronico}}</p>
-    <p>Telefono de contacto: {{datosUsuario.telefono}}</p>
-    <ion-button color="warning">Modificar datos</ion-button>
-    </div>
+  <ion-content >
+    <ion-card class="user-card">
+      <div class="user-profile">
+        <ion-row responsive-sm>
+          <ion-col col-12 width-50 class="ion-text-center">
+            <img class="user-avatar" src="../../assets/img/user.jpg">
+            <ion-icon name="create"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </div>
+  
+      <div class="user-details">
+        <h3>{{ datosUsuario.nombre }} {{ datosUsuario.apellidos }}</h3>
+        <p>Fecha de creación: {{ datosUsuario.fecha_creacion | date:'dd-MM-yyyy' }}</p>
+        <p>Fecha de nacimiento: {{ datosUsuario.fecha_nacimiento | date:'dd-MM-yyyy' }}</p>
+        
+      </div>
+    </ion-card>
   </ion-content>
 </div>

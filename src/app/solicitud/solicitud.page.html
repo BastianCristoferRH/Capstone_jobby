@@ -6,15 +6,21 @@
   </ion-header>
   <ion-content class="ion-padding">
     <ion-list>
-      <ion-item class="ion-item-menu" (click)="perfil_menu()">
+      <ion-button class="custom-button" (click)="perfil_menu()">
         Perfil
-      </ion-item>
-      <ion-item class="ion-item-menu">
+      </ion-button>
+      <ion-button class="custom-button"> <!--(click)="perfil_trabajador()"-->
+        Perfil Trabajador
+      </ion-button>
+      <ion-button class="custom-button">
         Servicios
-      </ion-item>
-      <ion-item class="ion-item-menu" (click)="logout()">
+      </ion-button>
+      <ion-button class="custom-button "> <!--(click)="navegarAServicioSolicitado()"-->
+        Listado Servicio
+      </ion-button>
+      <ion-button class="custom-button" (click)="logout()">
         Cerrar Sesión
-      </ion-item>
+      </ion-button>
     </ion-list>
   </ion-content>
 </ion-menu>
@@ -28,29 +34,28 @@
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
-  <ion-content>
-    <ion-card>
+
+  <ion-content class="content-sol">
+    <H1 style="text-align: center;">ENVIAR SOLICITUD</H1>
+    <ion-card class="ion-card-solicitud">
       <ion-card-content>
-      
-        <ion-item>
+        <div>
           <ion-label position="floating">Título de la Solicitud</ion-label>
           <ion-input [(ngModel)]="titulo" name="titulo" type="text" required></ion-input>
-        </ion-item>
-        <ion-item>
+        </div>
+        <div >
           <ion-label>Servicio</ion-label>
           <ion-select [(ngModel)]="servicioSeleccionado" name="servicioSeleccionado" interface="popover">
             <ion-select-option *ngFor="let servicio of datosServicio; let i = index" [value]="servicio.name_serv">
               {{ servicio.name_serv }}
             </ion-select-option>
           </ion-select>
-        </ion-item>
-
-        <ion-item>
+        </div>
+        <div>
           <ion-label position="floating">Descripción</ion-label>
           <ion-textarea [(ngModel)]="descripcion" name="descripcion" required></ion-textarea>
-        </ion-item>
-        <ion-button expand="full" (click)="enviarSolicitud()">Enviar Solicitud</ion-button>
-
+        </div>
+        <ion-button shape="round" expand="full" class="custom-button" (click)="enviarSolicitud()" >Enviar Solicitud</ion-button>
       </ion-card-content>
     </ion-card>
   </ion-content>

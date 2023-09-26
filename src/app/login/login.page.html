@@ -18,19 +18,21 @@
               <h3 class="form-title">INICIAR SESIÓN</h3>
               <ion-item class="animate__animated animate__fadeIn">
                 <ion-label shape="round" position="floating">Correo electrónico</ion-label>
-                <ion-input shape="round" class="white-background" type="email" name="email" [(ngModel)]="correo_electronico"
-                  required></ion-input>
+                <ion-input shape="round" class="white-background" type="email" name="email"
+                  [(ngModel)]="correo_electronico" required></ion-input>
               </ion-item>
               <ion-item class="animate__animated animate__fadeIn">
-                <ion-label  position="floating">Contraseña</ion-label>
+                <ion-label position="floating">Contraseña</ion-label>
                 <ion-input shape="round" class="white-background" type="password" name="password" [(ngModel)]="password"
                   required></ion-input>
               </ion-item>
               <div class="ion-padding-top"></div>
-              <ion-button  shape="round" type="submit" expand="full" class="btn_login" (click)="login()">Iniciar Sesión</ion-button>
-              <ion-button shape="round" type="submit" expand="full" class="btn_registro"
-                routerLink="/registro">Registrarse</ion-button>
+              <ion-button shape="round" type="submit" expand="full" class="btn_login" (click)="login()">Iniciar
+                Sesión</ion-button>
+
             </form>
+            <ion-button shape="round" type="submit" expand="full" class="btn_registro"
+              routerLink="/registro">Registrarse</ion-button>
           </div>
         </ion-col>
         <ion-col size="1"></ion-col>

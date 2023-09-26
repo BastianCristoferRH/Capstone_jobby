@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
-
 @Component({
   selector: 'app-perfiltrabajador',
   templateUrl: './perfiltrabajador.page.html',
@@ -26,8 +25,8 @@ export class PerfiltrabajadorPage implements OnInit {
         (data: any) => {
           this.datosTrabajador = data;
           console.log(this.datosTrabajador);
-  
-          
+
+
         },
         (error: any) => {
           console.error('error al recibir los datos trabajador', error);
@@ -36,6 +35,11 @@ export class PerfiltrabajadorPage implements OnInit {
     });
   }
 
+  navigateToSolicitud() {
+    this.router.navigate(['/solicitud', this.correoElectronico]); 
+  }
+
+  //menu
 
 
   logout() {
@@ -57,6 +61,24 @@ export class PerfiltrabajadorPage implements OnInit {
   private navigateToUserProfile(correoElectronico: string) {
     this.router.navigate(['/perfil', correoElectronico]);
   }
+  perfil_trabajador() {
+    this.router.navigate(['/trabajador', this.correoElectronico]); // Usar 'this.correoElectronico'
+  }
 
-  
+  navegarAServicioSolicitado() {
+
+    const correoElectronico = this.authService.getCorreoElectronico();
+
+    if (correoElectronico) {
+      
+      this.router.navigate(['/servicio-solicitado', correoElectronico]);
+    } else {
+      console.error('Correo electrónico no disponible.');
+     
+    }
+  }
+
+
+
+
 }
