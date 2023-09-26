@@ -64,20 +64,15 @@ h3 {
     width: 80%;
     max-width: 80%;
     margin: 0 auto;
-    /* Centra horizontalmente */
     margin-top: 5%;
     background-color: rgba(255, 255, 255, 0.5);
     border-radius: 10px;
-    /* Bordes redondeados (ajusta según sea necesario) */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    /* Sombra */
 }
 
 ion-item.custom-menu-item {
     --color: black;
-    /* Cambia el color del texto */
     --background: transparent;
-    /* Cambia el color de fondo a transparente o al que desees */
     border: solid red;
 }
 
@@ -87,11 +82,17 @@ ion-list {
 }
 
 ion-button.custom-button {
-    --background: orange; /* Cambia el color de fondo de los botones */
-    color: red; /* Cambia el color del texto de los botones */
-    width: 100%; /* Haz que los botones ocupen el ancho completo */
+    --background: orange;
+    /* Cambia el color de fondo de los botones */
+    color: red;
+    /* Cambia el color del texto de los botones */
+    width: 100%;
+    /* Haz que los botones ocupen el ancho completo */
     display: flex;
-    justify-content: center; /* Centra horizontalmente el contenido */
-    align-items: center; /* Centra verticalmente el contenido */
+    justify-content: center;
+    /* Centra horizontalmente el contenido */
+    align-items: center;
+    /* Centra verticalmente el contenido */
     margin-top: 2%;
-  }
+}
+

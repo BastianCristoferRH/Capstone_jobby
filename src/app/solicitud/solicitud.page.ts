@@ -25,8 +25,8 @@ export class SolicitudPage implements OnInit {
   ngOnInit() {
 
     this.route.params.subscribe(params => {
-      this.correoElectronico_trabajador = params['correoElectronico']; // Utiliza 'correoElectronico'
-      this.loadServicio_solicitud(this.correoElectronico_trabajador); // Pasa 'correoElectronico' en lugar de 'userId'
+      this.correoElectronico_trabajador = params['correoElectronico'];
+      this.loadServicio_solicitud(this.correoElectronico_trabajador);
 
     });
 
@@ -63,40 +63,35 @@ export class SolicitudPage implements OnInit {
 
 
   enviarSolicitud() {
-    // Verifica si correo_electronico no es null antes de usarlo
     const correo_electronico = this.authService.getCorreoElectronico();
     if (!correo_electronico) {
       console.error('Correo electrónico no disponible.');
-      // Puedes manejar la falta de correo electrónico aquí
       return;
     }
-  
-    // Asegúrate de que datosServicio sea un arreglo
+
     if (!Array.isArray(this.datosServicio)) {
       console.error('Los datos del servicio no son válidos.');
       return;
     }
-  
+
     // Asegúrate de que servicioSeleccionado tenga un valor
     if (!this.servicioSeleccionado) {
       console.error('No se ha seleccionado un servicio válido.');
       return;
     }
-  
-    // Encuentra el índice en datosServicio
+
     const seleccionIndex = this.datosServicio.findIndex(servicio => servicio.name_serv === this.servicioSeleccionado);
-  
+
     if (seleccionIndex === -1) {
       console.error('No se ha encontrado el servicio seleccionado en los datos del servicio.');
       return;
     }
-  
+
     const correoElectronico_trabajadorx = this.correoElectronico_trabajador;
     const idTrabajadorSeleccionado = this.datosServicio[seleccionIndex].id_trabajador;
     const idDesServSeleccionado = this.datosServicio[seleccionIndex].id_des_serv;
-    const tituloSolicitud = this.titulo; 
-    const descripcionSolicitud = this.descripcion; // Obtén la descripción del formulario
-    // Llama a la función de AuthService para enviar la solicitud
+    const tituloSolicitud = this.titulo;
+    const descripcionSolicitud = this.descripcion; 
     this.authService.enviarSolicitud(
       correo_electronico,
       idTrabajadorSeleccionado,
@@ -106,17 +101,16 @@ export class SolicitudPage implements OnInit {
       correoElectronico_trabajadorx
     ).subscribe(
       (response: any) => {
-        // La solicitud se envió con éxito, puedes manejar aquí la respuesta del servidor
         console.log('Solicitud enviada con éxito', response);
-       
         this.navigateToUserProfile(correoElectronico_trabajadorx);
       },
       (error: any) => {
         console.error('Error al enviar la solicitud:', error);
-        // Maneja aquí los errores, por ejemplo, muestra un mensaje al usuario
       }
     );
   }
-  
+
+
+
 }
 

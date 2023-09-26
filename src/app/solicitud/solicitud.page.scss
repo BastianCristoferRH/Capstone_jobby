@@ -1,0 +1,22 @@
+ion-item.custom-menu-item {
+    --color: black;
+    --background: transparent;
+    border: solid red;
+}
+
+ion-list {
+    background-color: rgba(255, 255, 255, 0);
+    border: red;
+}
+
+ion-button.custom-button {
+    --background: orange;
+    color: red;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2%;
+}
+
+

@@ -145,11 +145,16 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) { // es pa
   usuario.apellidos,
   usuario.img,
   usuario.telefono,
-  usuario.fecha_nacimiento
+  usuario.fecha_nacimiento,
+  trabajador.des_perfil,
+  comuna.name_comuna,
+  region.name_region
       FROM trabajador
       JOIN descrip_servicio ON descrip_servicio.id_trabajador = trabajador.id_trabajador
       JOIN servicio ON servicio.id_serv = descrip_servicio.id_serv
       JOIN usuario ON usuario.correo_electronico = trabajador.correo_electronico  
+      JOIN comuna ON descrip_servicio.id_comuna = comuna.id_comuna  
+      JOIN region ON region.id_region=descrip_servicio.id_region
       WHERE trabajador.correo_electronico = ?
   `;
   const valores = [correoElectronico];
