@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 export class AuthService {
   private tokenKey = 'auth_token';
   private emailKey = 'auth_email'; // Clave para almacenar el correo electrónico
-  private apiUrl = 'http://192.168.1.7:4000';
+  private apiUrl = 'http://192.168.1.2:4001';
   constructor(private http: HttpClient) { }
 
   registrarUsuario(usuario: any) {
