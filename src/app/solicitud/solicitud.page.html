@@ -36,13 +36,14 @@
   </ion-header>
 
   <ion-content class="content-sol">
-    <ion-card>
+    <H1 style="text-align: center;">ENVIAR SOLICITUD</H1>
+    <ion-card class="ion-card-solicitud">
       <ion-card-content>
         <div>
           <ion-label position="floating">Título de la Solicitud</ion-label>
           <ion-input [(ngModel)]="titulo" name="titulo" type="text" required></ion-input>
         </div>
-        <div>
+        <div >
           <ion-label>Servicio</ion-label>
           <ion-select [(ngModel)]="servicioSeleccionado" name="servicioSeleccionado" interface="popover">
             <ion-select-option *ngFor="let servicio of datosServicio; let i = index" [value]="servicio.name_serv">
@@ -54,7 +55,7 @@
           <ion-label position="floating">Descripción</ion-label>
           <ion-textarea [(ngModel)]="descripcion" name="descripcion" required></ion-textarea>
         </div>
-        <ion-button expand="full" (click)="enviarSolicitud()">Enviar Solicitud</ion-button>
+        <ion-button shape="round" expand="full" class="custom-button" (click)="enviarSolicitud()" >Enviar Solicitud</ion-button>
       </ion-card-content>
     </ion-card>
   </ion-content>

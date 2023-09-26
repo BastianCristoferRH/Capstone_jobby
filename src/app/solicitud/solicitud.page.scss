@@ -20,3 +20,45 @@ ion-button.custom-button {
 }
 
 
+.solicitud{
+    margin-left: 20%;
+    margin-top:20% ;
+}
+
+ion-card.custom-card {
+  width: 80%;
+  max-width: 80%;
+  margin: 0 auto;
+  margin-top: 5%;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+ion-label.input-label {
+  color: black;
+}
+
+ion-select {
+  background-color: transparent;
+  border: 1px solid red;
+}
+
+ion-textarea {
+  border: 1px solid red;
+}
+
+ion-button.custom-buttonx {
+  --background: orange;
+  color: red;
+  width: 40%;
+}
+
+.ion-card-solicitud{
+    background-color: rgba(255,255,255,0.5);
+    color: black;
+}
+
+.btn-enviar-solicitud{
+    background-color: red;
+}
