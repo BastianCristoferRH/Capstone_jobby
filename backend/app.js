@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, aceptarSolicitud,obtenerRegiones,obtenerComunas,obtenerServicios,listarServicios, agregarReseña } = require('./controller');
+const { registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, aceptarSolicitud,obtenerRegiones,obtenerComunas,obtenerServicios,listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo } = require('./controller');
 const { ifError } = require('assert');
 
 
@@ -37,25 +37,8 @@ app.post('/login', (req, res) => {
     }
   });
 });
-//app.post('/agregar_servicio', (req, res) => {
-// Validar el token del trabajador aquí
 
-// Insertar el servicio en la base de datos
-//  const serviceData = req.body;
-//db.query('INSERT INTO descrip_servicio SET ?', serviceData, (err, result) => {
-//if (err) {
-//console.error('Error al agregar el servicio', err);
-//res.status(500).json({ error: 'Error al agregar el servicio' });
-//} else {
-//console.log('Servicio agregado con éxito');
-//res.status(200).json({ message: 'Servicio agregado con éxito' });
-// }
-//});
-//});
 app.post('/agregar_servicio', (req, res) => {
-  // Validar el token del trabajador aquí (debe implementarse)
-
-  // Insertar el servicio en la base de datos
   const serviceData = req.body;
   agregarServicio(serviceData, (error, resultado) => {
     if (error) {
@@ -213,6 +196,22 @@ app.post('/agregar-resena/:id_solicitud',(req,res)=>{
     }
   })
 
+});
+
+
+
+
+app.get('/obtener-trabajadorid/:correoElectronico', (req, res) => {
+  const correoElectronico = req.params.correoElectronico;
+  obtenerTrabajadorIdPorCorreo(correoElectronico, (error, resultados) => {
+    if (error) {
+      console.log("Error al obtener al trabajador solicitado: ", error);
+      res.status(500).json(error);
+    } else {
+      console.log("trabajador solicitado obtenidos con éxito: ", resultados);
+      res.status(200).json(resultados);
+    }
+  });
 });
 
 const puerto = 4001;
