@@ -150,7 +150,7 @@ function agregarServicio(serviceData, callback) {
       callback({ error: 'Error interno al agregar el servicio', details: err.message }, null);
     } else {
       console.log('Servicio agregado con éxito');
-      callback(null, { message: 'Servicio agregado con éxito' });
+      callback(null, { message: 'Servicio agregado con éxito' },result);
     }
 
   })
@@ -299,6 +299,27 @@ function agregarReseña(reseñaData,callback){
 
 
 
+
+
+
+function obtenerTrabajadorIdPorCorreo(correoElectronico, callback) {
+  const query = `SELECT id_trabajador FROM trabajador WHERE correo_electronico = ?`;
+  const valores = [correoElectronico];
+
+  db.query(query, valores, (err, resultados) => {
+    if (err) {
+      console.error('Error al obtener el trabajador solicitado:', err);
+      callback({ error: 'Error interno al obtener el trabajador solicitado', details: err.message }, null);
+    } else {
+      console.log('Trabajador solicitado obtenidos con éxito');
+      callback(null, resultados);
+    }
+  });
+
+}
+
+
+
 module.exports = {
   registroUsuario,
   iniciarSesion,
@@ -312,5 +333,6 @@ module.exports = {
   obtenerComunas,
   obtenerServicios,
   listarServicios,
-  agregarReseña
+  agregarReseña,
+  obtenerTrabajadorIdPorCorreo
 };

@@ -33,7 +33,7 @@ const routes: Routes = [
   },
 
   {
-    path: 'agregar-servicio',
+    path: 'agregar-servicio/:correoElectronico',
     loadChildren: () => import('./agregar-servicio/agregar-servicio.module').then( m => m.AgregarServicioPageModule),
     canActivate: [AuthGuard],
   },
