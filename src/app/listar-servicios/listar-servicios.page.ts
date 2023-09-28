@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
+import { Router } from '@angular/router'; 
 
 @Component({  
   selector: 'app-listar-servicios',
@@ -11,7 +12,8 @@ export class ListarServiciosPage implements OnInit {
   listaServicios:any[] = [];
   constructor(
     private http: HttpClient ,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
     ) { }
 
   ngOnInit() {
@@ -22,5 +24,9 @@ export class ListarServiciosPage implements OnInit {
       this.listaServicios = data;
       console.log(this.listaServicios);
     });
+  }
+  navegarAPerfilTrabajador(correoElectronico: string) {
+    const perfilTrabajadorUrl = `/trabajador/${correoElectronico}`;
+    this.router.navigate([perfilTrabajadorUrl]);
   }
 }
