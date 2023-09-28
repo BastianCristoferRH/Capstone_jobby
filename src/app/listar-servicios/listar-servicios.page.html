@@ -15,10 +15,6 @@
     <ion-searchbar [(ngModel)]="terminoBusqueda" (ionChange)="filtrarServicios()"(ionClear)="limpiarFiltro()"  placeholder="Buscar"></ion-searchbar>
     <button class="btn-busqueda" (click)="buscarServicios()">Buscar</button>
     <ion-header collapse="condense">
-      <ion-toolbar>
-        <ion-title size="large">JOBBY</ion-title>
-
-      </ion-toolbar>
     </ion-header>
     <div class="row" *ngFor="let servicio of listaServicios">
       <div class="column">
