@@ -12,8 +12,8 @@
 
   </ion-header>
   <ion-content [fullscreen]="true">
-    <ion-searchbar [(ngModel)]="terminoBusqueda" (ionChange)="filtrarServicios()"(ionClear)="limpiarFiltro()"></ion-searchbar>
-    <button ion-button (click)="buscarServicios()">Buscar</button>
+    <ion-searchbar [(ngModel)]="terminoBusqueda" (ionChange)="filtrarServicios()"(ionClear)="limpiarFiltro()"  placeholder="Buscar"></ion-searchbar>
+    <button class="btn-busqueda" (click)="buscarServicios()">Buscar</button>
     <ion-header collapse="condense">
       <ion-toolbar>
         <ion-title size="large">JOBBY</ion-title>
