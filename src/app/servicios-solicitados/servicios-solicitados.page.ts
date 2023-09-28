@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
-import { Router, ActivatedRoute } from '@angular/router';
-
+import { Router, ActivatedRoute } from '@angular/router'; 
 @Component({
   selector: 'app-servicios-solicitados',
   templateUrl: './servicios-solicitados.page.html',
