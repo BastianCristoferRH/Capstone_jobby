@@ -46,4 +46,9 @@ export class MenuComponent {
       console.error('Correo electrónico no disponible.');
     }
   }
+
+
+  inicio(){
+    this.router.navigate(['/listar-servicios']);
+  }
 }

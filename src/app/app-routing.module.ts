@@ -5,7 +5,7 @@ import { AuthGuard } from './auth.guard';
 const routes: Routes = [
   {
     path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+    loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
   },
   {
     path: '',
@@ -14,52 +14,53 @@ const routes: Routes = [
   },
   {
     path: 'registro',
-    loadChildren: () => import('./registro/registro.module').then( m => m.RegistroPageModule)
+    loadChildren: () => import('./registro/registro.module').then(m => m.RegistroPageModule)
   },
   {
     path: 'login',
-    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
- 
+    loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule)
+
   },
   {
-    path: 'perfil/:userId', 
-    loadChildren: () => import('./perfil/perfil.module').then( m => m.PerfilPageModule),
+    path: 'perfil/:userId',
+    loadChildren: () => import('./perfil/perfil.module').then(m => m.PerfilPageModule),
     canActivate: [AuthGuard],
   },
   {
     path: 'trabajador/:correoElectronico',
-    loadChildren: () => import('./perfiltrabajador/perfiltrabajador.module').then( m => m.PerfiltrabajadorPageModule),
+    loadChildren: () => import('./perfiltrabajador/perfiltrabajador.module').then(m => m.PerfiltrabajadorPageModule),
     canActivate: [AuthGuard],
   },
 
   {
     path: 'agregar-servicio',
-    loadChildren: () => import('./agregar-servicio/agregar-servicio.module').then( m => m.AgregarServicioPageModule),
+    loadChildren: () => import('./agregar-servicio/agregar-servicio.module').then(m => m.AgregarServicioPageModule),
     canActivate: [AuthGuard],
   },
   {
-    path: 'solicitud/:correoElectronico', 
-    loadChildren: () => import('./solicitud/solicitud.module').then( m => m.SolicitudPageModule),
+    path: 'solicitud/:correoElectronico',
+    loadChildren: () => import('./solicitud/solicitud.module').then(m => m.SolicitudPageModule),
     canActivate: [AuthGuard],
   },
   {
     path: 'listar-servicios',
-    loadChildren: () => import('./listar-servicios/listar-servicios.module').then( m => m.ListarServiciosPageModule)
+    loadChildren: () => import('./listar-servicios/listar-servicios.module').then(m => m.ListarServiciosPageModule),
+    canActivate: [AuthGuard],
   },
 
   {
     path: 'agregar-servicio',
-    loadChildren: () => import('./agregar-servicio/agregar-servicio.module').then( m => m.AgregarServicioPageModule),
+    loadChildren: () => import('./agregar-servicio/agregar-servicio.module').then(m => m.AgregarServicioPageModule),
     canActivate: [AuthGuard],
   },
   {
-    path: 'solicitud/:correoElectronico', 
-    loadChildren: () => import('./solicitud/solicitud.module').then( m => m.SolicitudPageModule),
+    path: 'solicitud/:correoElectronico',
+    loadChildren: () => import('./solicitud/solicitud.module').then(m => m.SolicitudPageModule),
     canActivate: [AuthGuard],
   },
   {
     path: 'servicio-solicitado/:correoElectronico',
-    loadChildren: () => import('./servicios-solicitados/servicios-solicitados.module').then( m => m.ServiciosSolicitadosPageModule),
+    loadChildren: () => import('./servicios-solicitados/servicios-solicitados.module').then(m => m.ServiciosSolicitadosPageModule),
     canActivate: [AuthGuard],
   },
 

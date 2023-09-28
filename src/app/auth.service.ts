@@ -107,6 +107,11 @@ export class AuthService {
     return this.http.put(`${this.apiUrl}/actualizar-solicitud/${solicitudId}`, data);
   }
 
+  cargarListadoServicios() { // listar servicios pagina de inicio
+     return this.http.get(`${this.apiUrl}/listar-servicios`);
+  }
+
 
 }
 
+  
