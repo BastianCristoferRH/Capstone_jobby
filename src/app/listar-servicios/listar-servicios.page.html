@@ -1,7 +1,7 @@
 <app-menu></app-menu>
 <div class="ion-page" id="main-content">
   <ion-header>
-    
+
     <ion-toolbar>
       <ion-title>JOBBY</ion-title>
       <ion-buttons slot="end">
@@ -9,14 +9,15 @@
       </ion-buttons>
       
     </ion-toolbar>
-    
+
   </ion-header>
   <ion-content [fullscreen]="true">
-  
+    <ion-searchbar [(ngModel)]="terminoBusqueda" (ionChange)="filtrarServicios()"(ionClear)="limpiarFiltro()"></ion-searchbar>
+    <button ion-button (click)="buscarServicios()">Buscar</button>
     <ion-header collapse="condense">
       <ion-toolbar>
         <ion-title size="large">JOBBY</ion-title>
-  
+
       </ion-toolbar>
     </ion-header>
     <div class="row" *ngFor="let servicio of listaServicios">
@@ -26,16 +27,15 @@
         <p style="text-align: center;">⭐⭐⭐⭐⭐</p>
         <p>Presencial: {{ servicio.presencial === '1' ? 'Sí' : 'No' }}</p>
         <p>Disponibilidad: {{ servicio.disponibilidad }}</p>
-       
+
         <p>Comuna: {{ servicio.name_comuna }}</p>
         <p>Región: {{ servicio.name_region }}</p>
-        <button shape="round" class="boton-look-perfil"  (click)="navegarAPerfilTrabajador(servicio.correo_electronico)">Ver perfil</button>
+        <button shape="round" class="boton-look-perfil"
+          (click)="navegarAPerfilTrabajador(servicio.correo_electronico)">Ver perfil</button>
       </div>
-      
+
     </div>
-  </ion-content> 
+  </ion-content>
 
-  
+
 </div>
-
-

@@ -64,3 +64,10 @@ button {
   }
   
 }
+
+ion-searchbar {
+  --background: rgb(231, 46, 46)  ;
+  width: 70%; /* Ancho personalizado (ajusta según tus necesidades) */
+  margin: 0 auto; /* Centra horizontalmente */
+  color: white;
+}
