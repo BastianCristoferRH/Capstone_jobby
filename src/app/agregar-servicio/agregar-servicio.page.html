@@ -1,16 +1,15 @@
-<ion-header [translucent]="true" class="gradiante">
+<app-menu></app-menu>
+<div class="ion-page" id="ion-content">
+<ion-header>
   <ion-toolbar>
-    <ion-title>agregar_servicio</ion-title>
+    <ion-title size="large">agregar_servicio</ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
 <ion-content [fullscreen]="true" class="gradiante">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">agregar_servicio</ion-title>
-    </ion-toolbar>
-  </ion-header>
-<div>
+
   <form (submit)="addService()" class="service-form">
     <h2>Agregar Servicio</h2>
   
@@ -29,7 +28,6 @@
       <select id="id_serv" name="id_serv" [(ngModel)]="servicioo.id_serv" required>
         <option value="" disabled selected>Selecciona un servicio</option>
         <option *ngFor="let servicio of servicios" [value]="servicio.id_serv">{{ servicio.name_serv }}</option>
-        <!-- Agrega más opciones según tus servicios disponibles -->
       </select>
     </div>
   
@@ -51,5 +49,6 @@
   
     <button type="submit" class="submit-button">Agregar Servicio</button>
   </form>
-</div>
+
 </ion-content>
+</div>

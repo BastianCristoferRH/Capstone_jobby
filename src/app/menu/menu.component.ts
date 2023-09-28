@@ -51,4 +51,8 @@ export class MenuComponent {
   inicio(){
     this.router.navigate(['/listar-servicios']);
   }
+
+  agregarServicio(){
+    this.router.navigate(['/agregar-servicio',this.authService.getCorreoElectronico()]);
+  }
 }

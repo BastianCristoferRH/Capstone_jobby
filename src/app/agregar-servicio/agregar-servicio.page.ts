@@ -56,10 +56,10 @@ export class AgregarServicioPage implements OnInit {
     this.cargarComunas();
     this.cargarServicios();
   }
-  private navigateToServiceList(correoElectronico: string) {
-    this.router.navigate(['/listar-servicios', correoElectronico]);
+  private navigateToServiceList() {
+    this.router.navigate(['/listar-servicios']);
   }
-
+ 
   addService() {
     const correoElectronico = this.authService.getCorreoElectronico();
     this.servicio.des_serv = this.servicioo.des_serv;
@@ -81,11 +81,8 @@ export class AgregarServicioPage implements OnInit {
       (response) => {
         console.log('Servicio agregado con éxito', response);
         console.log(this.servicio.des_serv);
-        // Puedes realizar acciones adicionales después de agregar el servicio aquí
-        if(correoElectronico){
-          this.navigateToServiceList(correoElectronico);
-        }
-        
+        // Puedes realizar acciones adicionales después de agregar el servicio aqu
+          this.navigateToServiceList();
       },
       (error) => {
         console.error('Error al agregar el servicio:', error);

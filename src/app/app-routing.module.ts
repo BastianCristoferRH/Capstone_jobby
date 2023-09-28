@@ -43,7 +43,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'listar-servicios/:correoElectronico',
+    path: 'listar-servicios',
     loadChildren: () => import('./listar-servicios/listar-servicios.module').then( m => m.ListarServiciosPageModule)
   },
 
