@@ -288,6 +288,27 @@ function listarServicios(callback){
 }
 
 
+function agregarReseña(reseñaData,callback){
+  const query = `INSERT INTO reseña (descripcion, calificacion, id_solicitud) VALUES(?,?,?)`;
+  const valores = [
+    reseñaData.descripcion,
+    reseñaData.calificacion,
+    reseñaData.id_solicitud
+  ];
+  db.query(query, valores, (error, result) => {
+    if (error) {
+      console.log("Error al agregar reseña",error);
+      callback(error,null);
+      return;
+      
+    }else{
+      console.log("Exito al agregar reseña",result);
+      callback(null,result);
+    }
+
+  });
+}
+
 
 
 
@@ -304,5 +325,6 @@ module.exports = {
   obtenerRegiones,
   obtenerComunas,
   obtenerServicios,
-  listarServicios
+  listarServicios,
+  agregarReseña
 };

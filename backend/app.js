@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, aceptarSolicitud,obtenerRegiones,obtenerComunas,obtenerServicios,listarServicios } = require('./controller');
+const { registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, aceptarSolicitud,obtenerRegiones,obtenerComunas,obtenerServicios,listarServicios, agregarReseña } = require('./controller');
 const { ifError } = require('assert');
 
 
@@ -197,6 +197,22 @@ app.put('/actualizar-solicitud/:id', (req, res) => {
       res.status(200).json(resultado);
     }
   });
+});
+
+app.post('/agregar-resena/:id_solicitud',(req,res)=>{
+  const solicitudId = req.params.id_solicitud;
+  const reseñaData = req.body;
+  agregarReseña(reseñaData,(error, result)=> {
+    if (error) {
+      console.log("Error al agregar reseña", error);
+      res.status(500).json(error);
+      
+    }else{
+      console.log("Reseña agregada con exito");
+      res.status(200).json(result)
+    }
+  })
+
 });
 
 const puerto = 4001;
