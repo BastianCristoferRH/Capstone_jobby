@@ -1,54 +1,55 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true" class="gradiante">
   <ion-toolbar>
     <ion-title>agregar_servicio</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="gradiante">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">agregar_servicio</ion-title>
     </ion-toolbar>
   </ion-header>
-
+<div>
   <form (submit)="addService()" class="service-form">
     <h2>Agregar Servicio</h2>
   
     <div class="form-group">
       <label for="des_serv">Descripción del Servicio:</label>
-      <textarea id="des_serv" name="des_serv" [(ngModel)]="servicio.des_serv" required></textarea>
+      <textarea id="des_serv" name="des_serv" [(ngModel)]="servicioo.des_serv" required></textarea>
     </div>
   
     <div class="form-group">
       <label for="presencial">Presencial:</label>
-      <input type="checkbox" id="presencial" name="presencial" [(ngModel)]="servicio.presencial">
+      <input type="checkbox" id="presencial" name="presencial" [(ngModel)]="servicioo.presencial">
     </div>
   
     <div class="form-group">
       <label for="id_serv">Seleccionar Servicio:</label>
-      <select id="id_serv" name="id_serv" [(ngModel)]="servicio.id_serv" required>
+      <select id="id_serv" name="id_serv" [(ngModel)]="servicioo.id_serv" required>
         <option value="" disabled selected>Selecciona un servicio</option>
-        <option *ngFor="let servicio of servicios" [value]="servicio.id">{{ servicio.name_serv }}</option>
+        <option *ngFor="let servicio of servicios" [value]="servicio.id_serv">{{ servicio.name_serv }}</option>
         <!-- Agrega más opciones según tus servicios disponibles -->
       </select>
     </div>
   
     <div class="form-group">
       <label for="id_comuna">Seleccionar Comuna:</label>
-      <select id="id_comuna" name="id_comuna" [(ngModel)]="servicio.id_comuna" required>
+      <select id="id_comuna" name="id_comuna" [(ngModel)]="servicioo.id_comuna" required>
         <option value="" disabled selected>Selecciona una comuna</option>
-        <option *ngFor="let comuna of comunas" [value]="comuna.id">{{ comuna.name_comuna }}</option>
+        <option *ngFor="let comuna of comunas" [value]="comuna.id_comuna">{{ comuna.name_comuna }}</option>
       </select>
     </div>
   
     <div class="form-group">
       <label for="id_region">Seleccionar Región:</label>
-      <select id="id_region" name="id_region" [(ngModel)]="servicio.id_region" required>
+      <select id="id_region" name="id_region" [(ngModel)]="servicioo.id_region" required>
         <option value="" disabled selected>Selecciona una región</option>
-        <option *ngFor="let region of regiones" [value]="region.id">{{ region.name_region }}</option>
+        <option *ngFor="let region of regiones" [value]="region.id_region">{{ region.name_region }}</option>
       </select>
     </div>
   
     <button type="submit" class="submit-button">Agregar Servicio</button>
   </form>
+</div>
 </ion-content>

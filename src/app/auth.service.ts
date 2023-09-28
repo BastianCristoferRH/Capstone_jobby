@@ -111,6 +111,15 @@ export class AuthService {
      return this.http.get(`${this.apiUrl}/listar-servicios`);
   }
 
+  agregarServicio(serviceData: any): Observable<any> {
+
+    return this.http.post(`${this.apiUrl}/agregar_servicio`,serviceData);
+  }
+
+  getTrabajadorIdPorCorreo(correoElectronico: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/obtener-trabajador-id/${correoElectronico}`);
+  }
+
 
 }
 

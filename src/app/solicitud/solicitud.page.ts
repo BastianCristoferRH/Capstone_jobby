@@ -74,7 +74,6 @@ export class SolicitudPage implements OnInit {
       return;
     }
 
-    // Asegúrate de que servicioSeleccionado tenga un valor
     if (!this.servicioSeleccionado) {
       console.error('No se ha seleccionado un servicio válido.');
       return;
