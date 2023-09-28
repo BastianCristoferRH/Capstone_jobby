@@ -61,7 +61,8 @@ const routes: Routes = [
     path: 'servicio-solicitado/:correoElectronico',
     loadChildren: () => import('./servicios-solicitados/servicios-solicitados.module').then( m => m.ServiciosSolicitadosPageModule),
     canActivate: [AuthGuard],
-  },  {
+  },
+  {
     path: 'agregar-resena',
     loadChildren: () => import('./agregar-resena/agregar-resena.module').then( m => m.AgregarResenaPageModule)
   },
