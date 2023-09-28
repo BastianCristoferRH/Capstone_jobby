@@ -56,8 +56,8 @@ export class AgregarServicioPage implements OnInit {
     this.cargarComunas();
     this.cargarServicios();
   }
-  private navigateToUserProfile(correoElectronico: string) {
-    this.router.navigate(['/perfil', correoElectronico]);
+  private navigateToServiceList(correoElectronico: string) {
+    this.router.navigate(['/listar-servicios', correoElectronico]);
   }
 
   addService() {
@@ -83,7 +83,7 @@ export class AgregarServicioPage implements OnInit {
         console.log(this.servicio.des_serv);
         // Puedes realizar acciones adicionales después de agregar el servicio aquí
         if(correoElectronico){
-          this.navigateToUserProfile(correoElectronico);
+          this.navigateToServiceList(correoElectronico);
         }
         
       },
