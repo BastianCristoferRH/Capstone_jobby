@@ -1,8 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-agregar-servicio',
@@ -10,8 +8,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./agregar-servicio.page.scss'],
 })
 export class AgregarServicioPage implements OnInit {
-
-
   servicioo: any = {};
   regiones: any[] = [];
   comunas: any[] = [];
@@ -27,22 +23,18 @@ export class AgregarServicioPage implements OnInit {
   trabajadorInfo: any = {};
   trabajadorId: any = {};
 
-  constructor(private http: HttpClient,
+  constructor(
     private authService: AuthService,
-    private router: Router) { }
-
+    private router: Router
+  ) { }
 
   ngOnInit() {
     const correoElectronico = this.authService.getCorreoElectronico();
-    console.log(correoElectronico);
+
     if (correoElectronico) {
-      // Llama al servicio para obtener la información del trabajador por correo electrónico
       this.authService.getTrabajadorIdPorCorreo(correoElectronico).subscribe(
         (data: any) => {
-          console.log(data);
-          this.trabajadorId = data; // Almacena la información del trabajador
-          
-          console.log(this.trabajadorId[0].id_trabajador);
+          this.trabajadorId = data;
         },
         (error) => {
           console.error('Error al obtener información del trabajador:', error);
@@ -51,62 +43,48 @@ export class AgregarServicioPage implements OnInit {
     } else {
       console.error('El correo electrónico es nulo o no está disponible.');
     }
-    
-    this.cargarRegiones();
-    this.cargarComunas();
-    this.cargarServicios();
+
+    // Llama a las funciones del servicio para cargar regiones, comunas y servicios
+    this.authService.cargarRegiones().subscribe((data: any) => {
+      this.regiones = data;
+    });
+
+    this.authService.cargarComunas().subscribe((data: any) => {
+      this.comunas = data;
+    });
+
+    this.authService.cargarServicios().subscribe((data: any) => {
+      this.servicios = data;
+    });
   }
+
   private navigateToServiceList() {
     this.router.navigate(['/listar-servicios']);
   }
- 
+
   addService() {
     const correoElectronico = this.authService.getCorreoElectronico();
     this.servicio.des_serv = this.servicioo.des_serv;
     this.servicio.presencial = this.servicioo.presencial;
+
     if (this.trabajadorId.length > 0) {
-      // Asigna el ID del trabajador al objeto this.servicio
       this.servicio.id_trabajador = this.trabajadorId[0].id_trabajador;
     } else {
       console.error('No se encontró información del trabajador.');
     }
+
     this.servicio.id_serv = this.servicioo.id_serv;
     this.servicio.id_comuna = this.servicioo.id_comuna;
     this.servicio.id_region = this.servicioo.id_region;
 
-    console.log(this.servicio);
-
-
     this.authService.agregarServicio(this.servicio).subscribe(
       (response) => {
         console.log('Servicio agregado con éxito', response);
-        console.log(this.servicio.des_serv);
-        // Puedes realizar acciones adicionales después de agregar el servicio aqu
-          this.navigateToServiceList();
+        this.navigateToServiceList();
       },
       (error) => {
         console.error('Error al agregar el servicio:', error);
       }
     );
   }
-  cargarRegiones() {
-    this.http.get('http://localhost:4001/obtener-regiones').subscribe((data: any) => {
-      this.regiones = data;
-    });
-  }
-  cargarComunas() {
-    this.http.get('http://localhost:4001/obtener-comunas').subscribe((data: any) => {
-      this.comunas = data;
-    });
-  }
-  cargarServicios() {
-    this.http.get('http://localhost:4001/obtener-servicios').subscribe((data: any) => {
-      this.servicios = data;
-      //console.log(this.servicios);
-    });
-  }
-
-
-
-
 }

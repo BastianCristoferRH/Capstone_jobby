@@ -31,9 +31,9 @@
         <p>⭐⭐⭐⭐⭐</p>
         <p>{{datosTrabajador[0]?.des_perfil}}</p>
       </div>
-
       <div style="text-align: center; padding-bottom: 5px;">
-        <ion-button *ngIf="datosTrabajador.length"  shape="round" class="button-solicitar-servicio custom-buttonx" (click)="navigateToSolicitud()">Solicitar</ion-button>
+        <ion-button *ngIf="datosTrabajador.length>0 && mostrarBotonSolicitar" shape="round" class="button-solicitar-servicio custom-buttonx" (click)="navigateToSolicitud()">Solicitar</ion-button> <br>
+        <ion-button *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length>0" shape="round" class="button-solicitar-servicio custom-buttonx" (click)="agregarServicio()" >Agregar Servicio</ion-button>
       </div>
     </ion-card>
     <br><br>

@@ -21,16 +21,14 @@ export class AgregarResenaPage implements OnInit {
      }
 
     agregarReseña() {
-      // Realiza una solicitud POST a tu API para agregar la reseña
       this.http.post(`http://localhost:4001/agregar-resena/${this.solicitudId}`, this.reseñaData)
         .subscribe(
           (result) => {
             console.log("Reseña agregada con éxito", result);
-            // Puedes redirigir a otra página o realizar otras acciones aquí
+           
           },
           (error) => {
             console.log("Error al agregar reseña", error);
-            // Maneja el error de acuerdo a tus necesidades
           }
         );
     }

@@ -120,6 +120,17 @@ export class AuthService {
     return this.http.get(`${this.apiUrl}/obtener-trabajadorid/${correoElectronico}`);
   }
 
+  cargarRegiones() {
+    return this.http.get(`${this.apiUrl}/obtener-regiones`);
+  }
+  cargarComunas() {
+    return this.http.get(`${this.apiUrl}/obtener-comunas`);
+  }
+  cargarServicios() {
+    return this.http.get(`${this.apiUrl}/obtener-servicios`);
+  }
+
+
 
 }
 

@@ -9,6 +9,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 
 export class PerfiltrabajadorPage implements OnInit {
+  mostrarBotonAgregarServicio: boolean = false;
+  mostrarBotonSolicitar: boolean = true;
   correoElectronico: string = '';
   datosTrabajador: any = []; // Ahora inicializado como un arreglo
 
@@ -18,22 +20,29 @@ export class PerfiltrabajadorPage implements OnInit {
     private route: ActivatedRoute,
   ) { }
 
-  ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.correoElectronico = params['correoElectronico'];
-      this.authService.loadTrabajadorData(this.correoElectronico).subscribe(
-        (data: any) => {
-          this.datosTrabajador = data;
-          console.log(this.datosTrabajador);
+ngOnInit() {
+  this.route.params.subscribe(params => {
+    this.correoElectronico = params['correoElectronico'];
 
+    // Cargar los datos del trabajador
+    this.authService.loadTrabajadorData(this.correoElectronico).subscribe(
+      (data: any) => {
+        this.datosTrabajador = data;
+        console.log(this.datosTrabajador);
 
-        },
-        (error: any) => {
-          console.error('error al recibir los datos trabajador', error);
-        },
-      );
-    });
-  }
+        // Verificar si el correo del trabajador coincide con el usuario autenticado
+        const usuarioAutenticado = this.authService.getCorreoElectronico();
+        if (usuarioAutenticado === this.correoElectronico) {
+          this.mostrarBotonAgregarServicio = true;
+          this.mostrarBotonSolicitar = false; // Ocultar el botón "Solicitar"
+        }
+      },
+      (error: any) => {
+        console.error('Error al recibir los datos del trabajador', error);
+      }
+    );
+  });
+}
 
   navigateToSolicitud() {
     this.router.navigate(['/solicitud', this.correoElectronico]); 
@@ -76,6 +85,11 @@ export class PerfiltrabajadorPage implements OnInit {
       console.error('Correo electrónico no disponible.');
      
     }
+  }
+
+  agregarServicio(){
+    this.router.navigate(['/agregar-servicio',this.authService.getCorreoElectronico()]);
+    console.log("click")
   }
 
 
