@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute ,Router } from '@angular/router';
 import { AuthService } from '../auth.service'; 
 
 @Component({
@@ -13,7 +13,9 @@ export class RegistrarTrabajadorPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private authService: AuthService 
+    private authService: AuthService ,
+    private router: Router,
+
   ) {}
 
   ngOnInit() {
@@ -33,10 +35,13 @@ export class RegistrarTrabajadorPage implements OnInit {
     this.authService.registrarTrabajador(trabajadorData).subscribe(
       (response) => {
         console.log('Trabajador registrado con éxito', response)
+        this.router.navigate(['/agregar-servicio',this.authService.getCorreoElectronico()]);
       },
       (error) => {
         console.error('Error al registrar al trabajador:', error);
       }
     );
   }
+
+  
 }

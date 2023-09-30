@@ -1,20 +1,23 @@
-<ion-header>
+<app-menu></app-menu>
+<ion-header id="main-content">
   <ion-toolbar>
-    <ion-title>Registrar Trabajador</ion-title>
+    <ion-title>JOBBY</ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
   </ion-toolbar>
+  
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-card>
-    <ion-card-content>
-      <form (ngSubmit)="registrarTrabajador()">
-        <ion-item>
-          <ion-label position="stacked">Descripción</ion-label>
-          <ion-textarea [(ngModel)]="descripcion" name="descripcion" required></ion-textarea>
-        </ion-item>
-
-
-        <ion-button expand="full" type="submit">Registrar</ion-button>
+    <ion-card-content class="form-trabajador-registro">
+      <H1 style="text-align: center;">Registrarse como trabajador</H1>
+      <br>
+      <form (ngSubmit)="registrarTrabajador()" class="registro-from">
+        <ion-label position="stacked">Descripción perfil</ion-label>
+        <ion-textarea [(ngModel)]="descripcion" name="descripcion" required></ion-textarea>
+        <ion-button class="buton-registro" expand="full" type="submit">Registrar</ion-button>
       </form>
     </ion-card-content>
   </ion-card>

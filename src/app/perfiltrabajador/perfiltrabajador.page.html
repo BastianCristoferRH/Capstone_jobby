@@ -22,7 +22,7 @@
       </div>
       <div *ngIf="!datosTrabajador.length">
           <h2 style="color: white; text-align: center;">NO POSEE CUENTA TRABAJADOR</h2>
-        <ion-button  shape="round" class="button-solicitar-servicio custom-buttonx boton-crear">CREAR</ion-button>
+        <ion-button  shape="round" class="button-solicitar-servicio custom-buttonx boton-crear" (click)="navegarCrearPerfilTrabajador()">CREAR</ion-button>
       </div>
       
       <div class="datos" *ngIf="datosTrabajador.length">
