@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, aceptarSolicitud,obtenerRegiones,obtenerComunas,obtenerServicios,listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo } = require('./controller');
+const { registrarTrabajador,registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, aceptarSolicitud,obtenerRegiones,obtenerComunas,obtenerServicios,listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo } = require('./controller');
 const { ifError } = require('assert');
 
 
@@ -213,6 +213,26 @@ app.get('/obtener-trabajadorid/:correoElectronico', (req, res) => {
     }
   });
 });
+
+app.post('/registrar-trabajador', (req, res) => {
+  const trabajadorData = req.body;
+
+  registrarTrabajador(
+    trabajadorData.disponibilidad,
+    trabajadorData.des_perfil,
+    trabajadorData.correo_electronico,
+    (error, result) => {
+      if (error) {
+        console.error('Error al registrar el trabajador:', error);
+        res.status(500).json({ error: 'Error interno al registrar el trabajador' });
+      } else {
+        console.log('Trabajador registrado con éxito');
+        res.status(200).json({ message: 'Trabajador registrado con éxito' });
+      }
+    }
+  );
+});
+
 
 const puerto = 4001;
 

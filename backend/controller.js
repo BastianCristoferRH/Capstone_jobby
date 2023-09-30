@@ -318,6 +318,17 @@ function obtenerTrabajadorIdPorCorreo(correoElectronico, callback) {
 
 }
 
+const registrarTrabajador = (disponibilidad, des_perfil, correo_electronico, callback) => {
+  const query = `INSERT INTO trabajador (disponibilidad, des_perfil, correo_electronico) VALUES (?, ?, ?)`;
+
+  db.query(query, [disponibilidad, des_perfil, correo_electronico], (error, result) => {
+    if (error) {
+      console.error('Error al registrar el trabajador:', error);
+      return callback(error, null); 
+    }
+    callback(null, result);
+  });
+};
 
 
 module.exports = {
@@ -334,5 +345,6 @@ module.exports = {
   obtenerServicios,
   listarServicios,
   agregarReseña,
-  obtenerTrabajadorIdPorCorreo
+  obtenerTrabajadorIdPorCorreo,
+  registrarTrabajador
 };

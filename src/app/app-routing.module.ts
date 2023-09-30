@@ -64,8 +64,15 @@ const routes: Routes = [
   },
   {
     path: 'agregar-resena',
-    loadChildren: () => import('./agregar-resena/agregar-resena.module').then( m => m.AgregarResenaPageModule)
+    loadChildren: () => import('./agregar-resena/agregar-resena.module').then( m => m.AgregarResenaPageModule),
+    canActivate: [AuthGuard],
   },
+  {
+    path: 'registrar-trabajado/:correo',
+    loadChildren: () => import('./registrar-trabajador/registrar-trabajador.module').then( m => m.RegistrarTrabajadorPageModule),
+    canActivate: [AuthGuard],
+  },
+
 
 
 

@@ -130,6 +130,12 @@ export class AuthService {
     return this.http.get(`${this.apiUrl}/obtener-servicios`);
   }
 
+  
+  registrarTrabajador(trabajadorData: any) {
+    const url = `${this.apiUrl}/registrar-trabajador`;
+    return this.http.post(url, trabajadorData);
+  }
+
 
 
 }
