@@ -28,6 +28,9 @@
 <div class="ion-page" id="main-content">
   <ion-header>
     <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/"></ion-back-button>
+      </ion-buttons>
       <ion-title>Perfil Trabajador</ion-title>
       <ion-buttons slot="end">
         <ion-menu-button></ion-menu-button>
@@ -47,8 +50,7 @@
 
 <div class="datos"> 
   <h3>{{datosTrabajador[0]?.nombre}} {{datosTrabajador[0]?.apellidos}}</h3>
-  <p>Correo de contacto: {{datosTrabajador[0]?.correo_electronico}}</p>
-  <p>Telefono de contacto: {{datosTrabajador[0]?.telefono}}</p>
+  <p>{{datosTrabajador[0]?.des_serv}}</p>
 </div>
 
 <div style="text-align: center; padding-bottom: 5px;">

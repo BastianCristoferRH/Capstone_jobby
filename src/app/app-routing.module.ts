@@ -62,6 +62,12 @@ const routes: Routes = [
     loadChildren: () => import('./servicios-solicitados/servicios-solicitados.module').then( m => m.ServiciosSolicitadosPageModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'modificar-servicio/:id_des_serv',
+    loadChildren: () => import('./modificar-servicio/modificar-servicio.module').then( m => m.ModificarServicioPageModule),
+    canActivate: [AuthGuard],
+  },
+
 
 
 

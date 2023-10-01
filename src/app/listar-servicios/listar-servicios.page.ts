@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router} from '@angular/router';
 
 @Component({
   selector: 'app-listar-servicios',
@@ -8,13 +9,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ListarServiciosPage implements OnInit {
   listaServicios:any[] = [];
-  constructor(private http: HttpClient ) { }
+  constructor(private http: HttpClient,
+              private router: Router ) { }
 
   ngOnInit() {
     this.cargarListadoServicios();
   }
+
+  perfil_trabajador(correoElectronico: string) {
+    // Usar 'correoElectronico' para construir la URL y navegar
+    this.router.navigate(['/trabajador', correoElectronico]);
+  }
+
   cargarListadoServicios() {
-    this.http.get('http://localhost:3000/listar-servicios').subscribe((data: any) => {
+    this.http.get('http://localhost:4000/listar-servicios').subscribe((data: any) => {
       this.listaServicios = data;
       console.log(this.listaServicios);
      });

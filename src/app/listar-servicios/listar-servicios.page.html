@@ -21,7 +21,8 @@
       <p>Nombre del Servicio: {{ servicio.name_serv }}</p>
       <p>Comuna: {{ servicio.name_comuna }}</p>
       <p>Región: {{ servicio.name_region }}</p>
-      <button>Solicitar servicio</button>
+
+      <button (click)="perfil_trabajador(servicio.correo_electronico)">ver perfil</button>
     </div>
     
   </div>

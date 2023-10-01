@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, aceptarSolicitud,obtenerRegiones,obtenerComunas,obtenerServicios,listarServicios } = require('./controller');
+const { registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo,modificarServicio, agregarServicio, enviarSolicitud, obtenerDatosTrabajadorPorCorreo,
+   obtenerServiciosSolicitadosPorTrabajador, aceptarSolicitud,obtenerRegiones,obtenerComunas,obtenerServicios,listarServicios,servEspecifico } = require('./controller');
 const { ifError } = require('assert');
 
 
@@ -68,6 +69,26 @@ app.post('/agregar_servicio', (req, res) => {
   });
 });
 
+
+app.put('/modificar_servicio/:id_des_serv', (req, res) => {
+  const id_des_serv = req.params.id_des_serv;
+  const serviceData = req.body;
+
+  // Llamar a la función modificarServicio con el id_des_serv y los nuevos datos
+  modificarServicio(id_des_serv, serviceData, (error, resultado) => {
+    if (error) {
+      console.error('Error al modificar el servicio:', error);
+      res.status(500).json(error);
+    } else {
+      console.log('Servicio modificado con éxito');
+      res.status(200).json(resultado);
+    }
+  });
+});
+
+
+
+
 app.get('/usuario/:correo', (req, res) => {
   const correoElectronico = req.params.correo;
 
@@ -112,6 +133,20 @@ app.get('/obtener-datos-trabajador/:correo', (req, res) => { // get de los datos
   });
 });
 
+app.get('/servicio-especifico/:id_des_serv', (req, res) => {
+  const id_des_serv = req.params.id_des_serv;
+
+  servEspecifico(id_des_serv,(error, result) => {
+    if (error) {
+      console.log("Error al obtener el servicio", error);
+      res.status(404).json(error);
+    } else {
+      console.log("Servicio obtenido con exito", result);
+      res.status(200).json(result);
+    }
+  })
+})
+
 app.get('/obtener-regiones', (req, res) => {
 
   obtenerRegiones((error, result) => {
@@ -144,6 +179,8 @@ app.get('/obtener-comunas', (req, res) => {
 
 
 })
+
+
 
 app.get('/obtener-servicios', (req, res) => {
   obtenerServicios((error, result) => {
@@ -198,6 +235,9 @@ app.put('/actualizar-solicitud/:id', (req, res) => {
     }
   });
 });
+
+
+
 
 const puerto = 4000;
 

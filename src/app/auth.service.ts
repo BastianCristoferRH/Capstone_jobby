@@ -10,12 +10,14 @@ import { Observable } from 'rxjs';
 export class AuthService {
   private tokenKey = 'auth_token';
   private emailKey = 'auth_email'; // Clave para almacenar el correo electrónico
-  private apiUrl = 'http://192.168.1.7:4000';
+  private apiUrl = 'http://localhost:4000';
   constructor(private http: HttpClient) { }
 
   registrarUsuario(usuario: any) {
     return this.http.post(`${this.apiUrl}/registro`, usuario);
   }
+
+  
 
   login(correo_electronico: string, password: string) {
     const userData = {
@@ -91,7 +93,9 @@ export class AuthService {
     return this.http.post(url, solicitudData);
   }
 
-
+  loadServData(id_des_serv: string) {
+    return this.http.get(`${this.apiUrl}/servicio-especifico/${id_des_serv}`); 
+  }
 
   loadTrabajadorData(correoElectronico: string) {
     return this.http.get(`${this.apiUrl}/obtener-datos-trabajador/${correoElectronico}`); 

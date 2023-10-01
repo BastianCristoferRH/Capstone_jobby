@@ -111,6 +111,30 @@ function agregarServicio(serviceData, callback) {
   })
 };
 
+function modificarServicio(id_des_serv, serviceData, callback) {
+  // Validar el token del trabajador aquí (debe implementarse)
+
+  // Actualizar el servicio en la base de datos
+  db.query('UPDATE `descrip_servicio` SET `id_des_serv`=?,`des_serv`=?,`presencial`=?,`id_trabajador`=?,`id_serv`=?,`id_comuna`=?,`id_region`=? WHERE id_des_serv=?',
+    [serviceData.id_des_serv,serviceData.des_serv, serviceData.presencial, serviceData.id_trabajador, serviceData.id_serv, serviceData.id_comuna, serviceData.id_region, id_des_serv],
+    (err, result) => {
+      if (err) {
+        console.error('Error al modificar el servicio:', err);
+        callback({ error: 'Error interno al modificar el servicio', details: err.message }, null);
+      } else {
+        if (result.affectedRows === 0) {
+          // Si no se encontró ningún registro para actualizar
+          callback({ error: 'Servicio no encontrado', details: 'No se encontró el servicio para modificar' }, null);
+        } else {
+          console.log('Servicio modificado con éxito');
+          callback(null, { message: 'Servicio modificado con éxito' });
+        }
+      }
+    }
+  );
+}
+
+
 function enviarSolicitud(solicitudData, callback) {
   const sql = 'INSERT INTO solicitud (id_trabajador, id_des_serv, correo_electronico, titulo_solicitud, estado, fecha_solicitud,des_solicitud) VALUES (?, ?, ?, ?, ?, ?, ?)';
   const valores = [
@@ -201,6 +225,25 @@ function obtenerServiciosSolicitadosPorTrabajador(correoElectronico, callback) {
   });
 }
 
+function servEspecifico(id_des_serv,callback){
+  const query = `SELECT ds.des_serv, ds.id_des_serv, ds.presencial, ds.id_trabajador, ds.id_serv, ds.id_region, ds.id_comuna, ds.presencial, t.correo_electronico, t.disponibilidad, name_serv, name_comuna, name_region 
+  FROM descrip_servicio ds JOIN trabajador t ON(ds.id_trabajador = t.id_trabajador) 
+  JOIN servicio s ON(ds.id_serv = s.id_serv) 
+  JOIN region r ON(ds.id_region = r.id_region)
+  JOIN  comuna c ON (ds.id_comuna = c.id_comuna) WHERE id_des_serv = ?`;
+
+  const valores = [id_des_serv];
+  db.query(query, valores, (error, result) => {
+    if (error) {
+      console.log("Error al obtener listado de servicios", error);
+      callback(error,null);
+      return;
+    }else{
+      callback(null,result)
+    }
+  })
+}
+
 
 function aceptarSolicitud(solicitudId, nuevoEstado, callback) {
   const sql = 'UPDATE solicitud SET estado = ? WHERE id_solicitud = ?';
@@ -287,10 +330,13 @@ function listarServicios(callback){
 
 
 
+
+
 module.exports = {
   registroUsuario,
   iniciarSesion,
   agregarServicio,
+  modificarServicio,
   obtenerDatosUsuarioPorCorreo,
   enviarSolicitud,
   obtenerDatosTrabajadorPorCorreo,
@@ -299,5 +345,6 @@ module.exports = {
   obtenerRegiones,
   obtenerComunas,
   obtenerServicios,
-  listarServicios
+  listarServicios,
+  servEspecifico
 };

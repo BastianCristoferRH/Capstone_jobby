@@ -1,0 +1,53 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Modificar Servicio</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Modificar Servicio</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <form (submit)="modService()" class="service-form">
+    <h2>Modificar Servicio</h2>
+  
+    <div class="form-group">
+      <label for="des_serv">Descripción del Servicio:</label>
+      <textarea id="des_serv" name="des_serv" [(ngModel)]="serviceData.des_serv" required></textarea>
+    </div>
+  
+    <div class="form-group">
+      <label for="presencial">Presencial:</label>
+      <input type="checkbox" id="presencial" name="presencial">
+    </div>
+  
+    <div class="form-group">
+      <label for="id_serv">Seleccionar Servicio:</label>
+      <select id="id_serv" name="id_serv" [(ngModel)]="serviceData.name_serv" required>
+        <option value="" disabled selected>Selecciona un servicio</option>
+        <option *ngFor="let servicio of servicios">{{ servicio.name_serv }}</option>
+      </select>
+    </div>
+  
+    <div class="form-group">
+      <label for="id_comuna">Seleccionar Comuna:</label>
+      <select id="id_comuna" name="id_comuna" [(ngModel)]="serviceData.name_comuna" required>
+        <option value="" disabled selected>Selecciona una comuna</option>
+        <option *ngFor="let comuna of comunas">{{ comuna.name_comuna }}</option>
+      </select>
+    </div>
+  
+    <div class="form-group">
+      <label for="id_region">Seleccionar Región:</label>
+      <select id="id_region" name="id_region" [(ngModel)]="serviceData.name_region" required>
+        <option value="" disabled selected>Selecciona una región</option>
+        <option *ngFor="let region of regiones">{{ region.name_region }}</option>
+      </select>
+    </div>
+  
+    <button type="submit" class="submit-button">Modificar Servicio</button>
+  </form>
+</ion-content>
