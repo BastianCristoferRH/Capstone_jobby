@@ -320,6 +320,24 @@ function obtenerTrabajadorIdPorCorreo(correoElectronico, callback) {
 
 
 
+function obtenerSolicitudIdPorTrabajadorId(trabajadorId, callback){
+  const query = `SELECT id_solicitud, estado FROM solicitud
+  WHERE id_trabajador = ? AND estado = 'Finalizado'`;
+  const valores = [trabajadorId];
+  db.query(query, valores, (error,result)=>{
+    if (error) {
+      console.log("Error al obtener el idsolicitud en cuestion", error);
+      callback({error: "Error interno al obtener el idsolicitud en cuestion", details:error.message}, null);
+      
+    } else{
+      console.log("Solicitud id obtenida con exito");
+      callback(null, result)
+    }
+  })
+}
+
+
+
 module.exports = {
   registroUsuario,
   iniciarSesion,
@@ -334,5 +352,6 @@ module.exports = {
   obtenerServicios,
   listarServicios,
   agregarReseña,
-  obtenerTrabajadorIdPorCorreo
+  obtenerTrabajadorIdPorCorreo,
+  obtenerSolicitudIdPorTrabajadorId
 };

@@ -131,6 +131,11 @@ export class AuthService {
   }
 
 
+  getSolicitudIdPorTrabajadorId(trabajadorid:number):Observable<any> {
+    return this.http.get(`${this.apiUrl}/obtener-solicitudid/${trabajadorid}`)
+  }
+
+
 
 }
 

@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, aceptarSolicitud,obtenerRegiones,obtenerComunas,obtenerServicios,listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo } = require('./controller');
+const { registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, aceptarSolicitud,obtenerRegiones,obtenerComunas,obtenerServicios,listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo,obtenerSolicitudIdPorTrabajadorId } = require('./controller');
 const { ifError } = require('assert');
 
 
@@ -185,7 +185,7 @@ app.put('/actualizar-solicitud/:id', (req, res) => {
 app.post('/agregar-resena/:id_solicitud',(req,res)=>{
   const solicitudId = req.params.id_solicitud;
   const reseñaData = req.body;
-  agregarReseña(reseñaData,(error, result)=> {
+  agregarReseña(solicitudId,reseñaData,(error, result)=> {
     if (error) {
       console.log("Error al agregar reseña", error);
       res.status(500).json(error);
@@ -209,6 +209,20 @@ app.get('/obtener-trabajadorid/:correoElectronico', (req, res) => {
       res.status(500).json(error);
     } else {
       console.log("trabajador solicitado obtenidos con éxito: ", resultados);
+      res.status(200).json(resultados);
+    }
+  });
+});
+
+
+app.get('/obtener-solicitudid/:id_trabajador', (req, res) => {
+  const trabajadorId = req.params.id_trabajador;
+  obtenerSolicitudIdPorTrabajadorId(trabajadorId, (error, resultados) => {
+    if (error) {
+      console.log("Error al obtener la solicitud: ", error);
+      res.status(500).json(error);
+    } else {
+      console.log("solicitud obtenida con éxito: ", resultados);
       res.status(200).json(resultados);
     }
   });

@@ -63,7 +63,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'agregar-resena',
+    path: 'agregar-resena/:id_solicitud',
     loadChildren: () => import('./agregar-resena/agregar-resena.module').then( m => m.AgregarResenaPageModule)
   },
 
