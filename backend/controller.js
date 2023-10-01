@@ -73,44 +73,6 @@ function obtenerDatosUsuarioPorCorreo(correoElectronico, callback) {
 }
 
 
-//function agregarServicio(req, res) {
-// Recuperar los datos del cuerpo de la solicitud
-//  const {  des_serv, presencial, id_trabajador, id_serv, id_comuna, id_region } = req.body;
-
-// Validar los datos (agregar más validaciones según tus necesidades)
-//if (!des_serv || typeof presencial !== 'boolean' || !id_trabajador ||!id_serv || !id_comuna || !id_region) {
-//return res.status(400).json({ error: 'Faltan campos obligatorios' });
-// }
-
-// Insertar el servicio en la base de datos
-//   const servicio = {  des_serv, presencial, id_trabajador, id_serv, id_comuna, id_region };
-
-// db.query('INSERT INTO descrip_servicio SET ?', servicio, (err, result) => {
-// if (err) {
-// console.error('Error al agregar el servicio', err);
-//res.status(500).json({ error: 'Error al agregar el servicio' });
-//} else {
-//console.log('Servicio agregado con éxito');
-//res.status(200).json({ message: 'Servicio agregado con éxito' });
-// }
-//});
-//}
-function agregarServicio(serviceData, callback) {
-  // Validar el token del trabajador aquí (debe implementarse)
-
-  // Insertar el servicio en la base de datos
-  db.query('INSERT INTO descrip_servicio (id_des_serv,des_serv, presencial, id_trabajador, id_serv, id_comuna, id_region) VALUES (?, ?, ?, ?, ?, ?, ?)', [serviceData.id_des_serv,serviceData.des_serv, serviceData.presencial, serviceData.id_trabajador, serviceData.id_serv, serviceData.id_comuna, serviceData.id_region], (err, result) => {
-    if (err) {
-      console.error('Error al agregar el servicio:', err);
-      callback({ error: 'Error interno al agregar el servicio', details: err.message }, null);
-    } else {
-      console.log('Servicio agregado con éxito');
-      callback(null, { message: 'Servicio agregado con éxito' });
-    }
-    // ...
-  })
-};
-
 function modificarServicio(id_des_serv, serviceData, callback) {
   // Validar el token del trabajador aquí (debe implementarse)
 
@@ -169,11 +131,16 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) { // es pa
   usuario.apellidos,
   usuario.img,
   usuario.telefono,
-  usuario.fecha_nacimiento
+  usuario.fecha_nacimiento,
+  trabajador.des_perfil,
+  comuna.name_comuna,
+  region.name_region
       FROM trabajador
       JOIN descrip_servicio ON descrip_servicio.id_trabajador = trabajador.id_trabajador
       JOIN servicio ON servicio.id_serv = descrip_servicio.id_serv
       JOIN usuario ON usuario.correo_electronico = trabajador.correo_electronico  
+      JOIN comuna ON descrip_servicio.id_comuna = comuna.id_comuna  
+      JOIN region ON region.id_region=descrip_servicio.id_region
       WHERE trabajador.correo_electronico = ?
   `;
   const valores = [correoElectronico];
@@ -189,6 +156,30 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) { // es pa
   });
   
 }
+function agregarServicio(serviceData, callback) {
+
+  const query ='INSERT INTO descrip_servicio (des_serv, presencial, id_trabajador, id_serv, id_comuna, id_region) VALUES (?, ?, ?, ?, ?, ?)';
+  const valores = [
+    serviceData.des_serv,
+    serviceData.presencial,
+    serviceData.id_trabajador,
+    serviceData.id_serv,
+    serviceData.id_comuna,
+    serviceData.id_region
+  ];
+
+  db.query(query, valores, (err, result)=>{
+    if (err) {
+      console.error('Error al agregar el servicio:', err);
+      callback({ error: 'Error interno al agregar el servicio', details: err.message }, null);
+    } else {
+      console.log('Servicio agregado con éxito');
+      callback(null, { message: 'Servicio agregado con éxito' },result);
+    }
+
+  })
+    
+};
 
 function obtenerServiciosSolicitadosPorTrabajador(correoElectronico, callback) {
   const sql = `
@@ -326,7 +317,78 @@ function listarServicios(callback){
 }
 
 
+function agregarReseña(reseñaData,callback){
+  const query = `INSERT INTO reseña (descripcion, calificacion, id_solicitud) VALUES(?,?,?)`;
+  const valores = [
+    reseñaData.descripcion,
+    reseñaData.calificacion,
+    reseñaData.id_solicitud
+  ];
+  db.query(query, valores, (error, result) => {
+    if (error) {
+      console.log("Error al agregar reseña",error);
+      callback(error,null);
+      return;
+      
+    }else{
+      console.log("Exito al agregar reseña",result);
+      callback(null,result);
+    }
 
+  });
+}
+
+
+
+
+
+
+
+
+function obtenerTrabajadorIdPorCorreo(correoElectronico, callback) {
+  const query = `SELECT id_trabajador FROM trabajador WHERE correo_electronico = ?`;
+  const valores = [correoElectronico];
+
+  db.query(query, valores, (err, resultados) => {
+    if (err) {
+      console.error('Error al obtener el trabajador solicitado:', err);
+      callback({ error: 'Error interno al obtener el trabajador solicitado', details: err.message }, null);
+    } else {
+      console.log('Trabajador solicitado obtenidos con éxito');
+      callback(null, resultados);
+    }
+  });
+
+}
+
+const registrarTrabajador = (disponibilidad, des_perfil, correo_electronico, callback) => {
+  const query = `INSERT INTO trabajador (disponibilidad, des_perfil, correo_electronico) VALUES (?, ?, ?)`;
+
+  db.query(query, [disponibilidad, des_perfil, correo_electronico], (error, result) => {
+    if (error) {
+      console.error('Error al registrar el trabajador:', error);
+      return callback(error, null); 
+    }
+    callback(null, result);
+  });
+};
+
+
+function obtenerSolicitudIdPorTrabajadorId(trabajadorId, callback){
+  const query = `SELECT id_solicitud, estado FROM solicitud
+  WHERE id_trabajador = ? AND estado = 'Finalizado'`;
+  const valores = [trabajadorId];
+  db.query(query, valores, (error,result)=>{
+    if (error) {
+      console.log("Error al obtener el idsolicitud en cuestion", error);
+      callback({error: "Error interno al obtener el idsolicitud en cuestion", details:error.message}, null);
+      
+    } else{
+      console.log("Solicitud id obtenida con exito");
+      callback(null, result)
+    }
+  })
+}
 
 
 
@@ -346,5 +408,9 @@ module.exports = {
   obtenerComunas,
   obtenerServicios,
   listarServicios,
-  servEspecifico
+  servEspecifico,
+  agregarReseña,
+  obtenerTrabajadorIdPorCorreo,
+  obtenerSolicitudIdPorTrabajadorId,
+  registrarTrabajador
 };

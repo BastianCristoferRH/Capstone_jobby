@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
-
+import { MenuComponent } from '../menu/menu.component';
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.page.html',
   styleUrls: ['./perfil.page.scss'],
+  
 })
 export class PerfilPage implements OnInit {
   correoElectronico: string = '';

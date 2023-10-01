@@ -33,7 +33,7 @@ const routes: Routes = [
   },
 
   {
-    path: 'agregar-servicio',
+    path: 'agregar-servicio/:correoElectronico',
     loadChildren: () => import('./agregar-servicio/agregar-servicio.module').then( m => m.AgregarServicioPageModule),
     canActivate: [AuthGuard],
   },
@@ -67,6 +67,18 @@ const routes: Routes = [
     loadChildren: () => import('./modificar-servicio/modificar-servicio.module').then( m => m.ModificarServicioPageModule),
     canActivate: [AuthGuard],
   },
+  {
+
+    path: 'agregar-resena/:id_solicitud',
+    loadChildren: () => import('./agregar-resena/agregar-resena.module').then( m => m.AgregarResenaPageModule),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'registrar-trabajado/:correo',
+    loadChildren: () => import('./registrar-trabajador/registrar-trabajador.module').then( m => m.RegistrarTrabajadorPageModule),
+    canActivate: [AuthGuard],
+  },
+
 
 
 

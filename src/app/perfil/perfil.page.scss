@@ -16,11 +16,13 @@ ion-menu {
     }
 }
 
-p{
+p {
     color: black;
+    text-align: center;
 }
 
-h3{
+h3 {
+    text-align: center;
     color: black;
 }
 
@@ -31,28 +33,66 @@ h3{
     filter: drop-shadow(3px 4px 4px #444);
     margin: 0 auto;
     border-radius: 50%;
-  }
+}
 
 .datos {
-    margin-left: 10px; /* Margen izquierdo */
-    margin-right: 10px; /* Margen derecho */
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .custom-lista {
-    background-color: #f2f2f2; /* Fondo gris */
-    margin-left: 10px; /* Margen izquierdo */
-    margin-right: 10px; /* Margen derecho */
+    background-color: #f2f2f2;
+    margin-left: 10px;
+    margin-right: 10px;
     --ion-item-background: transparent;
     border-radius: 15px;
-  }
+}
 
 .custom-list-item {
-    display: flex;/* Alinea los elementos al espacio entre ellos */
-    align-items: center; /* Alinea verticalmente en el centro */
-  }
-  
+    display: flex;
+    align-items: center;
+}
+
 .custom-button {
-    float: right; /* Hace que el botón se muestre a la derecha */
+    float: right;
     margin-right: 0;
-    padding-right: 0;  
-  }
+    padding-right: 0;
+}
+
+.user-card {
+
+    width: 80%;
+    max-width: 80%;
+    margin: 0 auto;
+    margin-top: 5%;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+ion-item.custom-menu-item {
+    --color: black;
+    --background: transparent;
+    border: solid red;
+}
+
+ion-list {
+    background-color: rgba(255, 255, 255, 0);
+    border: red;
+}
+
+ion-button.custom-button {
+    --background: orange;
+    /* Cambia el color de fondo de los botones */
+    color: red;
+    /* Cambia el color del texto de los botones */
+    width: 100%;
+    /* Haz que los botones ocupen el ancho completo */
+    display: flex;
+    justify-content: center;
+    /* Centra horizontalmente el contenido */
+    align-items: center;
+    /* Centra verticalmente el contenido */
+    margin-top: 2%;
+}
+

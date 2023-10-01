@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 export class AuthService {
   private tokenKey = 'auth_token';
   private emailKey = 'auth_email'; // Clave para almacenar el correo electrónico
-  private apiUrl = 'http://localhost:4000';
+  private apiUrl = 'http://localhost:4001';//'http://192.168.1.9:4001'
   constructor(private http: HttpClient) { }
 
   registrarUsuario(usuario: any) {
@@ -111,6 +111,42 @@ export class AuthService {
     return this.http.put(`${this.apiUrl}/actualizar-solicitud/${solicitudId}`, data);
   }
 
+  cargarListadoServicios() { // listar servicios pagina de inicio
+     return this.http.get(`${this.apiUrl}/listar-servicios`);
+  }
+
+  agregarServicio(serviceData: any): Observable<any> {
+
+    return this.http.post(`${this.apiUrl}/agregar_servicio`,serviceData);
+  }
+
+  getTrabajadorIdPorCorreo(correoElectronico: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/obtener-trabajadorid/${correoElectronico}`);
+  }
+
+  cargarRegiones() {
+    return this.http.get(`${this.apiUrl}/obtener-regiones`);
+  }
+  cargarComunas() {
+    return this.http.get(`${this.apiUrl}/obtener-comunas`);
+  }
+  cargarServicios() {
+    return this.http.get(`${this.apiUrl}/obtener-servicios`);
+  }
+
+  
+  registrarTrabajador(trabajadorData: any) {
+    const url = `${this.apiUrl}/registrar-trabajador`;
+    return this.http.post(url, trabajadorData);
+  }
+
+
+  getSolicitudIdPorTrabajadorId(trabajadorid:number):Observable<any> {
+    return this.http.get(`${this.apiUrl}/obtener-solicitudid/${trabajadorid}`)
+  }
+
+
 
 }
 
+  

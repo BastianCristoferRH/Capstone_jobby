@@ -1,30 +1,37 @@
-.custom-list{
-   
-    margin-left: 5%;
-    background-color: white;
+.list-soli{
+    background-color: rgba(255, 100, 100,0.5);
+    margin-top:1%;
+    margin-left: 10%;
+    margin-right: 10%;
 }
-.custom-list-item {
-    width: 80%;
-    margin: 20px auto;
-  
-    border-radius: 8px;
-    background-color: #3498db;
-    
-    color: #ffffff;
-   
+.datos-servicio{
+    text-align: center;
+}
+.fecha{
+    text-align: end;
+    margin-right:2%;
+}
 
-   
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+.custom-button{
+    --background: orange; 
+    color: red; 
 
-  
-    h2 {
-        font-size: 1.2rem;
-        font-weight: bold;
-    }
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    margin-top: 1%;
+}
 
-    
-    p {
-        margin: 8px 0;
-        font-size: 0.9rem;
-    }
+.estado{
+    text-align: center;
+    margin-right:2%; 
+    background-color: red;
+}
+
+.custom-button-rechazo{
+    --background: rgb(211, 163, 163); 
+    color: black; 
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
 }

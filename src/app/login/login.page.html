@@ -1,5 +1,8 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
+    <ion-avatar slot="start" class="logo-avatar">
+      <img src="https://www.pngmart.com/files/17/Vector-Worker-PNG-Free-Download.png" alt="Logo">
+    </ion-avatar>
     <ion-title>JOBBY</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -10,25 +13,29 @@
       <ion-row>
         <ion-col size="1"></ion-col>
         <ion-col size="10" class="ion-padding">
-          <form (ngSubmit)="login()" #loginForm="ngForm">
-            <h3>INICIAR SESIÓN</h3>
+          <div class="form-container"> <!-- Div adicional para el fondo semi-transparente -->
+            <form (ngSubmit)="login()" #loginForm="ngForm" class="login-form">
+              <h3 class="form-title">INICIAR SESIÓN</h3>
+              <ion-item class="animate__animated animate__fadeIn">
+                <ion-label shape="round" position="floating">Correo electrónico</ion-label>
+                <ion-input shape="round" class="white-background" type="email" name="email"
+                  [(ngModel)]="correo_electronico" required></ion-input>
+              </ion-item>
+              <ion-item class="animate__animated animate__fadeIn">
+                <ion-label position="floating">Contraseña</ion-label>
+                <ion-input shape="round" class="white-background" type="password" name="password" [(ngModel)]="password"
+                  required></ion-input>
+              </ion-item>
+              <div class="ion-padding-top"></div>
+              <ion-button shape="round" type="submit" expand="full" class="btn_login" (click)="login()">Iniciar
+                Sesión</ion-button>
 
-            <ion-item class="ion-padding-top animate__animated animate__fadeIn">
-              <ion-input label="Correo electronico" labelPlacement="floating" type="email" name="email" [(ngModel)]="correo_electronico" required></ion-input>
-            </ion-item>
-            <ion-item class="ion-padding-top animate__animated animate__fadeIn">
-              <ion-input label="Contraseña" labelPlacement="floating" type="password" name="password" [(ngModel)]="password" required></ion-input>
-            </ion-item>
-            
-            <!-- Agregar un espacio adicional con un div -->
-            <div class="ion-padding-top"></div>
-
-            
-            <ion-button type="submit" expand="full" class="blueBackGr" (click)="login()">Iniciar Sesión</ion-button>
-            <ion-button type="submit" expand="full" class="whiteButton" routerLink="/registro">Registrarse</ion-button>
-          </form>
+            </form>
+            <ion-button shape="round" type="submit" expand="full" class="btn_registro"
+              routerLink="/registro">Registrarse</ion-button>
+          </div>
         </ion-col>
-        <ion-col size="2"></ion-col>
+        <ion-col size="1"></ion-col>
       </ion-row>
     </ion-grid>
   </div>

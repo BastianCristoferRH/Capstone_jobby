@@ -4,6 +4,7 @@ import { AlertController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Router } from '@angular/router';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-registro',
@@ -12,14 +13,26 @@ import { Router } from '@angular/router';
 })
 
 export class RegistroPage implements OnInit {
+  imagenFileName: string | null = null;
   registroForm!: FormGroup; // Inicializar la propiedad con "!"
 
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private alertController: AlertController,
-    private router: Router
+    private router: Router,
+    private sanitizer: DomSanitizer
   ) {}
+
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      console.log('Archivo seleccionado:', file.name);
+      // Almacena el nombre del archivo en la propiedad
+      this.imagenFileName = file.name;
+      // Puedes realizar acciones adicionales aquí, como subir la imagen al servidor si es necesario
+    }
+  }
 
   ngOnInit() {
 
@@ -111,16 +124,26 @@ export class RegistroPage implements OnInit {
     );
   }
 
-  onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-    if (file) {
-      // Puedes realizar acciones con el archivo seleccionado aquí
-      // Por ejemplo, puedes mostrar una vista previa o subirlo al servidor
-      console.log('Archivo seleccionado:', file);
-      // También puedes almacenar la URL de la imagen en el formulario si es necesario
-      this.registroForm.get('imagen')?.setValue(file.name); // Ejemplo: almacenar el nombre del archivo
+  getImagenUrl(): SafeUrl | null {
+    if (this.imagenFileName) {
+      // Construye la URL de la imagen, asumiendo que las imágenes se almacenan en una carpeta llamada "imagenes"
+      const imageUrl = `/imagenes/${this.imagenFileName}`;
+      // Asegura la URL para evitar problemas de seguridad
+      return this.sanitizer.bypassSecurityTrustUrl(imageUrl);
     }
+    return null;
   }
+
+  // onFileSelected(event: any) {
+  //   const file: File = event.target.files[0];
+  //   if (file) {
+  //     // Puedes realizar acciones con el archivo seleccionado aquí
+  //     // Por ejemplo, puedes mostrar una vista previa o subirlo al servidor
+  //     console.log('Archivo seleccionado:', file);
+  //     // También puedes almacenar la URL de la imagen en el formulario si es necesario
+  //     this.registroForm.get('imagen')?.setValue(file.name); // Ejemplo: almacenar el nombre del archivo
+  //   }
+  // }
 
   async presentAlert(mensaje: string) {
     const alert = await this.alertController.create({

@@ -27,16 +27,14 @@
 
 
 ion-content {
-    --background: white;
-
+    --background: transparent url('https://static.vecteezy.com/system/resources/previews/019/551/684/non_2x/orange-gradient-wave-abstract-background-modern-poster-with-gradient-3d-flow-shape-innovation-background-design-for-landing-page-and-computer-desktop-background-vector.jpg') center center / cover no-repeat;
 }
+
+
+
 
 ion-header {
-    --background: black;
-    --color: white;
-
+    ion-toolbar {
+        --background: red;
+    }
 }
-label{
-    font-weight: bolder;
-}
-

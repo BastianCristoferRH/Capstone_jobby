@@ -1,74 +1,59 @@
-<ion-menu side="end" contentId="main-content">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Menú</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content class="ion-padding">
-    <ion-list>
-      <ion-item class="ion-item-menu" (click)="perfil_menu()">
-        Perfil
-      </ion-item>
-      <ion-item class="ion-item-menu" (click)="perfil_menu()">
-        Perfil Trabajador
-      </ion-item>
-      <ion-item class="ion-item-menu">
-        Servicios
-      </ion-item>
-      <ion-item class="ion-item-menu" (click)="logout()">
-        Cerrar Sesión
-      </ion-item>
-    </ion-list>
-  </ion-content>
-</ion-menu>
-
-
-
+<app-menu></app-menu>
 
 <div class="ion-page" id="main-content">
   <ion-header>
     <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-back-button defaultHref="/"></ion-back-button>
-      </ion-buttons>
-      <ion-title>Perfil Trabajador</ion-title>
+      <ion-title>JOBBY</ion-title>
       <ion-buttons slot="end">
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
 
-
-<ion-content [fullscreen]="true" class="custom-content">
-
-  <ion-row responsive-sm>
-    <ion-col col-12 width-50 class="ion-text-center"> <!-- Utiliza la clase ion-text-center -->
-      <img class="user-avatar" src="../../assets/img/user.jpg">
-      <ion-icon name="create"></ion-icon>
-    </ion-col>
-  </ion-row>
-
-<div class="datos"> 
-  <h3>{{datosTrabajador[0]?.nombre}} {{datosTrabajador[0]?.apellidos}}</h3>
-  <p>{{datosTrabajador[0]?.des_serv}}</p>
-</div>
-
-<div style="text-align: center; padding-bottom: 5px;">
-  <ion-button>Solicitar servicio</ion-button>
-</div>
-
-<ion-list class="custom-lista">
-  <h4 style="color: black; text-align: center;">Servicios para ofrecer</h4>
-  <ion-item *ngFor="let datos of datosTrabajador" class="custom-list-item">
-    <ion-label>
-      <p>{{datos.name_serv}}</p>
-      <p>{{datos.des_serv}}</p>
+  <ion-content [fullscreen]="true" class="custom-content">
+    <ion-card class="user-card">
+      <div class="user-profile">
+        <ion-row responsive-sm>
+          <ion-col col-12 width-50 class="ion-text-center">
+            <img class="user-avatar" src="../../assets/img/user.jpg">
+            <ion-icon name="create"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </div>
+      <div *ngIf="!datosTrabajador.length">
+          <h2 style="color: white; text-align: center;">NO POSEE CUENTA TRABAJADOR</h2>
+        <ion-button  shape="round" class="button-solicitar-servicio custom-buttonx boton-crear" (click)="navegarCrearPerfilTrabajador()">CREAR</ion-button>
+      </div>
+      
+      <div class="datos" *ngIf="datosTrabajador.length">
+        <h3>{{ datosTrabajador[0]?.nombre }} {{ datosTrabajador[0]?.apellidos }}</h3>
+        <p>Fecha de nacimiento: {{ datosTrabajador[0]?.fecha_nacimiento | date:'dd-MM-yyyy' }}</p>
+        <p>⭐⭐⭐⭐⭐</p>
+        <p>{{datosTrabajador[0]?.des_perfil}}</p>
+      </div>
+      <div style="text-align: center; padding-bottom: 5px;">
+        <ion-button *ngIf="datosTrabajador.length>0 && mostrarBotonSolicitar" shape="round" class="button-solicitar-servicio custom-buttonx" (click)="navigateToSolicitud()">Solicitar</ion-button> <br>
+        <ion-button *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length>0" shape="round" class="button-solicitar-servicio custom-buttonx" (click)="agregarServicio()" >Agregar Servicio</ion-button>
+      </div>
+    </ion-card>
+    <br><br>
+    <ion-label class="titulo">
+      <h1  *ngIf="datosTrabajador.length">SERVICIOS</h1>
     </ion-label>
     
-  </ion-item>
-</ion-list>
+    <ion-card class="custom-card custom-white-background" *ngFor="let datos of datosTrabajador">
+      <div class="div-tarjeta-servicio">
+        <div class="div-tarjeta-servicio-for" >
+          <div>
+            <h2 class="tipo_servicio_h2">{{ datos.name_serv }}</h2>
+            <p style="text-align: center;">{{datos.name_comuna}},{{datos.name_region}}</p>
+            <p style="text-align: center;">⭐⭐⭐⭐</p>
+            <p style="text-align: center;">{{ datos.des_serv }}</p>
+          </div>
+        </div>
+      </div>
+     
 
-
-
-
-</ion-content>
+    </ion-card>
+  </ion-content>
+</div>

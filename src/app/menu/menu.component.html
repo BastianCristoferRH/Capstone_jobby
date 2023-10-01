@@ -1,0 +1,27 @@
+<ion-menu side="end" contentId="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Menú</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content [fullscreen]="true" class="gradiante" >
+    <ion-list>
+      <ion-button class="custom-button" (click)="inicio()">
+        Inicio
+      </ion-button>
+      <ion-button class="custom-button" (click)="perfil_menu()">
+        Perfil
+      </ion-button>
+      <ion-button class="custom-button" (click)="perfil_trabajador()">
+        Perfil Trabajador
+      </ion-button>
+      <ion-button class="custom-button " (click)="navegarAServicioSolicitado()">
+        Listado Servicio
+      </ion-button>
+      <ion-button class="custom-button" (click)="logout()">
+        Cerrar Sesión
+      </ion-button>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+

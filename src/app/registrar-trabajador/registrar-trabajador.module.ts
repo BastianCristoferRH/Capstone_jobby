@@ -4,18 +4,19 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { PerfiltrabajadorPageRoutingModule } from './perfiltrabajador-routing.module';
+import { RegistrarTrabajadorPageRoutingModule } from './registrar-trabajador-routing.module';
 
-import { PerfiltrabajadorPage } from './perfiltrabajador.page';
+import { RegistrarTrabajadorPage } from './registrar-trabajador.page';
 import { SharedModule } from '../shared/shared.module';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    PerfiltrabajadorPageRoutingModule,
+    RegistrarTrabajadorPageRoutingModule,
     SharedModule
   ],
-  declarations: [PerfiltrabajadorPage]
+  declarations: [RegistrarTrabajadorPage]
 })
-export class PerfiltrabajadorPageModule {}
+export class RegistrarTrabajadorPageModule {}

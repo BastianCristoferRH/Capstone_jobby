@@ -2,8 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo,modificarServicio, agregarServicio, enviarSolicitud, obtenerDatosTrabajadorPorCorreo,
-   obtenerServiciosSolicitadosPorTrabajador, aceptarSolicitud,obtenerRegiones,obtenerComunas,obtenerServicios,listarServicios,servEspecifico } = require('./controller');
+const { registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud,servEspecifico,modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, aceptarSolicitud,obtenerRegiones,obtenerComunas,obtenerServicios,listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo,obtenerSolicitudIdPorTrabajadorId,registrarTrabajador } = require('./controller');
 const { ifError } = require('assert');
 
 
@@ -38,25 +37,8 @@ app.post('/login', (req, res) => {
     }
   });
 });
-//app.post('/agregar_servicio', (req, res) => {
-// Validar el token del trabajador aquí
 
-// Insertar el servicio en la base de datos
-//  const serviceData = req.body;
-//db.query('INSERT INTO descrip_servicio SET ?', serviceData, (err, result) => {
-//if (err) {
-//console.error('Error al agregar el servicio', err);
-//res.status(500).json({ error: 'Error al agregar el servicio' });
-//} else {
-//console.log('Servicio agregado con éxito');
-//res.status(200).json({ message: 'Servicio agregado con éxito' });
-// }
-//});
-//});
 app.post('/agregar_servicio', (req, res) => {
-  // Validar el token del trabajador aquí (debe implementarse)
-
-  // Insertar el servicio en la base de datos
   const serviceData = req.body;
   agregarServicio(serviceData, (error, resultado) => {
     if (error) {
@@ -236,10 +218,73 @@ app.put('/actualizar-solicitud/:id', (req, res) => {
   });
 });
 
+app.post('/agregar-resena/:id_solicitud',(req,res)=>{
+  const solicitudId = req.params.id_solicitud;
+  const reseñaData = req.body;
+  agregarReseña(solicitudId,reseñaData,(error, result)=> {
+    if (error) {
+      console.log("Error al agregar reseña", error);
+      res.status(500).json(error);
+      
+    }else{
+      console.log("Reseña agregada con exito");
+      res.status(200).json(result)
+    }
+  })
+
+});
 
 
 
-const puerto = 4000;
+
+app.get('/obtener-trabajadorid/:correoElectronico', (req, res) => {
+  const correoElectronico = req.params.correoElectronico;
+  obtenerTrabajadorIdPorCorreo(correoElectronico, (error, resultados) => {
+    if (error) {
+      console.log("Error al obtener al trabajador solicitado: ", error);
+      res.status(500).json(error);
+    } else {
+      console.log("trabajador solicitado obtenidos con éxito: ", resultados);
+      res.status(200).json(resultados);
+    }
+  });
+});
+
+
+app.get('/obtener-solicitudid/:id_trabajador', (req, res) => {
+  const trabajadorId = req.params.id_trabajador;
+  obtenerSolicitudIdPorTrabajadorId(trabajadorId, (error, resultados) => {
+    if (error) {
+      console.log("Error al obtener la solicitud: ", error);
+      res.status(500).json(error);
+    } else {
+      console.log("solicitud obtenida con éxito: ", resultados);
+      res.status(200).json(resultados);
+    }
+  });
+});
+
+app.post('/registrar-trabajador', (req, res) => {
+  const trabajadorData = req.body;
+
+  registrarTrabajador(
+    trabajadorData.disponibilidad,
+    trabajadorData.des_perfil,
+    trabajadorData.correo_electronico,
+    (error, result) => {
+      if (error) {
+        console.error('Error al registrar el trabajador:', error);
+        res.status(500).json({ error: 'Error interno al registrar el trabajador' });
+      } else {
+        console.log('Trabajador registrado con éxito');
+        res.status(200).json({ message: 'Trabajador registrado con éxito' });
+      }
+    }
+  );
+});
+
+
+const puerto = 4001;
 
 app.listen(puerto, () => {
   console.log(`api funcionando en el puerto ${puerto}`);
