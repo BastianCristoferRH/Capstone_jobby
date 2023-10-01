@@ -92,6 +92,11 @@ ngOnInit() {
     console.log("click")
   }
 
+  navegarCrearPerfilTrabajador(){
+    const correoElectronico = this.authService.getCorreoElectronico();
+    this.router.navigate(['/registrar-trabajado', correoElectronico]);
+  }
+
 
 
 
