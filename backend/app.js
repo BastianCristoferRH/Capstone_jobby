@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud,servEspecifico,modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, aceptarSolicitud,obtenerRegiones,obtenerComunas,obtenerServicios,listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo,obtenerSolicitudIdPorTrabajadorId,registrarTrabajador } = require('./controller');
+const { agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador } = require('./controller');
 const { ifError } = require('assert');
 
 
@@ -103,7 +103,7 @@ app.post('/enviar-solicitud/:correoDestinatario', (req, res) => {
 app.get('/obtener-datos-trabajador/:correo', (req, res) => { // get de los datos encesario para obtener los datos del trabajador 
   const correoElectronico = req.params.correo;
 
-  
+
   obtenerDatosTrabajadorPorCorreo(correoElectronico, (error, datosTrabajador) => {
     if (error) {
       console.log("Error al obtener los datos del trabajador: ", error);
@@ -118,7 +118,7 @@ app.get('/obtener-datos-trabajador/:correo', (req, res) => { // get de los datos
 app.get('/servicio-especifico/:id_des_serv', (req, res) => {
   const id_des_serv = req.params.id_des_serv;
 
-  servEspecifico(id_des_serv,(error, result) => {
+  servEspecifico(id_des_serv, (error, result) => {
     if (error) {
       console.log("Error al obtener el servicio", error);
       res.status(404).json(error);
@@ -218,15 +218,15 @@ app.put('/actualizar-solicitud/:id', (req, res) => {
   });
 });
 
-app.post('/agregar-resena/:id_solicitud',(req,res)=>{
+app.post('/agregar-resena/:id_solicitud', (req, res) => {
   const solicitudId = req.params.id_solicitud;
   const reseñaData = req.body;
-  agregarReseña(solicitudId,reseñaData,(error, result)=> {
+  agregarReseña(solicitudId, reseñaData, (error, result) => {
     if (error) {
       console.log("Error al agregar reseña", error);
       res.status(500).json(error);
-      
-    }else{
+
+    } else {
       console.log("Reseña agregada con exito");
       res.status(200).json(result)
     }
@@ -281,6 +281,26 @@ app.post('/registrar-trabajador', (req, res) => {
       }
     }
   );
+});
+
+app.post('/agregar-favorito', (req, res) => {
+  const { id_usuario, id_trabajador } = req.body;
+
+  if (!id_usuario || !id_trabajador) {
+    return res.status(400).json({ error: 'Falta información requerida.' });
+  }
+
+  agregarFavorito(req, res); 
+});
+
+app.post('/quitar-favorito', (req, res) => {
+  const { id_usuario, id_trabajador } = req.body;
+
+  if (!id_usuario || !id_trabajador) {
+    return res.status(400).json({ error: 'Falta información requerida.' });
+  }
+
+  quitarFavorito(req, res);
 });
 
 

@@ -145,6 +145,16 @@ export class AuthService {
     return this.http.get(`${this.apiUrl}/obtener-solicitudid/${trabajadorid}`)
   }
 
+  agregarFavorito(id_usuario: string, id_trabajador: number): Observable<any> {
+    const body = { id_usuario, id_trabajador };
+    return this.http.post(`${this.apiUrl}/agregar-favorito`, body);
+  }
+
+  quitarFavorito(id_usuario: string, id_trabajador: number): Observable<any> {
+    const body = { id_usuario, id_trabajador };
+    return this.http.post(`${this.apiUrl}/quitar-favorito`, body);
+  }
+
 
 
 }

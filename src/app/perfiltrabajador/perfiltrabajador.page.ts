@@ -13,6 +13,7 @@ export class PerfiltrabajadorPage implements OnInit {
   mostrarBotonSolicitar: boolean = true;
   correoElectronico: string = '';
   datosTrabajador: any = []; // Ahora inicializado como un arreglo
+  esFavorito: boolean = false; // Inicialmente no
 
   constructor(
     private authService: AuthService,
@@ -89,12 +90,55 @@ ngOnInit() {
 
   agregarServicio(){
     this.router.navigate(['/agregar-servicio',this.authService.getCorreoElectronico()]);
-    console.log("click")
   }
 
   navegarCrearPerfilTrabajador(){
     const correoElectronico = this.authService.getCorreoElectronico();
     this.router.navigate(['/registrar-trabajado', correoElectronico]);
+  }
+
+  agregarFavorito(id_usuario: string, id_trabajador: number) {
+    this.authService.agregarFavorito(id_usuario, id_trabajador).subscribe(
+      (response) => {
+        console.log('Trabajador agregado como favorito con éxito');
+      },
+      (error) => {
+      
+        console.error('Error al agregar el trabajador como favorito', error);
+      }
+    );
+  }
+  quitarFavorito(id_usuario: string, id_trabajador: number) {
+    this.authService.quitarFavorito(id_usuario, id_trabajador).subscribe(
+      (response) => {
+        console.log('Trabajador eliminado de favoritos con éxito');
+      },
+      (error) => {
+        console.error('Error al quitar el trabajador de favoritos', error);
+      }
+    );
+  }
+
+  toggleFavorito() {
+    this.esFavorito = !this.esFavorito; 
+    const correoElectronico = this.authService.getCorreoElectronico();
+    console.log(correoElectronico);
+    
+    if (this.datosTrabajador.length > 0) {
+      const idTrabajador = this.datosTrabajador[0].id_trabajador; 
+      console.log(idTrabajador);
+      if (correoElectronico) {
+        if (this.esFavorito) {
+          this.agregarFavorito(correoElectronico, idTrabajador);
+        } else {
+          this.quitarFavorito(correoElectronico, idTrabajador);
+        }
+      } else {
+        console.error('Correo electrónico no disponible.');
+      }
+    } else {
+      console.error('No hay datos de trabajador disponibles.');
+    }
   }
 
 

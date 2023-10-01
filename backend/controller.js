@@ -133,6 +133,7 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) { // es pa
   usuario.telefono,
   usuario.fecha_nacimiento,
   trabajador.des_perfil,
+  trabajador.id_trabajador,
   comuna.name_comuna,
   region.name_region
       FROM trabajador
@@ -390,6 +391,33 @@ function obtenerSolicitudIdPorTrabajadorId(trabajadorId, callback){
   })
 }
 
+function agregarFavorito(req, res) {
+  const { id_usuario, id_trabajador } = req.body;
+  const sql = `INSERT INTO favorito (favorito, id_usuario, id_trabajador) VALUES (1, ?, ?)`;
+  db.query(sql, [id_usuario, id_trabajador], (error, result) => {
+    if (error) {
+      console.error('Error al agregar como favorito:', error);
+      return res.status(500).json({ error: 'Error interno al agregar como favorito' });
+    }
+    
+    console.log('Trabajador agregado como favorito con éxito');
+    res.status(200).json({ message: 'Trabajador agregado como favorito con éxito' });
+  });
+}
+function quitarFavorito(req, res) {
+  const { id_usuario, id_trabajador } = req.body;
+  const sql = `DELETE FROM favorito WHERE id_usuario = ? AND id_trabajador = ?`;
+  db.query(sql, [id_usuario, id_trabajador], (error, result) => {
+    if (error) {
+      console.error('Error al quitar como favorito:', error);
+      return res.status(500).json({ error: 'Error interno al quitar como favorito' });
+    }
+    
+    console.log('Trabajador quitado de favoritos con éxito');
+    res.status(200).json({ message: 'Trabajador quitado de favoritos con éxito' });
+  });
+}
+
 
 
 
@@ -412,5 +440,7 @@ module.exports = {
   agregarReseña,
   obtenerTrabajadorIdPorCorreo,
   obtenerSolicitudIdPorTrabajadorId,
-  registrarTrabajador
+  registrarTrabajador,
+  agregarFavorito,
+  quitarFavorito
 };
