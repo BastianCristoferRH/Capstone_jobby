@@ -12,8 +12,8 @@ export class PerfiltrabajadorPage implements OnInit {
   mostrarBotonAgregarServicio: boolean = false;
   mostrarBotonSolicitar: boolean = true;
   correoElectronico: string = '';
-  datosTrabajador: any = []; // Ahora inicializado como un arreglo
-  esFavorito: boolean = false; // Inicialmente no
+  datosTrabajador: any = [];
+  esFavorito: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -21,36 +21,35 @@ export class PerfiltrabajadorPage implements OnInit {
     private route: ActivatedRoute,
   ) { }
 
-ngOnInit() {
-  this.route.params.subscribe(params => {
-    this.correoElectronico = params['correoElectronico'];
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.correoElectronico = params['correoElectronico'];
 
-    // Cargar los datos del trabajador
-    this.authService.loadTrabajadorData(this.correoElectronico).subscribe(
-      (data: any) => {
-        this.datosTrabajador = data;
-        console.log(this.datosTrabajador);
+      // Cargar los datos del trabajador
+      this.authService.loadTrabajadorData(this.correoElectronico).subscribe(
+        (data: any) => {
+          this.datosTrabajador = data;
 
-        // Verificar si el correo del trabajador coincide con el usuario autenticado
-        const usuarioAutenticado = this.authService.getCorreoElectronico();
-        if (usuarioAutenticado === this.correoElectronico) {
-          this.mostrarBotonAgregarServicio = true;
-          this.mostrarBotonSolicitar = false; // Ocultar el botón "Solicitar"
+          // Verificar si el correo del trabajador coincide con el usuario autenticado
+          const usuarioAutenticado = this.authService.getCorreoElectronico();
+          if (usuarioAutenticado === this.correoElectronico) {
+            this.mostrarBotonAgregarServicio = true;
+            this.mostrarBotonSolicitar = false; // Ocultar el botón "Solicitar"
+          }
+
+          // Verificar si el trabajador es favorito
+          this.verificarFavorito();
+        },
+        (error: any) => {
+          console.error('Error al recibir los datos del trabajador', error);
         }
-      },
-      (error: any) => {
-        console.error('Error al recibir los datos del trabajador', error);
-      }
-    );
-  });
-}
-
-  navigateToSolicitud() {
-    this.router.navigate(['/solicitud', this.correoElectronico]); 
+      );
+    });
   }
 
-  //menu
-
+  navigateToSolicitud() {
+    this.router.navigate(['/solicitud', this.correoElectronico]);
+  }
 
   logout() {
     this.authService.logout();
@@ -71,28 +70,25 @@ ngOnInit() {
   private navigateToUserProfile(correoElectronico: string) {
     this.router.navigate(['/perfil', correoElectronico]);
   }
+
   perfil_trabajador() {
-    this.router.navigate(['/trabajador', this.correoElectronico]); // Usar 'this.correoElectronico'
+    this.router.navigate(['/trabajador', this.correoElectronico]);
   }
 
   navegarAServicioSolicitado() {
-
     const correoElectronico = this.authService.getCorreoElectronico();
-
     if (correoElectronico) {
-      
       this.router.navigate(['/servicio-solicitado', correoElectronico]);
     } else {
       console.error('Correo electrónico no disponible.');
-     
     }
   }
 
-  agregarServicio(){
-    this.router.navigate(['/agregar-servicio',this.authService.getCorreoElectronico()]);
+  agregarServicio() {
+    this.router.navigate(['/agregar-servicio', this.authService.getCorreoElectronico()]);
   }
 
-  navegarCrearPerfilTrabajador(){
+  navegarCrearPerfilTrabajador() {
     const correoElectronico = this.authService.getCorreoElectronico();
     this.router.navigate(['/registrar-trabajado', correoElectronico]);
   }
@@ -103,11 +99,11 @@ ngOnInit() {
         console.log('Trabajador agregado como favorito con éxito');
       },
       (error) => {
-      
         console.error('Error al agregar el trabajador como favorito', error);
       }
     );
   }
+
   quitarFavorito(id_usuario: string, id_trabajador: number) {
     this.authService.quitarFavorito(id_usuario, id_trabajador).subscribe(
       (response) => {
@@ -120,13 +116,11 @@ ngOnInit() {
   }
 
   toggleFavorito() {
-    this.esFavorito = !this.esFavorito; 
+    this.esFavorito = !this.esFavorito;
     const correoElectronico = this.authService.getCorreoElectronico();
-    console.log(correoElectronico);
-    
+
     if (this.datosTrabajador.length > 0) {
-      const idTrabajador = this.datosTrabajador[0].id_trabajador; 
-      console.log(idTrabajador);
+      const idTrabajador = this.datosTrabajador[0].id_trabajador;
       if (correoElectronico) {
         if (this.esFavorito) {
           this.agregarFavorito(correoElectronico, idTrabajador);
@@ -141,7 +135,19 @@ ngOnInit() {
     }
   }
 
-
-
-
+  verificarFavorito() {
+    const correoElectronico = this.authService.getCorreoElectronico();
+    if (correoElectronico) {
+      this.authService
+        .verificarFavorito(correoElectronico, this.datosTrabajador[0].id_trabajador)
+        .subscribe(
+          (response: any) => {
+            this.esFavorito = response.esFavorito;
+          },
+          (error: any) => {
+            console.error('Error al verificar si el trabajador es un favorito', error);
+          }
+        );
+    }
+  }
 }

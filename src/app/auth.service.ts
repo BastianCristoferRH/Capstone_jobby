@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap  } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 
@@ -17,7 +17,7 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/registro`, usuario);
   }
 
-  
+
 
   login(correo_electronico: string, password: string) {
     const userData = {
@@ -28,7 +28,7 @@ export class AuthService {
       tap((response: any) => {
         if (response && response.token) {
           this.saveToken(response.token);
-          this.saveEmail(correo_electronico); 
+          this.saveEmail(correo_electronico);
         }
       })
     );
@@ -65,8 +65,8 @@ export class AuthService {
     this.clearToken();
   }
 
-  getUserProfile(userId: string) {  
-    return this.http.get(`${this.apiUrl}/usuario/${userId}`); 
+  getUserProfile(userId: string) {
+    return this.http.get(`${this.apiUrl}/usuario/${userId}`);
   }
 
   enviarSolicitud(
@@ -86,38 +86,38 @@ export class AuthService {
       fecha_solicitud: new Date(), // Fecha de solicitud actual
       des_solicitud: descripcionSolicitud,
     };
-    console.log("HOLA: ",solicitudData.des_solicitud);
+    console.log("HOLA: ", solicitudData.des_solicitud);
 
     // Realiza la solicitud POST al servidor
-    const url = `${this.apiUrl}/enviar-solicitud/${correo_trabajador}`; 
+    const url = `${this.apiUrl}/enviar-solicitud/${correo_trabajador}`;
     return this.http.post(url, solicitudData);
   }
 
   loadServData(id_des_serv: string) {
-    return this.http.get(`${this.apiUrl}/servicio-especifico/${id_des_serv}`); 
+    return this.http.get(`${this.apiUrl}/servicio-especifico/${id_des_serv}`);
   }
 
   loadTrabajadorData(correoElectronico: string) {
-    return this.http.get(`${this.apiUrl}/obtener-datos-trabajador/${correoElectronico}`); 
+    return this.http.get(`${this.apiUrl}/obtener-datos-trabajador/${correoElectronico}`);
   }
 
-  SolicitudesRecibidas(correo_trabajador: String){
+  SolicitudesRecibidas(correo_trabajador: String) {
     return this.http.get(`${this.apiUrl}/servicios-solicitados/${correo_trabajador}`)
   }
 
   actualizarEstadoSolicitud(solicitudId: number, nuevoEstado: string) {
-    
+
     const data = { estado: nuevoEstado };
     return this.http.put(`${this.apiUrl}/actualizar-solicitud/${solicitudId}`, data);
   }
 
   cargarListadoServicios() { // listar servicios pagina de inicio
-     return this.http.get(`${this.apiUrl}/listar-servicios`);
+    return this.http.get(`${this.apiUrl}/listar-servicios`);
   }
 
   agregarServicio(serviceData: any): Observable<any> {
 
-    return this.http.post(`${this.apiUrl}/agregar_servicio`,serviceData);
+    return this.http.post(`${this.apiUrl}/agregar_servicio`, serviceData);
   }
 
   getTrabajadorIdPorCorreo(correoElectronico: string): Observable<any> {
@@ -134,14 +134,14 @@ export class AuthService {
     return this.http.get(`${this.apiUrl}/obtener-servicios`);
   }
 
-  
+
   registrarTrabajador(trabajadorData: any) {
     const url = `${this.apiUrl}/registrar-trabajador`;
     return this.http.post(url, trabajadorData);
   }
 
 
-  getSolicitudIdPorTrabajadorId(trabajadorid:number):Observable<any> {
+  getSolicitudIdPorTrabajadorId(trabajadorid: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/obtener-solicitudid/${trabajadorid}`)
   }
 
@@ -155,8 +155,30 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/quitar-favorito`, body);
   }
 
+  verificarFavorito(
+    id_usuario: string,
+    id_trabajador: number
+  ): Observable<any> {
+    const url = `${this.apiUrl}/verificar-favorito`;
+    const data = {
+      id_usuario,
+      id_trabajador,
+    };
 
+    return this.http.post(url, data);
+  }
 
+  listarFavoritos(id_usuario: string): Observable<any> {
+    const url = `${this.apiUrl}/listar-favoritos`;
+    const data = {
+      id_usuario,
+    };
+
+    return this.http.post(url, data);
+  }
 }
 
-  
+
+
+
+

@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador } = require('./controller');
+const { listarFavoritos,verificarFavorito,agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador } = require('./controller');
 const { ifError } = require('assert');
 
 
@@ -301,6 +301,18 @@ app.post('/quitar-favorito', (req, res) => {
   }
 
   quitarFavorito(req, res);
+});
+
+app.post('/verificar-favorito', (req, res) => {
+  if (!req.body.id_usuario || !req.body.id_trabajador) {
+    return res.status(400).json({ error: 'Falta información requerida.' });
+  }
+
+  verificarFavorito(req, res);
+});
+
+app.post('/listar-favoritos', (req, res) => {
+  listarFavoritos(req, res);
 });
 
 

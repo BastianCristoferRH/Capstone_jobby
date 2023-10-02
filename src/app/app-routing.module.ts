@@ -78,6 +78,12 @@ const routes: Routes = [
     loadChildren: () => import('./registrar-trabajador/registrar-trabajador.module').then( m => m.RegistrarTrabajadorPageModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'listar-favorito/:correo',
+    loadChildren: () => import('./listar-favorito/listar-favorito.module').then( m => m.ListarFavoritoPageModule),
+    canActivate: [AuthGuard],
+  },
+
 
 
 
