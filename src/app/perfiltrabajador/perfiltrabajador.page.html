@@ -12,6 +12,9 @@
 
   <ion-content [fullscreen]="true" class="custom-content">
     <ion-card class="user-card">
+      <ion-button (click)="toggleFavorito()" style="--background: orange;" *ngIf="datosTrabajador.length>0 && mostrarBotonSolicitar">
+        <ion-icon [name]="esFavorito ? 'heart' : 'heart-outline'"></ion-icon>
+      </ion-button>
       <div class="user-profile">
         <ion-row responsive-sm>
           <ion-col col-12 width-50 class="ion-text-center">
@@ -32,6 +35,10 @@
         <p>⭐⭐⭐⭐⭐</p>
         <p>{{datosTrabajador[0]?.des_perfil}}</p>
       </div>
+      <div *ngIf="!datosTrabajador.length">
+        <h2 style="color: white; text-align: center;">NO POSEE CUENTA TRABAJADOR</h2>
+      <ion-button  shape="round" class="button-solicitar-servicio custom-buttonx boton-crear" (click)="navegarCrearPerfilTrabajador()">CREAR</ion-button>
+    </div>
       <div style="text-align: center; padding-bottom: 5px;">
         <ion-button *ngIf="datosTrabajador.length > 0 && mostrarBotonSolicitar" shape="round" class="button-solicitar-servicio custom-buttonx" (click)="navigateToSolicitud()">Solicitar</ion-button> <br>
         <ion-button *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0" shape="round" class="button-solicitar-servicio custom-buttonx" (click)="agregarServicio()">Agregar Servicio</ion-button>

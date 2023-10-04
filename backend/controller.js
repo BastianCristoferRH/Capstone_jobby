@@ -512,6 +512,73 @@ function obtenerSolicitudIdPorTrabajadorId(trabajadorId, callback){
   })
 }
 
+function agregarFavorito(req, res) {
+  const { id_usuario, id_trabajador } = req.body;
+  const sql = `INSERT INTO favorito (favorito, id_usuario, id_trabajador) VALUES (1, ?, ?)`;
+  db.query(sql, [id_usuario, id_trabajador], (error, result) => {
+    if (error) {
+      console.error('Error al agregar como favorito:', error);
+      return res.status(500).json({ error: 'Error interno al agregar como favorito' });
+    }
+    
+    console.log('Trabajador agregado como favorito con éxito');
+    res.status(200).json({ message: 'Trabajador agregado como favorito con éxito' });
+  });
+}
+function quitarFavorito(req, res) {
+  const { id_usuario, id_trabajador } = req.body;
+  const sql = `DELETE FROM favorito WHERE id_usuario = ? AND id_trabajador = ?`;
+  db.query(sql, [id_usuario, id_trabajador], (error, result) => {
+    if (error) {
+      console.error('Error al quitar como favorito:', error);
+      return res.status(500).json({ error: 'Error interno al quitar como favorito' });
+    }
+    
+    console.log('Trabajador quitado de favoritos con éxito');
+    res.status(200).json({ message: 'Trabajador quitado de favoritos con éxito' });
+  });
+}
+function verificarFavorito(req, res) {
+  const { id_usuario, id_trabajador } = req.body;
+  const sql = `SELECT COUNT(*) AS esFavorito FROM favorito WHERE id_usuario = ? AND id_trabajador = ?`;
+  db.query(sql, [id_usuario, id_trabajador], (error, result) => {
+    if (error) {
+      console.error('Error al verificar si el trabajador es un favorito:', error);
+      return res.status(500).json({ error: 'Error interno al verificar el favorito' });
+    }
+
+    const esFavorito = result[0].esFavorito === 1;
+
+    res.status(200).json({ esFavorito });
+  });
+}
+
+function listarFavoritos(req, res) {
+  const { id_usuario } = req.body;
+  const sql = `
+    SELECT favorito.id_usuario,
+           trabajador.correo_electronico,
+           trabajador.disponibilidad,
+           usuario.nombre,
+           usuario.apellidos,
+           trabajador.des_perfil
+    FROM favorito
+    JOIN trabajador ON favorito.id_trabajador = trabajador.id_trabajador
+    JOIN usuario ON usuario.correo_electronico = trabajador.correo_electronico
+    WHERE favorito.id_usuario = ?;
+  `;
+
+  db.query(sql, [id_usuario], (error, result) => {
+    if (error) {
+      console.error('Error al listar los trabajadores favoritos:', error);
+      return res.status(500).json({ error: 'Error interno al listar favoritos' });
+    }
+
+    res.status(200).json({ favoritos: result });
+  });
+}
+
+
 
 
 
@@ -536,5 +603,9 @@ module.exports = {
   obtenerTrabajadorIdPorCorreo,
   obtenerSolicitudIdPorTrabajadorId,
   registrarTrabajador,
-  eliminarServicio
+  eliminarServicio,
+  agregarFavorito,
+  quitarFavorito,
+  verificarFavorito,
+  listarFavoritos
 };
