@@ -88,10 +88,11 @@ export class ModificarServicioPage implements OnInit {
 
     console.log('Datos de serviceData antes de enviar la solicitud HTTP:', this.serviceData);
 
-    this.http.put(`http://localhost:4000/modificar_servicio/${this.id_des_serv}`, this.serviceData).subscribe(
+    this.http.put(`http://localhost:4001/modificar_servicio/${this.id_des_serv}`, this.serviceData).subscribe(
       (response) => {
         console.log('Servicio modificado con éxito', response);
         console.log('Así quedaron los datos modificados', this.serviceData);
+        this.perfil_trabajador();
 
         // Puedes redirigir al usuario a otra página después de modificar el servicio si es necesario
         // this.router.navigate(['/otra-pagina']);
@@ -103,21 +104,21 @@ export class ModificarServicioPage implements OnInit {
   }
 
   cargarRegiones() {
-    this.http.get('http://localhost:4000/obtener-regiones').subscribe((data: any) => {
+    this.http.get('http://localhost:4001/obtener-regiones').subscribe((data: any) => {
       this.regiones = data;
       console.log('Regiones cargadas con éxito', data);
     });
   }
 
   cargarComunas() {
-    this.http.get('http://localhost:4000/obtener-comunas').subscribe((data: any) => {
+    this.http.get('http://localhost:4001/obtener-comunas').subscribe((data: any) => {
       this.comunas = data;
       console.log('Comunas cargadas con éxito', data);
     });
   }
 
   cargarServicios() {
-    this.http.get('http://localhost:4000/obtener-servicios').subscribe((data: any) => {
+    this.http.get('http://localhost:4001/obtener-servicios').subscribe((data: any) => {
       this.servicios = data;
       console.log('Servicios cargados con éxito', data);
     });
@@ -134,6 +135,9 @@ export class ModificarServicioPage implements OnInit {
     }
 
     return true;
+  }
+  perfil_trabajador() {
+    this.router.navigate(['/trabajador', this.datosServicio.correo_electronico]); // Usar 'this.correoElectronico'
   }
 
   obtenerIdServicio(nombreServicio: string): string {

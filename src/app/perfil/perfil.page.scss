@@ -26,73 +26,101 @@ h3 {
     color: black;
 }
 
-.user-avatar {
-    max-width: 250px;
-    height: 250px;
-    padding: 0.5em;
-    filter: drop-shadow(3px 4px 4px #444);
-    margin: 0 auto;
-    border-radius: 50%;
+ion-item.custom-menu-item {
+  --color: black;
+  --background: transparent;
+  border: solid red;
 }
+
+ion-list {
+  background-color: rgba(255, 255, 255, 0);
+  border: red;
+}
+
+ion-button.custom-button {
+  --background: orange; 
+  color: red; 
+  width: 100%; 
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  margin-top: 2%;
+}
+
+.user-avatar {
+  max-width: 250px;
+  height: 250px;
+  padding: 0.5em;
+  filter: drop-shadow(3px 4px 4px #444);
+  margin: 0 auto;
+  border-radius: 50%;
+}
+
 
 .datos {
-    margin-left: 10px;
-    margin-right: 10px;
-}
-
-.custom-lista {
-    background-color: #f2f2f2;
-    margin-left: 10px;
-    margin-right: 10px;
-    --ion-item-background: transparent;
-    border-radius: 15px;
-}
-
-.custom-list-item {
-    display: flex;
-    align-items: center;
-}
-
-.custom-button {
-    float: right;
-    margin-right: 0;
-    padding-right: 0;
+  text-align: center;
+  color: black;
 }
 
 .user-card {
 
-    width: 80%;
-    max-width: 80%;
-    margin: 0 auto;
-    margin-top: 5%;
-    background-color: rgba(255, 255, 255, 0.5);
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  width: 80%;
+  max-width: 80%;
+  margin: 0 auto;
+  margin-top: 5%;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+
 }
 
-ion-item.custom-menu-item {
-    --color: black;
-    --background: transparent;
-    border: solid red;
+.custom-buttonx {
+  --background: orange;
+  color: red; 
+  width: 40%;
 }
 
-ion-list {
-    background-color: rgba(255, 255, 255, 0);
-    border: red;
+
+.custom-card{
+  width: 90%;
+  max-width: 90%;
+  margin: 0 auto;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-ion-button.custom-button {
-    --background: orange;
-    /* Cambia el color de fondo de los botones */
-    color: red;
-    /* Cambia el color del texto de los botones */
-    width: 100%;
-    /* Haz que los botones ocupen el ancho completo */
-    display: flex;
-    justify-content: center;
-    /* Centra horizontalmente el contenido */
-    align-items: center;
-    /* Centra verticalmente el contenido */
-    margin-top: 2%;
+.custom-list-item{
+  background-color: rgba(255,255,255,0.1);
+  color: red;
 }
 
+.titulo{
+  text-align: center;
+  color: white;
+
+
+}
+
+
+
+.div-tarjeta-servicio{
+  background-color: rgba(255,255,255,0.1);
+  color:black;
+  border: solid 1px red;
+}
+
+.tipo_servicio_h2{
+  text-align: center;
+}
+
+.div-tarjeta-servicio-for{
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.boton-crear{
+  margin-left: 30%;
+}

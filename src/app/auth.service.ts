@@ -101,8 +101,16 @@ export class AuthService {
     return this.http.get(`${this.apiUrl}/obtener-datos-trabajador/${correoElectronico}`); 
   }
 
+  loadServicioData(correoElectronico: string) {
+    return this.http.get(`${this.apiUrl}/obtener-servicios/${correoElectronico}`); 
+  }
+
   SolicitudesRecibidas(correo_trabajador: String){
     return this.http.get(`${this.apiUrl}/servicios-solicitados/${correo_trabajador}`)
+  }
+
+  SolicitudesRealizadas(correo_trabajador: String){
+    return this.http.get(`${this.apiUrl}/servicios-solicitados-cliente/${correo_trabajador}`)
   }
 
   actualizarEstadoSolicitud(solicitudId: number, nuevoEstado: string) {
@@ -119,6 +127,15 @@ export class AuthService {
 
     return this.http.post(`${this.apiUrl}/agregar_servicio`,serviceData);
   }
+
+  // Eliminar servicios
+  eliminarServicio(id_des_serv: number): Observable<any> {
+
+    return this.http.delete(`${this.apiUrl}/eliminar_servicio/${id_des_serv}`);
+  }
+
+
+
 
   getTrabajadorIdPorCorreo(correoElectronico: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/obtener-trabajadorid/${correoElectronico}`);

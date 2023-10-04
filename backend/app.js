@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud,servEspecifico,modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, aceptarSolicitud,obtenerRegiones,obtenerComunas,obtenerServicios,listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo,obtenerSolicitudIdPorTrabajadorId,registrarTrabajador } = require('./controller');
+const { registroUsuario,eliminarServicio, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud,servEspecifico,modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador,obtenerServiciosSolicitadosPorCliente, aceptarSolicitud,obtenerRegiones,obtenerComunas,obtenerServicios,listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo,obtenerSolicitudIdPorTrabajadorId,registrarTrabajador } = require('./controller');
 const { ifError } = require('assert');
 
 
@@ -52,6 +52,7 @@ app.post('/agregar_servicio', (req, res) => {
 });
 
 
+
 app.put('/modificar_servicio/:id_des_serv', (req, res) => {
   const id_des_serv = req.params.id_des_serv;
   const serviceData = req.body;
@@ -67,6 +68,23 @@ app.put('/modificar_servicio/:id_des_serv', (req, res) => {
     }
   });
 });
+
+//Eliminar Servicio
+app.delete('/eliminar_servicio/:id_des_serv', (req, res) => {
+  const id_des_serv = req.params.id_des_serv;
+
+  // Llamar a la función eliminarServicio con el id_des_serv y los nuevos datos
+  eliminarServicio(id_des_serv, (error, resultado) => {
+    if (error) {
+      console.error('Error al eliminar el servicio:', error);
+      res.status(500).json(error);
+    } else {
+      console.log('Servicio eliminado con éxito');
+      res.status(200).json(resultado);
+    }
+  });
+});
+
 
 
 
@@ -100,20 +118,20 @@ app.post('/enviar-solicitud/:correoDestinatario', (req, res) => {
   });
 });
 
-app.get('/obtener-datos-trabajador/:correo', (req, res) => { // get de los datos encesario para obtener los datos del trabajador 
+app.get('/obtener-datos-trabajador/:correo', (req, res) => {
   const correoElectronico = req.params.correo;
 
-  
-  obtenerDatosTrabajadorPorCorreo(correoElectronico, (error, datosTrabajador) => {
+  obtenerDatosTrabajadorPorCorreo(correoElectronico, (error, resultadoFinal) => {
     if (error) {
       console.log("Error al obtener los datos del trabajador: ", error);
       res.status(404).json(error);
     } else {
-      console.log("Datos del trabajador obtenidos con éxito: ", datosTrabajador);
-      res.status(200).json(datosTrabajador);
+      console.log("Datos del trabajador obtenidos con éxito: ", resultadoFinal);
+      res.status(200).json(resultadoFinal);
     }
   });
 });
+
 
 app.get('/servicio-especifico/:id_des_serv', (req, res) => {
   const id_des_serv = req.params.id_des_serv;
@@ -202,6 +220,23 @@ app.get('/servicios-solicitados/:correoElectronico', (req, res) => {
     }
   });
 });
+
+app.get('/servicios-solicitados-cliente/:correoElectronico', (req, res) => {
+  const correoElectronico = req.params.correoElectronico;
+  obtenerServiciosSolicitadosPorCliente(correoElectronico, (error, resultados) => {
+    if (error) {
+      console.log("Error al obtener los servicios solicitados por cliente: ", error);
+      res.status(500).json(error);
+    } else {
+      console.log("Servicios solicitados por cliente obtenidos con éxito: ", resultados);
+      res.status(200).json(resultados);
+    }
+  });
+});
+
+
+
+
 
 app.put('/actualizar-solicitud/:id', (req, res) => {
   const solicitudId = req.params.id;
