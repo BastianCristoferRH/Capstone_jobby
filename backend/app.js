@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { listarFavoritos,verificarFavorito,eliminarServicio,agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador,obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador } = require('./controller');
+const { listarFavoritos,verificarFavorito,eliminarServicio,agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador,obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador,agregarDocumentacionTrabajador } = require('./controller');
 const { ifError } = require('assert');
 
 
@@ -348,6 +348,24 @@ app.post('/verificar-favorito', (req, res) => {
 
 app.post('/listar-favoritos', (req, res) => {
   listarFavoritos(req, res);
+});
+
+
+
+app.post('/agregar-documentacion', (req, res)=>{
+  const trabajadorId = req.params.id_solicitud;
+  const documentData = req.body;
+
+  agregarDocumentacionTrabajador(documentData,(error,result)=>{
+      if (error) {
+        console.log("Error al agregar documentacion", error);
+        res.status(500).json({error:"Error interno al agregar documentacion"});
+      }else{
+        console.log("Documentacion agregada con exito", result);
+        res.status(200).json({message:"Documentacion agregada con exito"});
+      }
+    }
+  );
 });
 
 

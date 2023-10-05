@@ -581,6 +581,28 @@ function listarFavoritos(req, res) {
 
 
 
+function agregarDocumentacionTrabajador(documentData,callback){
+  const query = `INSERT INTO documento_trabajador(titulo, documento, id_trabajador) VALUES(?,?,?)`;
+  const valores = [
+    documentData.titulo,
+    documentData.documento,
+    documentData.id_trabajador
+  ];
+
+  db.query(query, valores, (error,result)=>{
+    if (error) {
+      console.log("Error al insertar documentacion", error);
+      callback({error:"Error al insertar la documentacion", details:error.message}, null);
+      
+    } else{
+      console.log("Documentacion agregada con exito");
+      callback(null, result)
+    }
+  });
+
+}
+
+
 
 
 module.exports = {
@@ -603,6 +625,7 @@ module.exports = {
   obtenerTrabajadorIdPorCorreo,
   obtenerSolicitudIdPorTrabajadorId,
   registrarTrabajador,
+  agregarDocumentacionTrabajador,
   eliminarServicio,
   agregarFavorito,
   quitarFavorito,

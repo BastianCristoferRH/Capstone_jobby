@@ -1,0 +1,32 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>subir-documentacion</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">subir-documentacion</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+
+  <form (ngSubmit)="submitForm()">
+    <ion-list>
+      <ion-item>
+        <ion-label position="stacked">Título del Documento</ion-label>
+        <ion-input type="text" [(ngModel)]="documentDataa.titulo" name="titulo"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Seleccione un archivo (Imagen o PDF)</ion-label>
+        <input type="file" accept=".jpg, .jpeg, .png, .pdf" (change)="onFileSelected($event)" />
+      </ion-item>
+    </ion-list>
+
+    <ion-button type="submit" [disabled]="!documentDataa.titulo || !selectedFile">Subir Documento</ion-button>
+  </form>
+
+
+</ion-content>

@@ -11,8 +11,11 @@ import { AlertController } from '@ionic/angular';
 
 export class PerfiltrabajadorPage implements OnInit {
   mostrarBotonAgregarServicio: boolean = false;
+  mostrarBotonAgregarDocumentacion: boolean = false;
   mostrarBotonSolicitar: boolean = true;
   correoElectronico: string = '';
+  //datosTrabajador: any = []; // Ahora inicializado como un arreglo
+  id_trabajador: any={};
   datosTrabajador: any[] = [];
   datosServicio: any[] = [];
   esFavorito: boolean = false;
@@ -36,20 +39,41 @@ export class PerfiltrabajadorPage implements OnInit {
           console.log('Datos Trabajador obtenidos', this.datosTrabajador);
           console.log('Datos servicios obtenidos', this.datosServicio);
 
-          const usuarioAutenticado = this.authService.getCorreoElectronico();
-          if (usuarioAutenticado === this.correoElectronico) {
-            this.mostrarBotonAgregarServicio = true;
-            this.mostrarBotonSolicitar = false;
-          }
-          // Verificar si el trabajador es favorito
-          this.verificarFavorito();
-        },
-        (error: any) => {
-          console.error('Error al recibir los datos del trabajador', error);
+        // Verificar si el correo del trabajador coincide con el usuario autenticado
+        const usuarioAutenticado = this.authService.getCorreoElectronico();
+        if (usuarioAutenticado === this.correoElectronico) {
+          this.mostrarBotonAgregarServicio = true;
+          this.mostrarBotonAgregarDocumentacion = true;
+          this.mostrarBotonSolicitar = false; // Ocultar el botón "Solicitar"
+
         }
-      );
-    });
+        this.verificarFavorito();
+      },
+      (error: any) => {
+        console.error('Error al recibir los datos del trabajador', error);
+      }
+    );
+  });
+}
+
+  goToFormularioDocumentacion(){
+    const correoElectronico = this.authService.getCorreoElectronico();
+    if (correoElectronico) {
+      this.authService.getTrabajadorIdPorCorreo(correoElectronico).subscribe((data:any)=>{
+        console.log(data);
+        this.id_trabajador = data;
+        console.log(this.id_trabajador);
+
+      });
+      this.router.navigate(['/subir-documentacion',this.id_trabajador[0].id_trabajador])
+      
+    }else{
+      this.router.navigate(['/login'])
+    }
+    
   }
+
+
 
   async confirmarEliminarServicio(id_des_serv: number) {
     const alert = await this.alertController.create({
