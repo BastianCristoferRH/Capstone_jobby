@@ -124,3 +124,20 @@ ion-button.custom-button {
 .boton-crear{
   margin-left: 30%;
 }
+
+
+.button-reseña{
+  --background:orange;
+  color: red;
+}
+
+.button-incompleto{
+  --background:red;
+  color: white;
+}
+
+.button-completado{
+  --background:orange;
+  color: red;
+}
+

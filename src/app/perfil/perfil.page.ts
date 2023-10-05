@@ -60,10 +60,7 @@ export class PerfilPage implements OnInit {
 
 
 
-  logout() {
-    this.authService.logout();
-    this.router.navigateByUrl('/login');
-  }
+ 
 
   
 
@@ -102,6 +99,30 @@ export class PerfilPage implements OnInit {
      
     }
   }
+
+  CompletadoEncargo(solicitudId: number) {
+    this.authService.actualizarEstadoSolicitud(solicitudId, 'Completado').subscribe(
+      (data: any) => {
+        console.log('Solicitud aceptada con éxito');
+        location.reload();
+      (error: any) => {
+        console.error('Error al aceptar la solicitud:', error);
+      }}
+    );
+  }
+
+  IncompletoEncargo(solicitudId: number) {
+    this.authService.actualizarEstadoSolicitud(solicitudId, 'Incompleto').subscribe(
+      (data: any) => {
+        console.log('Solicitud aceptada con éxito');
+        location.reload();
+      (error: any) => {
+        console.error('Error al aceptar la solicitud:', error);
+      }}
+    );
+  }
+
+  
 
 
 }
