@@ -256,7 +256,7 @@ app.put('/actualizar-solicitud/:id', (req, res) => {
 app.post('/agregar-resena/:id_solicitud', (req, res) => {
   const solicitudId = req.params.id_solicitud;
   const reseñaData = req.body;
-  agregarReseña(solicitudId, reseñaData, (error, result) => {
+  agregarReseña(reseñaData, (error, result) => {
     if (error) {
       console.log("Error al agregar reseña", error);
       res.status(500).json(error);

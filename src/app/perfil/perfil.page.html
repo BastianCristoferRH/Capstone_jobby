@@ -60,15 +60,12 @@
             <p style="text-align: center;">Descripcion: {{ datos.des_serv }}</p>
             <p style="text-align: center;">Ubicacion: {{ datos.name_comuna }},{{ datos.name_region }}</p>
             <p style="text-align: center;">Fecha de solicitud: {{ datos.fecha_solicitud | date:'dd-MM-yyyy' }}</p>
-            <ion-button class="button" (click)="goToResena()">Calificar servicio</ion-button>
             </div>
             
-            <p>{{datos.id_solicitud}}</p>
             </div>
             <ion-button  shape="round" expand="full" *ngIf="datos.estado  === 'Finalizado'" class="button-completado" (click)="CompletadoEncargo(datos.id_solicitud)" >Trabajo completado</ion-button>
             <ion-button shape="round"  expand="full" *ngIf="datos.estado  === 'Finalizado'" class="button-incompleto" (click)="IncompletoEncargo(datos.id_solicitud)">Incompleto</ion-button>
-            <ion-button shape="round"  expand="full" *ngIf="datos.estado  === 'Completado'" class="button-reseña">Realizar reseña</ion-button>
-        </div>
+            <ion-button shape="round"  expand="full" *ngIf="datos.estado  === 'Completado'" class="button-reseña" (click)="goToResena(datos.id_solicitud)">Realizar reseña</ion-button>
       </div>
     </ion-card>
 

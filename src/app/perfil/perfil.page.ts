@@ -36,8 +36,8 @@ export class PerfilPage implements OnInit {
       ); // Pasa 'correoElectronico' en lugar de 'userId'
     });
   }
-  goToResena(){
-    this.router.navigateByUrl('/agregar-resena', this.SolicitudesRealizadas[0].id_trabajador)
+  goToResena(solicitudId: number){
+    this.router.navigate(['/agregar-resena', solicitudId])
   }
   
 
