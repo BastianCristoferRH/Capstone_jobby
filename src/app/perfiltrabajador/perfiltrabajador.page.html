@@ -30,6 +30,7 @@
         <p>Fecha de nacimiento: {{ datosTrabajador[0]?.fecha_nacimiento | date:'dd-MM-yyyy' }}</p>
         <p>⭐⭐⭐⭐⭐</p>
         <p>{{datosTrabajador[0]?.des_perfil}}</p>
+        <ion-button *ngIf="mostrarBotonAgregarDocumentacion && datosTrabajador.length>0" shape="round" class="button" (click)="goToFormularioDocumentacion()">Subir documentacion</ion-button>
       </div>
       <div style="text-align: center; padding-bottom: 5px;">
         <ion-button *ngIf="datosTrabajador.length>0 && mostrarBotonSolicitar" shape="round" class="button-solicitar-servicio custom-buttonx" (click)="navigateToSolicitud()">Solicitar</ion-button> <br>

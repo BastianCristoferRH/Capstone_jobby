@@ -10,10 +10,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 export class PerfiltrabajadorPage implements OnInit {
   mostrarBotonAgregarServicio: boolean = false;
+  mostrarBotonAgregarDocumentacion: boolean = false;
   mostrarBotonSolicitar: boolean = true;
   correoElectronico: string = '';
   datosTrabajador: any = []; // Ahora inicializado como un arreglo
-
+  id_trabajador: any={};
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -21,6 +22,9 @@ export class PerfiltrabajadorPage implements OnInit {
   ) { }
 
 ngOnInit() {
+  
+
+
   this.route.params.subscribe(params => {
     this.correoElectronico = params['correoElectronico'];
 
@@ -34,6 +38,7 @@ ngOnInit() {
         const usuarioAutenticado = this.authService.getCorreoElectronico();
         if (usuarioAutenticado === this.correoElectronico) {
           this.mostrarBotonAgregarServicio = true;
+          this.mostrarBotonAgregarDocumentacion = true;
           this.mostrarBotonSolicitar = false; // Ocultar el botón "Solicitar"
         }
       },
@@ -44,7 +49,25 @@ ngOnInit() {
   });
 }
 
+  goToFormularioDocumentacion(){
+    const correoElectronico = this.authService.getCorreoElectronico();
+    if (correoElectronico) {
+      this.authService.getTrabajadorIdPorCorreo(correoElectronico).subscribe((data:any)=>{
+        console.log(data);
+        this.id_trabajador = data;
+        console.log(this.id_trabajador);
+
+      });
+      this.router.navigate(['/subir-documentacion',this.id_trabajador[0].id_trabajador])
+      
+    }else{
+      this.router.navigate(['/login'])
+    }
+    
+  }
+
   navigateToSolicitud() {
+
     this.router.navigate(['/solicitud', this.correoElectronico]); 
   }
 

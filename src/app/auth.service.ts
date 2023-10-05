@@ -145,6 +145,10 @@ export class AuthService {
     return this.http.get(`${this.apiUrl}/obtener-solicitudid/${trabajadorid}`)
   }
 
+  agregarDocumentacionTrabajador(documentData:any):Observable<any>{
+    const url =  `${this.apiUrl}/agregar-documentacion`;
+    return this.http.post(url,documentData);
+  }
 
 
 }

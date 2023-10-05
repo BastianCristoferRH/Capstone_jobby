@@ -78,6 +78,12 @@ const routes: Routes = [
     loadChildren: () => import('./registrar-trabajador/registrar-trabajador.module').then( m => m.RegistrarTrabajadorPageModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'subir-documentacion/:id_trabajador',
+    loadChildren: () => import('./subir-documentacion/subir-documentacion.module').then( m => m.SubirDocumentacionPageModule),
+    canActivate: [AuthGuard],
+  },
+
 
 
 
