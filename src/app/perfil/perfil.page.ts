@@ -36,13 +36,15 @@ export class PerfilPage implements OnInit {
       ); // Pasa 'correoElectronico' en lugar de 'userId'
     });
   }
-
+  goToResena(){
+    this.router.navigateByUrl('/agregar-resena', this.SolicitudesRealizadas[0].id_trabajador)
+  }
   
 
   loadUserProfile(correoElectronico: string) {
     this.authService.getUserProfile(correoElectronico).subscribe(
       (profileData: any) => {
-        this.datosUsuario = profileData;
+        this.datosUsuario = profileData;  
         
         if (this.datosUsuario.img_base64 !== null) {
           // Crear una URL segura a partir de los datos base64

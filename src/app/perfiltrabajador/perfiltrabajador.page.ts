@@ -15,7 +15,7 @@ export class PerfiltrabajadorPage implements OnInit {
   mostrarBotonSolicitar: boolean = true;
   correoElectronico: string = '';
   //datosTrabajador: any = []; // Ahora inicializado como un arreglo
-  id_trabajador: any={};
+  id_trabajador: number = 0;
   datosTrabajador: any[] = [];
   datosServicio: any[] = [];
   esFavorito: boolean = false;
@@ -60,12 +60,13 @@ export class PerfiltrabajadorPage implements OnInit {
     const correoElectronico = this.authService.getCorreoElectronico();
     if (correoElectronico) {
       this.authService.getTrabajadorIdPorCorreo(correoElectronico).subscribe((data:any)=>{
-        console.log(data);
-        this.id_trabajador = data;
+        console.log(data[0].id_trabajador);
+        this.id_trabajador = data[0].id_trabajador;
         console.log(this.id_trabajador);
 
       });
-      this.router.navigate(['/subir-documentacion',this.id_trabajador[0].id_trabajador])
+      this.id_trabajador = 0
+      this.router.navigate(['/subir-documentacion',this.id_trabajador])
       
     }else{
       this.router.navigate(['/login'])

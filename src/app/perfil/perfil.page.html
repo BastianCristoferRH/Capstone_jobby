@@ -60,7 +60,9 @@
             <p style="text-align: center;">Descripcion: {{ datos.des_serv }}</p>
             <p style="text-align: center;">Ubicacion: {{ datos.name_comuna }},{{ datos.name_region }}</p>
             <p style="text-align: center;">Fecha de solicitud: {{ datos.fecha_solicitud | date:'dd-MM-yyyy' }}</p>
+            <ion-button class="button" (click)="goToResena()">Calificar servicio</ion-button>
             </div>
+            
         </div>
       </div>
     </ion-card>
