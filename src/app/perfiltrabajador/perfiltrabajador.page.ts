@@ -14,9 +14,9 @@ export class PerfiltrabajadorPage implements OnInit {
   mostrarBotonAgregarDocumentacion: boolean = false;
   mostrarBotonSolicitar: boolean = true;
   correoElectronico: string = '';
-  datosTrabajador: any = []; // Ahora inicializado como un arreglo
+  //datosTrabajador: any = []; // Ahora inicializado como un arreglo
   id_trabajador: any={};
- // datosTrabajador: any[] = [];
+  datosTrabajador: any[] = [];
   datosServicio: any[] = [];
   esFavorito: boolean = false;
 
