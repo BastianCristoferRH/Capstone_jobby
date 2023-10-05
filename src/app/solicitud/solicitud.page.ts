@@ -52,8 +52,8 @@ export class SolicitudPage implements OnInit {
   loadServicio_solicitud(correoElectronico: string) {
     this.authService.loadTrabajadorData(correoElectronico).subscribe(
       (trabajorData: any) => {
-        this.datosServicio = trabajorData
-
+        this.datosServicio = trabajorData.datosServicio as Array<any>;
+        console.log(this.datosServicio);
       },
       (error: any) => {
         console.error('Error al cargar el perfil del usuario:', error);

@@ -12,49 +12,64 @@
 
   <ion-content [fullscreen]="true" class="custom-content">
     <ion-card class="user-card">
+      <ion-button (click)="toggleFavorito()" style="--background: orange;" *ngIf="datosTrabajador.length>0 && mostrarBotonSolicitar">
+        <ion-icon [name]="esFavorito ? 'heart' : 'heart-outline'"></ion-icon>
+      </ion-button>
       <div class="user-profile">
         <ion-row responsive-sm>
           <ion-col col-12 width-50 class="ion-text-center">
             <img class="user-avatar" src="../../assets/img/user.jpg">
+            
             <ion-icon name="create"></ion-icon>
           </ion-col>
         </ion-row>
       </div>
-      <div *ngIf="!datosTrabajador.length">
-          <h2 style="color: white; text-align: center;">NO POSEE CUENTA TRABAJADOR</h2>
-        <ion-button  shape="round" class="button-solicitar-servicio custom-buttonx boton-crear" (click)="navegarCrearPerfilTrabajador()">CREAR</ion-button>
+      <div *ngIf="datosTrabajador.length === 0">
+        <h2 style="color: white; text-align: center;">NO POSEE CUENTA TRABAJADOR</h2>
+        <ion-button shape="round" class="button-solicitar-servicio custom-buttonx boton-crear" (click)="navegarCrearPerfilTrabajador()">CREAR</ion-button>
       </div>
-      
-      <div class="datos" *ngIf="datosTrabajador.length">
+
+      <div class="datos" *ngIf="datosTrabajador.length > 0">
         <h3>{{ datosTrabajador[0]?.nombre }} {{ datosTrabajador[0]?.apellidos }}</h3>
         <p>Fecha de nacimiento: {{ datosTrabajador[0]?.fecha_nacimiento | date:'dd-MM-yyyy' }}</p>
         <p>⭐⭐⭐⭐⭐</p>
         <p>{{datosTrabajador[0]?.des_perfil}}</p>
         <ion-button *ngIf="mostrarBotonAgregarDocumentacion && datosTrabajador.length>0" shape="round" class="button" (click)="goToFormularioDocumentacion()">Subir documentacion</ion-button>
       </div>
+     
       <div style="text-align: center; padding-bottom: 5px;">
-        <ion-button *ngIf="datosTrabajador.length>0 && mostrarBotonSolicitar" shape="round" class="button-solicitar-servicio custom-buttonx" (click)="navigateToSolicitud()">Solicitar</ion-button> <br>
-        <ion-button *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length>0" shape="round" class="button-solicitar-servicio custom-buttonx" (click)="agregarServicio()" >Agregar Servicio</ion-button>
+        <ion-button *ngIf="datosTrabajador.length > 0 && mostrarBotonSolicitar" shape="round" class="button-solicitar-servicio custom-buttonx" (click)="navigateToSolicitud()">Solicitar</ion-button> <br>
+        <ion-button *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0" shape="round" class="button-solicitar-servicio custom-buttonx" (click)="agregarServicio()">Agregar Servicio</ion-button>
       </div>
     </ion-card>
     <br><br>
     <ion-label class="titulo">
-      <h1  *ngIf="datosTrabajador.length">SERVICIOS</h1>
+      <h1 *ngIf="datosServicio.length > 0">SERVICIOS</h1>
     </ion-label>
-    
-    <ion-card class="custom-card custom-white-background" *ngFor="let datos of datosTrabajador">
+
+    <ion-card class="custom-card custom-white-background" *ngFor="let datos of datosServicio">
       <div class="div-tarjeta-servicio">
-        <div class="div-tarjeta-servicio-for" >
+        <div class="div-tarjeta-servicio-for">
           <div>
             <h2 class="tipo_servicio_h2">{{ datos.name_serv }}</h2>
-            <p style="text-align: center;">{{datos.name_comuna}},{{datos.name_region}}</p>
+            <p style="text-align: center;">{{ datos.name_comuna }},{{ datos.name_region }}</p>
             <p style="text-align: center;">⭐⭐⭐⭐</p>
             <p style="text-align: center;">{{ datos.des_serv }}</p>
+            <div style="text-align: center;">
+              <!-- Utilizamos Angular RouterLink para la navegación -->
+              <a [routerLink]="'/modificar-servicio/' + datos.id_des_serv">
+                <ion-button shape="round" *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0" class="button-solicitar-servicio custom-buttonx" color="tertiary">
+                  <ion-icon name="create-outline"></ion-icon>
+                </ion-button>
+              </a>
+              <ion-button shape="round" *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0" class="button-solicitar-servicio custom-buttonx" color="danger" (click)="confirmarEliminarServicio(datos.id_des_serv)">
+                <ion-icon name="trash-outline"></ion-icon>
+              </ion-button>
+            </div>
           </div>
         </div>
       </div>
-     
-
     </ion-card>
+
   </ion-content>
 </div>

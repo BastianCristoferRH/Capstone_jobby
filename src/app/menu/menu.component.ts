@@ -47,6 +47,17 @@ export class MenuComponent {
     }
   }
 
+  navegarAFavorito() {
+    const correoElectronico = this.authService.getCorreoElectronico();
+    if (correoElectronico) {
+      this.router.navigate(['/listar-favorito', correoElectronico]);
+    } else {
+      console.error('Correo electrónico no disponible.');
+    }
+  }
+
+  
+
 
   inicio(){
     this.router.navigate(['/listar-servicios']);

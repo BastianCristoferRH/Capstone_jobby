@@ -81,6 +81,11 @@ const routes: Routes = [
   {
     path: 'subir-documentacion/:id_trabajador',
     loadChildren: () => import('./subir-documentacion/subir-documentacion.module').then( m => m.SubirDocumentacionPageModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'listar-favorito/:correo',
+    loadChildren: () => import('./listar-favorito/listar-favorito.module').then( m => m.ListarFavoritoPageModule),
     canActivate: [AuthGuard],
   },
 

@@ -1,3 +1,4 @@
+
 <app-menu></app-menu>
 <div class="ion-page" id="main-content">
   <ion-header>
@@ -17,9 +18,15 @@
       <div class="user-profile">
         <ion-row responsive-sm>
           <ion-col col-12 width-50 class="ion-text-center">
-            <img class="user-avatar" src="../../assets/img/user.jpg">
+            <ng-container *ngIf="datosUsuario.img_base64 !== null && datosUsuario.img_base64 !== undefined">
+              <img [src]="datosUsuario.img_base64" class="user-avatar">
+            </ng-container>
+            <ng-container *ngIf="!datosUsuario.img_base64 || datosUsuario.img_base64 === null || datosUsuario.img_base64 === undefined">
+              <img class="user-avatar" src="../../assets/img/user.jpg">
+            </ng-container>
             <ion-icon name="create"></ion-icon>
           </ion-col>
+          
         </ion-row>
       </div>
   
@@ -27,8 +34,36 @@
         <h3>{{ datosUsuario.nombre }} {{ datosUsuario.apellidos }}</h3>
         <p>Fecha de creación: {{ datosUsuario.fecha_creacion | date:'dd-MM-yyyy' }}</p>
         <p>Fecha de nacimiento: {{ datosUsuario.fecha_nacimiento | date:'dd-MM-yyyy' }}</p>
-        
       </div>
     </ion-card>
+    <br><br>
+
+    <div *ngIf="SolicitudesRealizadas.length === 0">
+      <h2 style="color: white; text-align: center;">NO HA REALIZADO SOLICITUDES</h2>
+    </div>
+
+    <ion-label class="titulo">
+      <h1 *ngIf="SolicitudesRealizadas.length > 0">SOLICITUDES REALIZADAS</h1>
+    </ion-label>
+
+    <ion-card class="custom-card custom-white-background" *ngFor="let datos of SolicitudesRealizadas">
+      <div class="div-tarjeta-servicio">
+        <div class="div-tarjeta-servicio-for">
+          <div>
+            
+            <h4 class="tipo_servicio_h2">Solicitud: {{ datos.titulo_solicitud }}</h4>
+            <p style="text-align: center;">Descripcion: {{ datos.des_solicitud }}</p>
+            <h4 class="tipo_servicio_h2">Est. de solicitud: {{ datos.estado }}</h4>
+            <h5 style="text-align: center;">Datos Trabajador</h5>
+            <p style="text-align: center;">Trabajador: {{ datos.nombre }} {{ datos.apellidos }} ⭐⭐⭐⭐</p>
+            <p style="text-align: center;">Servicio solicitado: {{ datos.name_serv }}</p>
+            <p style="text-align: center;">Descripcion: {{ datos.des_serv }}</p>
+            <p style="text-align: center;">Ubicacion: {{ datos.name_comuna }},{{ datos.name_region }}</p>
+            <p style="text-align: center;">Fecha de solicitud: {{ datos.fecha_solicitud | date:'dd-MM-yyyy' }}</p>
+            </div>
+        </div>
+      </div>
+    </ion-card>
+
   </ion-content>
 </div>

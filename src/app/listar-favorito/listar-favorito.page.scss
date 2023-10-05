@@ -1,0 +1,17 @@
+.lista-favorito {
+    background: transparent;
+}
+
+.button-perfil {
+    display: block;
+    /* Hacer que el botón sea un bloque para aplicar margen automático */
+    margin: 0 auto;
+    /* Margen automático horizontal para centrar el botón */
+    --background: orange;
+    color: red;
+}
+
+.carta-favorito{
+    background: rgba($color: red, $alpha: 0.7);
+    color: white;
+}

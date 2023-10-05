@@ -54,7 +54,16 @@ function iniciarSesion(datosUsuario, callback) {
 }
 
 function obtenerDatosUsuarioPorCorreo(correoElectronico, callback) {
-  const sql = 'SELECT * FROM usuario WHERE correo_electronico = ?';
+  const sql = `SELECT correo_electronico,
+  nombre,
+  TO_BASE64(img) AS img_base64,
+  apellidos,
+  telefono,
+  fecha_nacimiento,
+  fecha_creacion
+  FROM usuario
+  WHERE correo_electronico = ?`;
+  
   const valores = [correoElectronico];
 
   db.query(sql, valores, (err, resultados) => {
@@ -96,6 +105,50 @@ function modificarServicio(id_des_serv, serviceData, callback) {
   );
 }
 
+// Eliminar servicio por id de servicio
+function eliminarServicio(id_des_serv, callback) {
+  // Eliminar registros de la tabla reseña relacionados con id_solicitud
+  db.query(
+    'DELETE FROM reseña WHERE id_solicitud IN (SELECT id_solicitud FROM solicitud WHERE id_des_serv = ?)',
+    [id_des_serv],
+    (err, result) => {
+      if (err) {
+        console.error('Error al eliminar registros de reseña:', err);
+        callback({ error: 'Error interno al eliminar registros de reseña', details: err.message }, null);
+      } else {
+        // Ahora que los registros en reseña se han eliminado, procedemos a eliminar registros en solicitud
+        db.query(
+          'DELETE FROM solicitud WHERE id_des_serv = ?',
+          [id_des_serv],
+          (err, result) => {
+            if (err) {
+              console.error('Error al eliminar registros de solicitud:', err);
+              callback({ error: 'Error interno al eliminar registros de solicitud', details: err.message }, null);
+            } else {
+              // Ahora que los registros en solicitud se han eliminado, procedemos a eliminar registros en descrip_servicio
+              db.query(
+                'DELETE FROM descrip_servicio WHERE id_des_serv = ?',
+                [id_des_serv],
+                (err, result) => {
+                  if (err) {
+                    console.error('Error al eliminar registros de descrip_servicio:', err);
+                    callback({ error: 'Error interno al eliminar registros de descrip_servicio', details: err.message }, null);
+                  } else {
+                    if (result.affectedRows === 0) {
+                      // Si no se encontró ningún registro para eliminar en descrip_servicio
+                      callback({ error: 'Servicio no encontrado', details: 'No se encontró el servicio para eliminar en descrip_servicio' }, null);
+                    } else {
+                      console.log('Servicio eliminado con éxito en todas las tablas relacionadas');
+                      callback(null, { message: 'Servicio eliminado con éxito en todas las tablas relacionadas' });
+                    }
+                  }
+                });}});}});}// Fin de funcion Eliminar servicio por id de servicio
+
+
+
+
+
+
 
 function enviarSolicitud(solicitudData, callback) {
   const sql = 'INSERT INTO solicitud (id_trabajador, id_des_serv, correo_electronico, titulo_solicitud, estado, fecha_solicitud,des_solicitud) VALUES (?, ?, ?, ?, ?, ?, ?)';
@@ -120,42 +173,66 @@ function enviarSolicitud(solicitudData, callback) {
   });
 }
 
-function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) { // es para la solicitud
-  const sql = `
-  SELECT trabajador.id_trabajador,
-  descrip_servicio.id_des_serv,
-  servicio.name_serv,
-  descrip_servicio.des_serv,
-  usuario.correo_electronico,
-  usuario.nombre,
-  usuario.apellidos,
-  usuario.img,
-  usuario.telefono,
-  usuario.fecha_nacimiento,
-  trabajador.des_perfil,
-  comuna.name_comuna,
-  region.name_region
-      FROM trabajador
-      JOIN descrip_servicio ON descrip_servicio.id_trabajador = trabajador.id_trabajador
-      JOIN servicio ON servicio.id_serv = descrip_servicio.id_serv
-      JOIN usuario ON usuario.correo_electronico = trabajador.correo_electronico  
-      JOIN comuna ON descrip_servicio.id_comuna = comuna.id_comuna  
-      JOIN region ON region.id_region=descrip_servicio.id_region
-      WHERE trabajador.correo_electronico = ?
+function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) {
+  // Consulta para los datos de servicio
+  const sqlServicio = `
+    SELECT trabajador.id_trabajador,
+    descrip_servicio.id_des_serv,
+    servicio.name_serv,
+    descrip_servicio.des_serv,
+    usuario.correo_electronico,
+    comuna.name_comuna,
+    region.name_region
+    FROM trabajador
+    JOIN descrip_servicio ON descrip_servicio.id_trabajador = trabajador.id_trabajador
+    JOIN servicio ON servicio.id_serv = descrip_servicio.id_serv
+    JOIN usuario ON usuario.correo_electronico = trabajador.correo_electronico  
+    JOIN comuna ON descrip_servicio.id_comuna = comuna.id_comuna  
+    JOIN region ON region.id_region=descrip_servicio.id_region
+    WHERE trabajador.correo_electronico = ?
   `;
+
+  // Consulta para los datos del trabajador
+  const sqlTrabajador = `
+    SELECT trabajador.id_trabajador,
+    usuario.correo_electronico,
+    usuario.nombre,
+    usuario.apellidos,
+    usuario.img,
+    usuario.telefono,
+    usuario.fecha_nacimiento,
+    trabajador.des_perfil
+    FROM trabajador
+    JOIN usuario ON usuario.correo_electronico = trabajador.correo_electronico  
+    WHERE trabajador.correo_electronico = ?
+  `;
+
   const valores = [correoElectronico];
 
-  db.query(sql, valores, (err, datosTrabajador) => {
-    if (err) {
-      console.error('Error al obtener los servicios solicitados:', err);
-      callback({ error: 'Error interno al obtener los servicios solicitados', details: err.message }, null);
+  db.query(sqlServicio, valores, (errServicio, datosServicio) => {
+    if (errServicio) {
+      console.error('Error al obtener los datos de servicio:', errServicio);
+      callback({ error: 'Error interno al obtener los datos de servicio', details: errServicio.message }, null);
     } else {
-      console.log('Servicios solicitados obtenidos con éxito');
-      callback(null, datosTrabajador);
+      // Después de obtener los datos de servicio, realizamos la consulta para los datos del trabajador
+      db.query(sqlTrabajador, valores, (errTrabajador, datosTrabajador) => {
+        if (errTrabajador) {
+          console.error('Error al obtener los datos del trabajador:', errTrabajador);
+          callback({ error: 'Error interno al obtener los datos del trabajador', details: errTrabajador.message }, null);
+        } else {
+          console.log('Datos de servicio y trabajador obtenidos con éxito');
+          // Aquí puedes combinar los datos de servicio y trabajador como desees
+          const resultadoFinal = {
+            datosServicio: datosServicio,
+            datosTrabajador: datosTrabajador
+          };
+          callback(null, resultadoFinal);
+        }
+      });
     }
   });
-  
-}
+} 
+
 function agregarServicio(serviceData, callback) {
 
   const query ='INSERT INTO descrip_servicio (des_serv, presencial, id_trabajador, id_serv, id_comuna, id_region) VALUES (?, ?, ?, ?, ?, ?)';
@@ -215,6 +292,51 @@ function obtenerServiciosSolicitadosPorTrabajador(correoElectronico, callback) {
     }
   });
 }
+
+
+function obtenerServiciosSolicitadosPorCliente(correoElectronico, callback) {
+  const sql = `
+  SELECT 
+  id_solicitud,
+  trabajador.id_trabajador,
+  usuario.nombre,
+  usuario.apellidos,
+  solicitud.id_des_serv,
+  solicitud.correo_electronico as 'correo_solicitante',
+  titulo_solicitud,
+  estado,
+  fecha_solicitud,
+  des_solicitud,
+  servicio.name_serv,
+  descrip_servicio.des_serv,
+  usuario.correo_electronico as 'correo_trabajador',
+  comuna.name_comuna,
+  region.name_region
+  
+  FROM solicitud
+  JOIN trabajador ON trabajador.id_trabajador = solicitud.id_trabajador
+  JOIN usuario ON usuario.correo_electronico = trabajador.correo_electronico
+  JOIN descrip_servicio ON descrip_servicio.id_des_serv = solicitud.id_des_serv
+  JOIN servicio ON servicio.id_serv = descrip_servicio.id_serv
+  JOIN comuna ON descrip_servicio.id_comuna = comuna.id_comuna  
+  JOIN region ON region.id_region=descrip_servicio.id_region
+    WHERE solicitud.correo_electronico = ?
+  `;
+
+  const valores = [correoElectronico];
+
+  db.query(sql, valores, (err, resultados) => {
+    if (err) {
+      console.error('Error al obtener los servicios solicitados por cliente:', err);
+      callback({ error: 'Error interno al obtener los servicios solicitados por cliente', details: err.message }, null);
+    } else {
+      console.log('Servicios solicitados por cliente obtenidos con éxito');
+      callback(null, resultados);
+    }
+  });
+}
+
+
 
 function servEspecifico(id_des_serv,callback){
   const query = `SELECT ds.des_serv, ds.id_des_serv, ds.presencial, ds.id_trabajador, ds.id_serv, ds.id_region, ds.id_comuna, ds.presencial, t.correo_electronico, t.disponibilidad, name_serv, name_comuna, name_region 
@@ -390,6 +512,73 @@ function obtenerSolicitudIdPorTrabajadorId(trabajadorId, callback){
   })
 }
 
+function agregarFavorito(req, res) {
+  const { id_usuario, id_trabajador } = req.body;
+  const sql = `INSERT INTO favorito (favorito, id_usuario, id_trabajador) VALUES (1, ?, ?)`;
+  db.query(sql, [id_usuario, id_trabajador], (error, result) => {
+    if (error) {
+      console.error('Error al agregar como favorito:', error);
+      return res.status(500).json({ error: 'Error interno al agregar como favorito' });
+    }
+    
+    console.log('Trabajador agregado como favorito con éxito');
+    res.status(200).json({ message: 'Trabajador agregado como favorito con éxito' });
+  });
+}
+function quitarFavorito(req, res) {
+  const { id_usuario, id_trabajador } = req.body;
+  const sql = `DELETE FROM favorito WHERE id_usuario = ? AND id_trabajador = ?`;
+  db.query(sql, [id_usuario, id_trabajador], (error, result) => {
+    if (error) {
+      console.error('Error al quitar como favorito:', error);
+      return res.status(500).json({ error: 'Error interno al quitar como favorito' });
+    }
+    
+    console.log('Trabajador quitado de favoritos con éxito');
+    res.status(200).json({ message: 'Trabajador quitado de favoritos con éxito' });
+  });
+}
+function verificarFavorito(req, res) {
+  const { id_usuario, id_trabajador } = req.body;
+  const sql = `SELECT COUNT(*) AS esFavorito FROM favorito WHERE id_usuario = ? AND id_trabajador = ?`;
+  db.query(sql, [id_usuario, id_trabajador], (error, result) => {
+    if (error) {
+      console.error('Error al verificar si el trabajador es un favorito:', error);
+      return res.status(500).json({ error: 'Error interno al verificar el favorito' });
+    }
+
+    const esFavorito = result[0].esFavorito === 1;
+
+    res.status(200).json({ esFavorito });
+  });
+}
+
+function listarFavoritos(req, res) {
+  const { id_usuario } = req.body;
+  const sql = `
+    SELECT favorito.id_usuario,
+           trabajador.correo_electronico,
+           trabajador.disponibilidad,
+           usuario.nombre,
+           usuario.apellidos,
+           trabajador.des_perfil
+    FROM favorito
+    JOIN trabajador ON favorito.id_trabajador = trabajador.id_trabajador
+    JOIN usuario ON usuario.correo_electronico = trabajador.correo_electronico
+    WHERE favorito.id_usuario = ?;
+  `;
+
+  db.query(sql, [id_usuario], (error, result) => {
+    if (error) {
+      console.error('Error al listar los trabajadores favoritos:', error);
+      return res.status(500).json({ error: 'Error interno al listar favoritos' });
+    }
+
+    res.status(200).json({ favoritos: result });
+  });
+}
+
+
 
 
 function agregarDocumentacionTrabajador(documentData,callback){
@@ -425,6 +614,7 @@ module.exports = {
   enviarSolicitud,
   obtenerDatosTrabajadorPorCorreo,
   obtenerServiciosSolicitadosPorTrabajador,
+  obtenerServiciosSolicitadosPorCliente,
   aceptarSolicitud,
   obtenerRegiones,
   obtenerComunas,
@@ -436,4 +626,9 @@ module.exports = {
   obtenerSolicitudIdPorTrabajadorId,
   registrarTrabajador,
   agregarDocumentacionTrabajador,
+  eliminarServicio,
+  agregarFavorito,
+  quitarFavorito,
+  verificarFavorito,
+  listarFavoritos
 };
