@@ -162,11 +162,6 @@ export class AuthService {
     return this.http.get(`${this.apiUrl}/obtener-solicitudid/${trabajadorid}`)
   }
 
-  agregarDocumentacionTrabajador(documentData:any):Observable<any>{
-    const url =  `${this.apiUrl}/agregar-documentacion`;
-    return this.http.post(url,documentData);
-  }
-  
   agregarFavorito(id_usuario: string, id_trabajador: number): Observable<any> {
     const body = { id_usuario, id_trabajador };
     return this.http.post(`${this.apiUrl}/agregar-favorito`, body);
@@ -197,6 +192,15 @@ export class AuthService {
     };
 
     return this.http.post(url, data);
+  }
+
+  agregarResena(idSolicitud: string, reseñaData: any): Observable<any> {
+    const url = `${this.apiUrl}/agregar-resena/${idSolicitud}`;
+    return this.http.post(url, reseñaData);
+  }
+  agregarDocumentacionTrabajador(documentData:any):Observable<any>{
+    const url =  `${this.apiUrl}/agregar-documentacion`;
+    return this.http.post(url,documentData);
   }
 }
 

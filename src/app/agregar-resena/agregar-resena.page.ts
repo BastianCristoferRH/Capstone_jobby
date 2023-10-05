@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute , Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -10,43 +10,66 @@ import { AuthService } from '../auth.service';
 })
 export class AgregarResenaPage implements OnInit {
   trabajadorId: any = {};
-  solicitudId:any= {};
-  resenaa:any={}
-  reseñaData: any={
-    descripcion:'',
-    calificacion:null,
-    id_solicitud:''
+  solicitudId: any = {};
+  resenaa: any = {}
+  reseñaData: any = {
+    descripcion: '',
+    calificacion: null,
+    id_solicitud: ''
   };
 
- 
+
   constructor(private http: HttpClient,
     private authService: AuthService,
-    private route: ActivatedRoute) {
-      
-     }
+    private route: ActivatedRoute,
+    private router: Router) {
 
-    agregarResena() {
-      this.route.params.subscribe(params=>{
-        const solicitudId = params['id_solicitud']
-        this.reseñaData.descripcion = this.resenaa.descripcion;
-        this.reseñaData.calificacion = this.resenaa.calificacion;
-        this.reseñaData.id_solicitud = solicitudId
-        console.log(this.reseñaData.descripcion);
-        console.log(this.reseñaData.calificacion);
-        console.log(this.reseñaData.id_solicitud);
-        this.http.post(`http://localhost:4001/agregar-resena/${solicitudId}`, this.reseñaData)
-          .subscribe(
-            (result) => {
-              console.log("Reseña agregada con éxito", result);
-            
-            },
-            (error) => {
-              console.log("Error al agregar reseña", error);
-            }
-          );
-        });
-      
+  }
+
+  agregarResena() {
+    this.route.params.subscribe(params => {
+      const solicitudId = params['id_solicitud']
+      this.reseñaData.descripcion = this.resenaa.descripcion;
+      this.reseñaData.calificacion = this.resenaa.calificacion;
+      this.reseñaData.id_solicitud = solicitudId
+      this.authService.agregarResena(solicitudId, this.reseñaData).subscribe(
+        (result) => {
+          console.log('Reseña agregada con éxito', result);
+          this.CerrardoEncargo(solicitudId);
+          this.perfil_menu();
+        
+        },
+        (error) => {
+          console.log('Error al agregar reseña', error);
+          
+        }
+      );
+    });
+
+  }
+  CerrardoEncargo(solicitudId: number) {
+    this.authService.actualizarEstadoSolicitud(solicitudId, 'Cerrado').subscribe(
+      (data: any) => {
+        console.log('Solicitud aceptada con éxito');
+        location.reload();
+      (error: any) => {
+        console.error('Error al aceptar la solicitud:', error);
+      }}
+    );
+  }
+  perfil_menu() {
+    if (this.authService.isAuthenticated()) {
+      const correoElectronico = this.authService.getCorreoElectronico();
+      if (correoElectronico) {
+        this.navigateToUserProfile(correoElectronico);
+      }
+    } else {
+      this.router.navigateByUrl('/login');
     }
+  }
+  private navigateToUserProfile(correoElectronico: string) {
+    this.router.navigate(['/perfil', correoElectronico]);
+  }
 
 
 
@@ -69,7 +92,7 @@ export class AgregarResenaPage implements OnInit {
         console.error('El correo electrónico es nulo o no está disponible.');
       }
       console.log(this.trabajadorId[0].id_trabajador);
-  });
-}
+    });
+  }
 
 }

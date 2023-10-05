@@ -253,21 +253,17 @@ app.put('/actualizar-solicitud/:id', (req, res) => {
   });
 });
 
-app.post('/agregar-resena/:id_solicitud', (req, res) => {
-  const solicitudId = req.params.id_solicitud;
+app.post('/agregar-resena', (req, res) => {
   const reseñaData = req.body;
+  
   agregarReseña(reseñaData, (error, result) => {
     if (error) {
-      console.log("Error al agregar reseña", error);
-      res.status(500).json(error);
-
-    } else {
-      console.log("Reseña agregada con exito");
-      res.status(200).json(result)
+      return res.status(500).json({ error: 'Error al agregar reseña' });
     }
-  })
-
+    return res.status(200).json({ mensaje: 'Reseña agregada con éxito' });
+  });
 });
+
 
 
 
