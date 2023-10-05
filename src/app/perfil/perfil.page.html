@@ -63,6 +63,11 @@
             <ion-button class="button" (click)="goToResena()">Calificar servicio</ion-button>
             </div>
             
+            <p>{{datos.id_solicitud}}</p>
+            </div>
+            <ion-button  shape="round" expand="full" *ngIf="datos.estado  === 'Finalizado'" class="button-completado" (click)="CompletadoEncargo(datos.id_solicitud)" >Trabajo completado</ion-button>
+            <ion-button shape="round"  expand="full" *ngIf="datos.estado  === 'Finalizado'" class="button-incompleto" (click)="IncompletoEncargo(datos.id_solicitud)">Incompleto</ion-button>
+            <ion-button shape="round"  expand="full" *ngIf="datos.estado  === 'Completado'" class="button-reseña">Realizar reseña</ion-button>
         </div>
       </div>
     </ion-card>
