@@ -311,8 +311,8 @@ function obtenerServiciosSolicitadosPorCliente(correoElectronico, callback) {
   descrip_servicio.des_serv,
   usuario.correo_electronico as 'correo_trabajador',
   comuna.name_comuna,
-  region.name_region
-  
+  region.name_region,
+  usuario.telefono
   FROM solicitud
   JOIN trabajador ON trabajador.id_trabajador = solicitud.id_trabajador
   JOIN usuario ON usuario.correo_electronico = trabajador.correo_electronico
