@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-
+import { forkJoin } from 'rxjs';
 @Component({
   selector: 'app-perfiltrabajador',
   templateUrl: './perfiltrabajador.page.html',
@@ -19,6 +19,13 @@ export class PerfiltrabajadorPage implements OnInit {
   datosTrabajador: any[] = [];
   datosServicio: any[] = [];
   esFavorito: boolean = false;
+  promedioTrabajador: number = 0;
+  promedioServicio: number = 4;
+  starData1!: { enteras: number; fraccion: number; };
+  starData2!: { enteras: number; fraccion: number; };
+  
+  
+  
 
   constructor(
     private authService: AuthService,
@@ -27,17 +34,56 @@ export class PerfiltrabajadorPage implements OnInit {
     private alertController: AlertController
   ) { }
 
+  getStarDataAverageWorker(promedioTrabajador: number): { enteras: number, fraccion: number } {
+    const enteras = Math.floor(promedioTrabajador); // Parte entera
+    const fraccion = promedioTrabajador - enteras; // Parte fraccionaria
+    return { enteras, fraccion };
+    
+  }
+
+  getStarDataAverageService(promedioServicio: number): { enteras: number, fraccion: number } {
+    const enteras = Math.floor(promedioServicio); // Parte entera
+    const fraccion = promedioServicio - enteras; // Parte fraccionaria
+    return { enteras, fraccion };
+    
+  }
+  
+
   ngOnInit() {
+    this.starData1 = this.getStarDataAverageWorker(this.promedioTrabajador);
+    this.starData2 = this.getStarDataAverageService(this.promedioServicio);
+    console.log(this.promedioServicio);
     this.route.params.subscribe(params => {
       this.correoElectronico = params['correoElectronico'];
 
       // Obtener datos del trabajador
       this.authService.loadTrabajadorData(this.correoElectronico).subscribe(
         (data: any) => {
+          const promesas = [];
+
+          for (let i = 0; i < data.datosServicio.length; i++) {
+            const element = data.datosServicio[i];
+            const promesa = this.authService.getPromedioCalificacionesServicio(data.datosServicio[i].id_des_serv, data.datosServicio[i].id_trabajador);
+            promesas.push(promesa);
+          }
+
+          forkJoin(promesas).subscribe((promedios: any[]) => {
+            // Aquí, 'promedios' es un array de promedios de servicios
+            const promedioServicios = promedios.map(data2 => data2[0].promedio_servicio);
+            console.log('Promedios de servicio:', promedioServicios);
+            this.promedioServicio = promedioServicios[0]
+            console.log(this.promedioServicio);
+
+            
+          });
+          
+          this.promedioTrabajador = data.datosTrabajador[0].promedio_calificacion
           this.datosTrabajador = data.datosTrabajador;
           this.datosServicio = data.datosServicio;
+          console.log('promedio',this.promedioTrabajador);
           console.log('Datos Trabajador obtenidos', this.datosTrabajador);
           console.log('Datos servicios obtenidos', this.datosServicio);
+          console.log('Promedios servicio:',this.promedioServicio);
 
         // Verificar si el correo del trabajador coincide con el usuario autenticado
         const usuarioAutenticado = this.authService.getCorreoElectronico();
@@ -54,7 +100,35 @@ export class PerfiltrabajadorPage implements OnInit {
       }
     );
   });
+
+
 }
+getStarArray(): number[] {
+  return [1, 2, 3, 4, 5];
+}
+getStarIconAvgWorker(index: number, promedioTrabajador: number): string {
+  // Determina el nombre del ícono de estrella (star, star-half o star-outline) en función de 'index' y 'promedio'
+  if (index <= Math.floor(promedioTrabajador)) {
+    return 'star'; // Estrella completa
+  } else if (index === Math.ceil(promedioTrabajador)) {
+    return 'star-half'; // Media estrella si el índice es igual al valor entero más cercano del promedio
+  } else {
+    return 'star-outline'; // Estrella vacía
+  }
+}
+
+getStarIconAvgService(index: number, promedioServicio: number): string {
+  // Determina el nombre del ícono de estrella (star, star-half o star-outline) en función de 'index' y 'promedio'
+  if (index <= Math.floor(promedioServicio)) {
+    return 'star'; // Estrella completa
+  } else if (index === Math.ceil(promedioServicio)) {
+    return 'star-half'; // Media estrella si el índice es igual al valor entero más cercano del promedio
+  } else {
+    return 'star-outline'; // Estrella vacía
+  }
+}
+
+
 
   goToFormularioDocumentacion(){
     const correoElectronico = this.authService.getCorreoElectronico();

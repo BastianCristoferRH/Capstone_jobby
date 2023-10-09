@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { listarFavoritos,verificarFavorito,eliminarServicio,agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador,obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador,agregarDocumentacionTrabajador } = require('./controller');
+const { listarFavoritos,verificarFavorito,eliminarServicio,agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador,obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador,agregarDocumentacionTrabajador,calcularPromedioCalificacionServicio } = require('./controller');
 const { ifError } = require('assert');
 
 
@@ -259,8 +259,10 @@ app.post('/agregar-resena', (req, res) => {
   agregarReseña(reseñaData, (error, result) => {
     if (error) {
       return res.status(500).json({ error: 'Error al agregar reseña' });
+    }else{
+      return res.status(200).json({ mensaje: 'Reseña agregada con éxito' });
     }
-    return res.status(200).json({ mensaje: 'Reseña agregada con éxito' });
+    
   });
 });
 
@@ -363,6 +365,25 @@ app.post('/agregar-documentacion', (req, res)=>{
     }
   );
 });
+
+
+
+
+
+app.get('/promedio-calificacion-servicio/:id_des_serv/:id_trabajador', (req, res)=>{
+  const idServicio = req.params.id_des_serv;
+  const trabajadorId = req.params.id_trabajador;
+  calcularPromedioCalificacionServicio(idServicio,trabajadorId, (error, result)=>{
+    if (error) {
+      console.log("Error al obtener el promedio de calificaciones por servicio",error);
+      return res.status(500).json({error:"Error interno al obtener promedio de calificaciones"});
+      
+    }else{
+      console.log("Promedio de calificaciones por servicio obtenido con éxito",result);
+      return res.status(200).json(result);
+    }
+  });
+})
 
 
 const puerto = 4001;

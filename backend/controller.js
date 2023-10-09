@@ -194,17 +194,21 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) {
 
   // Consulta para los datos del trabajador
   const sqlTrabajador = `
-    SELECT trabajador.id_trabajador,
-    usuario.correo_electronico,
-    usuario.nombre,
-    usuario.apellidos,
-    usuario.img,
-    usuario.telefono,
-    usuario.fecha_nacimiento,
-    trabajador.des_perfil
-    FROM trabajador
-    JOIN usuario ON usuario.correo_electronico = trabajador.correo_electronico  
-    WHERE trabajador.correo_electronico = ?
+  SELECT trabajador.id_trabajador,
+  usuario.correo_electronico,
+  usuario.nombre,
+  usuario.apellidos,
+  usuario.img,
+  usuario.telefono,
+  usuario.fecha_nacimiento,
+  trabajador.des_perfil,
+  (SUM(reseña.calificacion)/COUNT(reseña.id_reseña))AS promedio_calificacion
+  FROM trabajador
+  JOIN usuario ON usuario.correo_electronico = trabajador.correo_electronico
+  JOIN solicitud ON trabajador.id_trabajador = solicitud.id_trabajador
+  JOIN reseña ON solicitud.id_solicitud = reseña.id_solicitud
+  WHERE trabajador.correo_electronico = ?
+  GROUP BY solicitud.id_trabajador
   `;
 
   const valores = [correoElectronico];
@@ -597,6 +601,31 @@ function agregarDocumentacionTrabajador(documentData,callback){
 }
 
 
+function calcularPromedioCalificacionServicio(id_des_serv,trabajadorId, callback){
+  const query = `SELECT (SUM(r.calificacion)/COUNT(r.id_reseña))AS promedio_servicio, s.id_trabajador 
+  FROM reseña r 
+  JOIN solicitud s ON(r.id_solicitud = s.id_solicitud) 
+  JOIN descrip_servicio ds ON (s.id_des_serv = ds.id_des_serv)
+
+  WHERE s.id_des_serv = ? AND s.id_trabajador = ?`;
+  const valores = [id_des_serv, trabajadorId];
+
+  db.query(query, valores,(err, result)=>{
+    if (err) {
+      console.error('Error al obtener el promedio de calificaciones por servicio:', err);
+      callback({ error: 'Error interno al obtener el promedio de calificaciones por servicio', details: err.message }, null);
+    } else {
+      console.log('Promedio de calificaciones por servicio obtenido con éxito');
+      callback(null, result);
+    }
+  });
+
+
+}
+
+
+
+
 
 
 module.exports = {
@@ -624,5 +653,7 @@ module.exports = {
   agregarFavorito,
   quitarFavorito,
   verificarFavorito,
-  listarFavoritos
+  listarFavoritos,
+  calcularPromedioCalificacionServicio,
+
 };

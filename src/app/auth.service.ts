@@ -202,6 +202,12 @@ export class AuthService {
     const url =  `${this.apiUrl}/agregar-documentacion`;
     return this.http.post(url,documentData);
   }
+
+
+
+  getPromedioCalificacionesServicio(idServicio:string, trabajadorId:string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/promedio-calificacion-servicio/${idServicio}/${trabajadorId}`);
+  }
 }
 
 

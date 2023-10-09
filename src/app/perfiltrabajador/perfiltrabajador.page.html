@@ -32,7 +32,9 @@
       <div class="datos" *ngIf="datosTrabajador.length > 0">
         <h3>{{ datosTrabajador[0]?.nombre }} {{ datosTrabajador[0]?.apellidos }}</h3>
         <p>Fecha de nacimiento: {{ datosTrabajador[0]?.fecha_nacimiento | date:'dd-MM-yyyy' }}</p>
-        <p>⭐⭐⭐⭐⭐</p>
+        <div class="star-container">
+          <ion-icon *ngFor="let i of getStarArray()" [name]="getStarIconAvgWorker(i, promedioTrabajador)" class="star-filled"></ion-icon>
+        </div>
         <p>{{datosTrabajador[0]?.des_perfil}}</p>
         <ion-button *ngIf="mostrarBotonAgregarDocumentacion && datosTrabajador.length>0" shape="round" class="button" (click)="goToFormularioDocumentacion()">Subir documentacion</ion-button>
       </div>
@@ -53,7 +55,9 @@
           <div>
             <h2 class="tipo_servicio_h2">{{ datos.name_serv }}</h2>
             <p style="text-align: center;">{{ datos.name_comuna }},{{ datos.name_region }}</p>
-            <p style="text-align: center;">⭐⭐⭐⭐</p>
+            <div class="star-container" >
+              <ion-icon *ngFor="let i of getStarArray()" [name]="getStarIconAvgService(i, promedioServicio)" class="star-filled"></ion-icon>
+            </div>
             <p style="text-align: center;">{{ datos.des_serv }}</p>
             <div style="text-align: center;">
               <!-- Utilizamos Angular RouterLink para la navegación -->
