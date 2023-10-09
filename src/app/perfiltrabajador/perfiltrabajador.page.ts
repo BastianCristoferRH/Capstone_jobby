@@ -3,6 +3,8 @@ import { AuthService } from '../auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+
 @Component({
   selector: 'app-perfiltrabajador',
   templateUrl: './perfiltrabajador.page.html',
@@ -13,7 +15,7 @@ export class PerfiltrabajadorPage implements OnInit {
   mostrarBotonAgregarServicio: boolean = false;
   mostrarBotonSolicitar: boolean = true;
   correoElectronico: string = '';
-  datosTrabajador: any[] = [];
+  datosTrabajador: any = {};
   datosServicio: any[] = [];
   esFavorito: boolean = false;
 
@@ -21,7 +23,8 @@ export class PerfiltrabajadorPage implements OnInit {
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
@@ -31,10 +34,25 @@ export class PerfiltrabajadorPage implements OnInit {
       // Obtener datos del trabajador
       this.authService.loadTrabajadorData(this.correoElectronico).subscribe(
         (data: any) => {
+
+          if (data.datosTrabajador.length > 0) {
+            const trabajador = data.datosTrabajador[0];
+            if (trabajador.img_base64 !== null) {
+              // Crear una URL segura a partir de los datos base64
+              trabajador.img_base64 = this.sanitizer.bypassSecurityTrustUrl('data:image/jpeg;base64,' + trabajador.img_base64);
+            }
+          }
+          
+          
+
           this.datosTrabajador = data.datosTrabajador;
+
+          
           this.datosServicio = data.datosServicio;
+          console.log('Datos en bruto', data);
           console.log('Datos Trabajador obtenidos', this.datosTrabajador);
           console.log('Datos servicios obtenidos', this.datosServicio);
+          
 
           const usuarioAutenticado = this.authService.getCorreoElectronico();
           if (usuarioAutenticado === this.correoElectronico) {

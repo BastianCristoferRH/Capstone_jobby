@@ -2,13 +2,22 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { listarFavoritos,verificarFavorito,eliminarServicio,agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion,servEspecifico, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador,obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador } = require('./controller');
+
+
+const { listarFavoritos,verificarFavorito,eliminarServicio,agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion,servEspecifico, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador,obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador } = require('./controller');
 const { ifError } = require('assert');
 
 
+
+
+// Configura un límite de carga más grande (por ejemplo, 50 MB)
+
+
 const app = express();
-app.use(bodyParser.json());
 app.use(cors());
+
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 app.post('/registro', (req, res) => {
   const datosUsuario = req.body;
@@ -352,6 +361,13 @@ app.post('/listar-favoritos', (req, res) => {
 
 
 const puerto = 4001;
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:8100'); // Permite solicitudes desde localhost:8100
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Methods', 'POST'); // Puedes ajustar los métodos permitidos según tus necesidades
+  next();
+});
 
 app.listen(puerto, () => {
   console.log(`api funcionando en el puerto ${puerto}`);

@@ -14,7 +14,7 @@
         <ion-col size="1"></ion-col>
         <ion-col size="10" class="ion-padding">
           <div class="form-container">
-            <form [formGroup]="registroForm" (ngSubmit)="registrar()">
+            <form [formGroup]="registroForm" (ngSubmit)="registrar()" enctype="multipart/form-data">
               <div class="form-header">
                 <h3>REGISTRARSE</h3>
               </div>
@@ -71,8 +71,11 @@
               <div class="form-field img-perfil">
                 <ion-label>Imagen:</ion-label>
                 <input type="file" (change)="onFileSelected($event)" accept="image/*">
-                <input type="hidden" formControlName="imagen">
+                <input type="hidden" name="imagen" formControlName="imagen">
+                <img *ngIf="imagenPreview" [src]="imagenPreview" alt="Vista previa de la imagen">
               </div>
+
+
 
               <div class="form-button animate__animated animate__fadeIn">
                 <ion-button shape="round" type="submit" expand="block" class="btn_registro" [disabled]="registroForm.invalid">Registrar</ion-button>

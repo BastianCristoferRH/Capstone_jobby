@@ -15,18 +15,20 @@
       <ion-button (click)="toggleFavorito()" style="--background: orange;" *ngIf="datosTrabajador.length>0 && mostrarBotonSolicitar">
         <ion-icon [name]="esFavorito ? 'heart' : 'heart-outline'"></ion-icon>
       </ion-button>
+
       <div class="user-profile">
         <ion-row responsive-sm>
           <ion-col col-12 width-50 class="ion-text-center">
-            <img class="user-avatar" src="../../assets/img/user.jpg">
-            
+            <ng-container *ngIf="datosTrabajador[0]?.img_base64 !== null && datosTrabajador[0]?.img_base64 !== undefined">
+              <img [src]="datosTrabajador[0]?.img_base64" class="user-avatar">
+            </ng-container>
+            <ng-container *ngIf="!datosTrabajador[0]?.img_base64 || datosTrabajador[0]?.img_base64 === null || datosTrabajador[0]?.img_base64 === undefined">
+              <img class="user-avatar" src="../../assets/img/user.jpg">
+            </ng-container>
             <ion-icon name="create"></ion-icon>
           </ion-col>
+          
         </ion-row>
-      </div>
-      <div *ngIf="datosTrabajador.length === 0">
-        <h2 style="color: white; text-align: center;">NO POSEE CUENTA TRABAJADOR</h2>
-        <ion-button shape="round" class="button-solicitar-servicio custom-buttonx boton-crear" (click)="navegarCrearPerfilTrabajador()">CREAR</ion-button>
       </div>
 
       <div class="datos" *ngIf="datosTrabajador.length > 0">

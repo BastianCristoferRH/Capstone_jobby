@@ -36,13 +36,15 @@ export class PerfilPage implements OnInit {
       ); // Pasa 'correoElectronico' en lugar de 'userId'
     });
   }
-
+  goToResena(solicitudId: number){
+    this.router.navigate(['/agregar-resena', solicitudId])
+  }
   
 
   loadUserProfile(correoElectronico: string) {
     this.authService.getUserProfile(correoElectronico).subscribe(
       (profileData: any) => {
-        this.datosUsuario = profileData;
+        this.datosUsuario = profileData;  
         
         if (this.datosUsuario.img_base64 !== null) {
           // Crear una URL segura a partir de los datos base64
@@ -60,10 +62,7 @@ export class PerfilPage implements OnInit {
 
 
 
-  logout() {
-    this.authService.logout();
-    this.router.navigateByUrl('/login');
-  }
+ 
 
   
 
@@ -102,6 +101,30 @@ export class PerfilPage implements OnInit {
      
     }
   }
+
+  CompletadoEncargo(solicitudId: number) {
+    this.authService.actualizarEstadoSolicitud(solicitudId, 'Completado').subscribe(
+      (data: any) => {
+        console.log('Solicitud aceptada con éxito');
+        location.reload();
+      (error: any) => {
+        console.error('Error al aceptar la solicitud:', error);
+      }}
+    );
+  }
+
+  IncompletoEncargo(solicitudId: number) {
+    this.authService.actualizarEstadoSolicitud(solicitudId, 'Incompleto').subscribe(
+      (data: any) => {
+        console.log('Solicitud aceptada con éxito');
+        location.reload();
+      (error: any) => {
+        console.error('Error al aceptar la solicitud:', error);
+      }}
+    );
+  }
+
+  
 
 
 }

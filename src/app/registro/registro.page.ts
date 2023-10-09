@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { AlertController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-registro',
@@ -13,8 +12,8 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 })
 
 export class RegistroPage implements OnInit {
-  imagenFileName: string | null = null;
   registroForm!: FormGroup; // Inicializar la propiedad con "!"
+  imagenPreview: any; 
 
   constructor(
     private formBuilder: FormBuilder,
@@ -23,16 +22,7 @@ export class RegistroPage implements OnInit {
     private router: Router,
     private sanitizer: DomSanitizer
   ) {}
-
-  onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-    if (file) {
-      console.log('Archivo seleccionado:', file.name);
-      // Almacena el nombre del archivo en la propiedad
-      this.imagenFileName = file.name;
-      // Puedes realizar acciones adicionales aquí, como subir la imagen al servidor si es necesario
-    }
-  }
+  
 
   ngOnInit() {
 
@@ -74,33 +64,29 @@ export class RegistroPage implements OnInit {
 
   
 
-  registrar() {
+  async registrar() {
     if (this.registroForm.invalid) {
       console.log("Formulario no válido");
       return;
     }
-
+  
     const contrasena = this.registroForm.get('contrasena')?.value;
     const confirmarContrasena = this.registroForm.get('confirmarContrasena')?.value;
     const telefono = this.registroForm.get('telefono')?.value;
     const fechaNacimiento = this.registroForm.get('fechaNacimiento')?.value;
-    
-    
-    
+  
     if (!contrasena || !confirmarContrasena || !telefono || !fechaNacimiento) {
       console.log("Error al registrar ");
       this.presentAlert1('Debes llenar los campos obligatorios del registro');
       return;
     }
-
+  
     if (contrasena !== confirmarContrasena) {
       console.log("Las contraseñas no coinciden");
       this.presentAlert2('Revisa las contraseñas ingresadas');
       return;
     }
-
-    
-
+  
     const usuario = {
       correo_electronico: this.registroForm.get('correoElectronico')?.value,
       nombre: this.registroForm.get('primerNombre')?.value,
@@ -109,9 +95,14 @@ export class RegistroPage implements OnInit {
       fecha_creacion: new Date(),
       fecha_nacimiento: fechaNacimiento,
       password: contrasena,
-      img: this.registroForm.get('imagen')?.value
+      img: await this.blobToHexString(this.registroForm.get('imagen')?.value) // Convierte el Blob a cadena hexadecimal
     };
-
+    
+    
+  
+    // Realizar acciones adicionales según tus necesidades
+    console.log("Objeto usuario:", usuario);
+  
     this.authService.registrarUsuario(usuario).subscribe(
       (resultado) => {
         this.presentAlert('¡Bien!, te has registrado correctamente');
@@ -123,27 +114,52 @@ export class RegistroPage implements OnInit {
       }
     );
   }
-
-  getImagenUrl(): SafeUrl | null {
-    if (this.imagenFileName) {
-      // Construye la URL de la imagen, asumiendo que las imágenes se almacenan en una carpeta llamada "imagenes"
-      const imageUrl = `/imagenes/${this.imagenFileName}`;
-      // Asegura la URL para evitar problemas de seguridad
-      return this.sanitizer.bypassSecurityTrustUrl(imageUrl);
-    }
-    return null;
+  
+  async blobToHexString(blob: Blob): Promise<string> {
+    return new Promise<string>(async (resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const arrayBuffer = reader.result as ArrayBuffer;
+        const array = new Uint8Array(arrayBuffer);
+        let hexString = '';
+        for (let i = 0; i < array.length; i++) {
+          const hex = array[i].toString(16).padStart(2, '0');
+          hexString += hex;
+        }
+        resolve(hexString);
+      };
+      reader.onerror = (error) => {
+        reject(error);
+      };
+      reader.readAsArrayBuffer(blob);
+    });
   }
+  
+  
 
-  // onFileSelected(event: any) {
-  //   const file: File = event.target.files[0];
-  //   if (file) {
-  //     // Puedes realizar acciones con el archivo seleccionado aquí
-  //     // Por ejemplo, puedes mostrar una vista previa o subirlo al servidor
-  //     console.log('Archivo seleccionado:', file);
-  //     // También puedes almacenar la URL de la imagen en el formulario si es necesario
-  //     this.registroForm.get('imagen')?.setValue(file.name); // Ejemplo: almacenar el nombre del archivo
-  //   }
-  // }
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      // Crear un nuevo objeto Blob con el archivo seleccionado
+      const blob = new Blob([file], { type: file.type });
+      this.registroForm.get('imagen')?.setValue(blob);
+      // Registrar datos del formulario
+      console.log("Datos del formulario al cargar la imagen:", this.registroForm.value);
+  
+      // Actualizar el valor del campo imagen en el formulario con el Blob
+      
+  
+      // Mostrar vista previa de la imagen
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.imagenPreview = this.sanitizer.bypassSecurityTrustUrl(e.target.result);
+      };
+      reader.readAsDataURL(blob);
+    }
+  }
+  
+  
+  
 
   async presentAlert(mensaje: string) {
     const alert = await this.alertController.create({
