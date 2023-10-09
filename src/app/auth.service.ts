@@ -195,7 +195,7 @@ export class AuthService {
   }
 
   agregarResena(idSolicitud: string, reseñaData: any): Observable<any> {
-    const url = `${this.apiUrl}/agregar-resena/${idSolicitud}`;
+    const url = `${this.apiUrl}/agregar-resena`;
     return this.http.post(url, reseñaData);
   }
   agregarDocumentacionTrabajador(documentData:any):Observable<any>{
