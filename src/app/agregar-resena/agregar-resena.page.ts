@@ -91,7 +91,7 @@ export class AgregarResenaPage implements OnInit {
       } else {
         console.error('El correo electrónico es nulo o no está disponible.');
       }
-      console.log(this.trabajadorId[0].id_trabajador);
+    
     });
   }
 
