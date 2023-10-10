@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { listarFavoritos,verificarFavorito,eliminarServicio,agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador,obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador,agregarDocumentacionTrabajador,calcularPromedioCalificacionServicio } = require('./controller');
+const { listarFavoritos,verificarFavorito,eliminarServicio,agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador,obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador,agregarDocumentacionTrabajador,calcularPromedioCalificacionServicio,calcularPromedioCalificacionTrabajador } = require('./controller');
 const { ifError } = require('assert');
 
 
@@ -385,6 +385,23 @@ app.get('/promedio-calificacion-servicio/:id_des_serv/:id_trabajador', (req, res
   });
 })
 
+
+
+
+app.get('/promedio-calificaciones-trabajador/:correoElectronico',(req,res)=>{
+  const correoElectronico = req.params.correoElectronico;
+  calcularPromedioCalificacionTrabajador(correoElectronico, (error, result)=>{
+    if (error) {
+      console.log("Error al obtener el promedio de calificaciones por trabajador", error);
+      return res.status(500).json({error:"Error interno al obtener promedio de calificaciones por trabajador"});
+
+      
+    }else{
+      console.log("Promedio de calificaciones por trabajador obtenido con éxito", result);
+      return res.status(200).json(result);
+    }
+  })
+});
 
 const puerto = 4001;
 

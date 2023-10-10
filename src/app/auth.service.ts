@@ -208,6 +208,11 @@ export class AuthService {
   getPromedioCalificacionesServicio(idServicio:string, trabajadorId:string): Observable<any> {
     return this.http.get(`${this.apiUrl}/promedio-calificacion-servicio/${idServicio}/${trabajadorId}`);
   }
+
+
+  getPromedioCalificacionesTrabajador(correoElectronico:string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/promedio-calificaciones-trabajador/${correoElectronico}`);
+  }
 }
 
 

@@ -201,14 +201,10 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) {
   usuario.img,
   usuario.telefono,
   usuario.fecha_nacimiento,
-  trabajador.des_perfil,
-  (SUM(reseña.calificacion)/COUNT(reseña.id_reseña))AS promedio_calificacion
+  trabajador.des_perfil
   FROM trabajador
   JOIN usuario ON usuario.correo_electronico = trabajador.correo_electronico
-  JOIN solicitud ON trabajador.id_trabajador = solicitud.id_trabajador
-  JOIN reseña ON solicitud.id_solicitud = reseña.id_solicitud
   WHERE trabajador.correo_electronico = ?
-  GROUP BY solicitud.id_trabajador
   `;
 
   const valores = [correoElectronico];
@@ -601,6 +597,32 @@ function agregarDocumentacionTrabajador(documentData,callback){
 }
 
 
+function calcularPromedioCalificacionTrabajador(correoElectronico, callback){
+  const query = `SELECT 
+  (SUM(reseña.calificacion)/COUNT(reseña.id_reseña))AS promedio_calificacion
+  FROM trabajador
+  JOIN usuario ON usuario.correo_electronico = trabajador.correo_electronico
+  JOIN solicitud ON trabajador.id_trabajador = solicitud.id_trabajador
+  JOIN reseña ON solicitud.id_solicitud = reseña.id_solicitud
+  WHERE trabajador.correo_electronico = ?
+  GROUP BY trabajador.id_trabajador`;
+
+  const valores = [correoElectronico];
+
+  db.query(query, valores, (error,result)=>{
+    if (error) {
+      console.log("Error al obtener promedio calificaciones por trabajador");
+      callback({error:"Error interno al obtener el promedio de calificaciones por trabajador", details:error.message}, null)
+      
+    }else{
+      console.log("Promedio de calificaciones por trabajador obtenido con éxito");
+      callback(null,result)
+    }
+  })
+}
+
+
+
 function calcularPromedioCalificacionServicio(id_des_serv,trabajadorId, callback){
   const query = `SELECT (SUM(r.calificacion)/COUNT(r.id_reseña))AS promedio_servicio, s.id_trabajador 
   FROM reseña r 
@@ -655,5 +677,6 @@ module.exports = {
   verificarFavorito,
   listarFavoritos,
   calcularPromedioCalificacionServicio,
+  calcularPromedioCalificacionTrabajador,
 
 };

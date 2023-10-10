@@ -17,6 +17,8 @@ export class PerfiltrabajadorPage implements OnInit {
   //datosTrabajador: any = []; // Ahora inicializado como un arreglo
   id_trabajador: number = 0;
   datosTrabajador: any[] = [];
+
+  //promedio_trabajador: any[]=[];
   datosServicio: any[] = [];
   esFavorito: boolean = false;
   promedioTrabajador: number = 0;
@@ -72,12 +74,11 @@ export class PerfiltrabajadorPage implements OnInit {
             const promedioServicios = promedios.map(data2 => data2[0].promedio_servicio);
             console.log('Promedios de servicio:', promedioServicios);
             this.promedioServicio = promedioServicios[0]
-            console.log(this.promedioServicio);
+            //console.log(this.promedioServicio);
 
             
           });
           
-          this.promedioTrabajador = data.datosTrabajador[0].promedio_calificacion
           this.datosTrabajador = data.datosTrabajador;
           this.datosServicio = data.datosServicio;
           console.log('promedio',this.promedioTrabajador);
@@ -99,6 +100,14 @@ export class PerfiltrabajadorPage implements OnInit {
         console.error('Error al recibir los datos del trabajador', error);
       }
     );
+
+
+    this.authService.getPromedioCalificacionesTrabajador(this.correoElectronico).subscribe((data:any)=>{
+      //console.log(data);
+      this.promedioTrabajador = data[0].promedio_calificacion;
+      console.log(this.promedioTrabajador);
+
+    })
   });
 
 
