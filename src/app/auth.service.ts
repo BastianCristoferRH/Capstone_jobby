@@ -193,6 +193,21 @@ export class AuthService {
 
     return this.http.post(url, data);
   }
+
+  agregarResena(idSolicitud: string, reseñaData: any): Observable<any> {
+    const url = `${this.apiUrl}/agregar-resena`;
+    return this.http.post(url, reseñaData);
+  }
+  agregarDocumentacionTrabajador(documentData:any):Observable<any>{
+    const url =  `${this.apiUrl}/agregar-documentacion`;
+    return this.http.post(url,documentData);
+  }
+
+
+
+  getPromedioCalificacionesServicio(idServicio:string, trabajadorId:string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/promedio-calificacion-servicio/${idServicio}/${trabajadorId}`);
+  }
 }
 
 

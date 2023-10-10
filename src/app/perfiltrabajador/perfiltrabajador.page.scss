@@ -95,3 +95,15 @@ ion-button.custom-button {
 .boton-crear{
   margin-left: 30%;
 }
+ion-icon {
+  font-size: 24px; /* Tamaño de las estrellas */
+}
+
+.star-filled {
+  color: gold; /* Color de las estrellas llenas */
+  border-color: black;
+}
+
+.unfilled {
+  color: gray; /* Color de las estrellas vacías */
+}

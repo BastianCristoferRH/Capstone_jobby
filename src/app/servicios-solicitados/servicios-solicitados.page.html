@@ -36,6 +36,9 @@
       <ion-button class="custom-button-rechazo" *ngIf="solicitud.estado === 'gestionando'" (click)="rechazarEncargo(solicitud.id_solicitud)">
         Rechazar Encargo
       </ion-button>
+      <ion-button   *ngIf="solicitud.estado === 'gestionando' || solicitud.estado === 'Desarrollo'" class="custom-button" target="_blank" href="https://wa.me/569{{ solicitud.telefono }}">
+        Hablar WhatsApp
+      </ion-button>
   
       <ion-button class="custom-button" *ngIf="solicitud.estado === 'Desarrollo'" (click)="finalizarSolicitud(solicitud.id_solicitud)">
         Solicitud completada
