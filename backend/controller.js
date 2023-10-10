@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 
 function registroUsuario(usuario, callback) {
-  const sql = 'INSERT usuario (correo_electronico, nombre, apellidos, telefono, fecha_creacion, fecha_nacimiento, password, img) VALUES (?, ?, ?, ?, ?, ?, ?,?)';
+  const sql = 'INSERT INTO usuario (correo_electronico, nombre, apellidos, telefono, fecha_creacion, fecha_nacimiento, password, img) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
   const valores = [
     usuario.correo_electronico,
     usuario.nombre,
@@ -13,7 +13,7 @@ function registroUsuario(usuario, callback) {
     usuario.fecha_creacion,
     usuario.fecha_nacimiento,
     usuario.password,
-    usuario.img,
+    usuario.img // El arreglo de bytes de la imagen
   ];
 
   db.query(sql, valores, (err, resultado) => {
@@ -26,6 +26,7 @@ function registroUsuario(usuario, callback) {
     }
   });
 }
+
 
 function iniciarSesion(datosUsuario, callback) {
   const sql = 'SELECT * FROM usuario WHERE correo_electronico = ?';
@@ -56,13 +57,13 @@ function iniciarSesion(datosUsuario, callback) {
 function obtenerDatosUsuarioPorCorreo(correoElectronico, callback) {
   const sql = `SELECT correo_electronico,
   nombre,
-  TO_BASE64(img) AS img_base64,
+  TO_BASE64(UNHEX(img)) AS img_base64,
   apellidos,
   telefono,
   fecha_nacimiento,
   fecha_creacion
-  FROM usuario
-  WHERE correo_electronico = ?`;
+FROM usuario
+WHERE correo_electronico = ?;`;
   
   const valores = [correoElectronico];
 
@@ -198,7 +199,7 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) {
   usuario.correo_electronico,
   usuario.nombre,
   usuario.apellidos,
-  usuario.img,
+  TO_BASE64(UNHEX(img)) AS img_base64,
   usuario.telefono,
   usuario.fecha_nacimiento,
   trabajador.des_perfil

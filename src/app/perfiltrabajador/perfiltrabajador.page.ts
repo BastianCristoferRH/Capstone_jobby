@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+
 import { forkJoin } from 'rxjs';
 @Component({
   selector: 'app-perfiltrabajador',
@@ -33,7 +36,8 @@ export class PerfiltrabajadorPage implements OnInit {
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private sanitizer: DomSanitizer
   ) { }
 
   getStarDataAverageWorker(promedioTrabajador: number): { enteras: number, fraccion: number } {
@@ -61,6 +65,17 @@ export class PerfiltrabajadorPage implements OnInit {
       // Obtener datos del trabajador
       this.authService.loadTrabajadorData(this.correoElectronico).subscribe(
         (data: any) => {
+
+          if (data.datosTrabajador.length > 0) {
+            const trabajador = data.datosTrabajador[0];
+            if (trabajador.img_base64 !== null) {
+              // Crear una URL segura a partir de los datos base64
+              trabajador.img_base64 = this.sanitizer.bypassSecurityTrustUrl('data:image/jpeg;base64,' + trabajador.img_base64);
+            }
+          }
+          
+          
+
           const promesas = [];
 
           for (let i = 0; i < data.datosServicio.length; i++) {
@@ -80,6 +95,8 @@ export class PerfiltrabajadorPage implements OnInit {
           });
           
           this.datosTrabajador = data.datosTrabajador;
+
+          
           this.datosServicio = data.datosServicio;
           console.log('promedio',this.promedioTrabajador);
           console.log('Datos Trabajador obtenidos', this.datosTrabajador);

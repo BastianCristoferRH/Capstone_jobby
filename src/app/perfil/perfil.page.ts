@@ -113,6 +113,11 @@ export class PerfilPage implements OnInit {
     );
   }
 
+  
+
+  
+
+
   IncompletoEncargo(solicitudId: number) {
     this.authService.actualizarEstadoSolicitud(solicitudId, 'Incompleto').subscribe(
       (data: any) => {
