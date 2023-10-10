@@ -30,6 +30,10 @@
           
         </ion-row>
       </div>
+      <div *ngIf="datosTrabajador.length === 0">
+        <h2 style="color: white; text-align: center;">NO POSEE CUENTA TRABAJADOR</h2>
+        <ion-button shape="round" class="button-solicitar-servicio custom-buttonx boton-crear" (click)="navegarCrearPerfilTrabajador()">CREAR</ion-button>
+      </div>
 
       <div class="datos" *ngIf="datosTrabajador.length > 0">
         <h3>{{ datosTrabajador[0]?.nombre }} {{ datosTrabajador[0]?.apellidos }}</h3>
