@@ -88,6 +88,11 @@ const routes: Routes = [
     loadChildren: () => import('./listar-favorito/listar-favorito.module').then( m => m.ListarFavoritoPageModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'trabajador/:correoElectronico/historial-trabajador',
+    loadChildren: () => import('./historial-trabajador/historial-trabajador.module').then( m => m.HistorialTrabajadorPageModule)
+  },
+
 
 
 
