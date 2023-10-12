@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
@@ -12,7 +11,6 @@ export class ListarServiciosPage implements OnInit {
   listaServicios: any[] = [];
   terminoBusqueda: string = '';
   constructor(
-    private http: HttpClient,
     private authService: AuthService,
     private router: Router
   ) { }
@@ -36,12 +34,7 @@ export class ListarServiciosPage implements OnInit {
     const perfilTrabajadorUrl = `/trabajador/${correoElectronico}`;
     this.router.navigate([perfilTrabajadorUrl]);
   }
-  argarListadoServicios() {
-    this.authService.cargarListadoServicios().subscribe((data: any) => {
-      this.listaServicios = data;
-      console.log(this.listaServicios);
-    });
-  }
+
 
   // Función para filtrar la lista de servicios
   filtrarServicios() {

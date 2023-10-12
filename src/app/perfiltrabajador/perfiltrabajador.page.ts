@@ -20,12 +20,12 @@ export class PerfiltrabajadorPage implements OnInit {
   //datosTrabajador: any = []; // Ahora inicializado como un arreglo
   id_trabajador: number = 0;
   datosTrabajador: any[] = [];
-
+  aa:any[]=[];
   //promedio_trabajador: any[]=[];
   datosServicio: any[] = [];
   esFavorito: boolean = false;
   promedioTrabajador: number = 0;
-  promedioServicio: number = 4;
+  promedioServicio: number = 1;
   starData1!: { enteras: number; fraccion: number; };
   starData2!: { enteras: number; fraccion: number; };
   
@@ -77,24 +77,21 @@ export class PerfiltrabajadorPage implements OnInit {
           
           
 
-          const promesas = [];
+
 
           for (let i = 0; i < data.datosServicio.length; i++) {
             const element = data.datosServicio[i];
-            const promesa = this.authService.getPromedioCalificacionesServicio(data.datosServicio[i].id_des_serv, data.datosServicio[i].id_trabajador);
-            promesas.push(promesa);
-          }
-
-          forkJoin(promesas).subscribe((promedios: any[]) => {
-            // Aquí, 'promedios' es un array de promedios de servicios
-            const promedioServicios = promedios.map(data2 => data2[0].promedio_servicio);
-            console.log('Promedios de servicio:', promedioServicios);
-            this.promedioServicio = promedioServicios[0]
-            //console.log(this.promedioServicio);
-
+            this.aa.push(element)
             
-          });
-          
+
+          }
+          this.authService.getPromedioCalificacionesServicio(this.aa[0].id_des_serv,this.aa[0].id_trabajador).subscribe((dataAvgServicio:any)=>{
+            console.log(dataAvgServicio);
+            this.promedioServicio = dataAvgServicio;
+          })
+          console.log(this.aa);
+
+          console.log('promedio servicioreklxD',this.promedioServicio);
           this.datosTrabajador = data.datosTrabajador;
 
           
@@ -129,7 +126,12 @@ export class PerfiltrabajadorPage implements OnInit {
   });
 
 
+  
 }
+navigateToHistorialServicios(){
+  this.router.navigate(['/trabajador',this.correoElectronico,'historial-trabajador'])
+}
+
 getStarArray(): number[] {
   return [1, 2, 3, 4, 5];
 }

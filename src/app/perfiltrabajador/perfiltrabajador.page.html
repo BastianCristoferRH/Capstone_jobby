@@ -35,8 +35,16 @@
         <ion-button shape="round" class="button-solicitar-servicio custom-buttonx boton-crear" (click)="navegarCrearPerfilTrabajador()">CREAR</ion-button>
       </div>
 
-      <div class="datos" *ngIf="datosTrabajador.length > 0">
-        <h3>{{ datosTrabajador[0]?.nombre }} {{ datosTrabajador[0]?.apellidos }}</h3>
+      <div class="datos" *ngIf="datosTrabajador.length > 0" >
+        
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="text-align: center; flex: 1;">
+            <ion-label>
+              <h3>{{ datosTrabajador[0]?.nombre }} {{ datosTrabajador[0]?.apellidos }}</h3>
+            </ion-label>
+          </div>
+            <ion-button *ngIf="datosServicio.length > 0 " (click)="navigateToHistorialServicios()">Historial de servicios</ion-button>
+        </div>
         <p>Fecha de nacimiento: {{ datosTrabajador[0]?.fecha_nacimiento | date:'dd-MM-yyyy' }}</p>
         <div class="star-container">
           <ion-icon *ngFor="let i of getStarArray()" [name]="getStarIconAvgWorker(i, promedioTrabajador)" class="star-filled"></ion-icon>
@@ -51,9 +59,11 @@
       </div>
     </ion-card>
     <br><br>
+    
     <ion-label class="titulo">
       <h1 *ngIf="datosServicio.length > 0">SERVICIOS</h1>
     </ion-label>
+    
 
     <ion-card class="custom-card custom-white-background" *ngFor="let datos of datosServicio">
       <div class="div-tarjeta-servicio">
