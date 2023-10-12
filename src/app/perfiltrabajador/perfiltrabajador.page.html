@@ -12,58 +12,71 @@
 
   <ion-content [fullscreen]="true" class="custom-content">
     <ion-card class="user-card">
-      <ion-button (click)="toggleFavorito()" style="--background: orange;" *ngIf="datosTrabajador.length>0 && mostrarBotonSolicitar">
+      <ion-button (click)="toggleFavorito()" style="--background: orange;"
+        *ngIf="datosTrabajador.length>0 && mostrarBotonSolicitar">
         <ion-icon [name]="esFavorito ? 'heart' : 'heart-outline'"></ion-icon>
       </ion-button>
 
       <div class="user-profile">
         <ion-row responsive-sm>
           <ion-col col-12 width-50 class="ion-text-center">
-            <ng-container *ngIf="datosTrabajador[0]?.img_base64 !== null && datosTrabajador[0]?.img_base64 !== undefined">
+            <ng-container
+              *ngIf="datosTrabajador[0]?.img_base64 !== null && datosTrabajador[0]?.img_base64 !== undefined">
               <img [src]="datosTrabajador[0]?.img_base64" class="user-avatar">
             </ng-container>
-            <ng-container *ngIf="!datosTrabajador[0]?.img_base64 || datosTrabajador[0]?.img_base64 === null || datosTrabajador[0]?.img_base64 === undefined">
+            <ng-container
+              *ngIf="!datosTrabajador[0]?.img_base64 || datosTrabajador[0]?.img_base64 === null || datosTrabajador[0]?.img_base64 === undefined">
               <img class="user-avatar" src="../../assets/img/user.jpg">
             </ng-container>
             <ion-icon name="create"></ion-icon>
           </ion-col>
-          
+
         </ion-row>
       </div>
       <div *ngIf="datosTrabajador.length === 0">
         <h2 style="color: white; text-align: center;">NO POSEE CUENTA TRABAJADOR</h2>
-        <ion-button shape="round" class="button-solicitar-servicio custom-buttonx boton-crear" (click)="navegarCrearPerfilTrabajador()">CREAR</ion-button>
+        <ion-button shape="round" class="button-solicitar-servicio custom-buttonx boton-crear"
+          (click)="navegarCrearPerfilTrabajador()">CREAR</ion-button>
       </div>
 
-      <div class="datos" *ngIf="datosTrabajador.length > 0" >
-        
+      <div class="datos" *ngIf="datosTrabajador.length > 0">
+
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <div style="text-align: center; flex: 1;">
             <ion-label>
               <h3>{{ datosTrabajador[0]?.nombre }} {{ datosTrabajador[0]?.apellidos }}</h3>
             </ion-label>
           </div>
-            <ion-button *ngIf="datosServicio.length > 0 " (click)="navigateToHistorialServicios()">Historial de servicios</ion-button>
+          <ion-button *ngIf="datosServicio.length > 0 " (click)="navigateToHistorialServicios()">Historial de
+            servicios</ion-button>
         </div>
         <p>Fecha de nacimiento: {{ datosTrabajador[0]?.fecha_nacimiento | date:'dd-MM-yyyy' }}</p>
-        <div class="star-container">
-          <ion-icon *ngFor="let i of getStarArray()" [name]="getStarIconAvgWorker(i, promedioTrabajador)" class="star-filled"></ion-icon>
-        </div>
         <p>{{datosTrabajador[0]?.des_perfil}}</p>
-        <ion-button *ngIf="mostrarBotonAgregarDocumentacion && datosTrabajador.length>0" shape="round" class="button" (click)="goToFormularioDocumentacion()">Subir documentacion</ion-button>
+        <div class="star-container">
+          <ion-icon *ngFor="let i of getStarArray()" [name]="getStarIconAvgWorker(i, promedioTrabajador)"
+            class="star-filled"></ion-icon>
+        </div>
+        <p>Estado:{{datosServicio[0]?.disponibilidad}}</p>
+        <ion-button *ngIf="mostrarBotonAgregarDocumentacion && datosTrabajador.length>0" shape="round" class="button"
+          (click)="goToFormularioDocumentacion()">Subir documentacion</ion-button>
       </div>
-     
+      <!-- boton para actualizar estado -->
+      <ion-button *ngIf="mostrarBotonAgregarServicio && datosServicio[0]?.disponibilidad=='ocupado'" (click)="actualizarDisponibilidadUsuarioAutenticado()"  >Disponible</ion-button>
+      <ion-button *ngIf="mostrarBotonAgregarServicio && datosServicio[0]?.disponibilidad=='disponible'" (click)=" actualizarDisponibilidadUsuarioAutenticadoocupado()">Ocupado</ion-button>
+
       <div style="text-align: center; padding-bottom: 5px;">
-        <ion-button *ngIf="datosTrabajador.length > 0 && mostrarBotonSolicitar" shape="round" class="button-solicitar-servicio custom-buttonx" (click)="navigateToSolicitud()">Solicitar</ion-button> <br>
-        <ion-button *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0" shape="round" class="button-solicitar-servicio custom-buttonx" (click)="agregarServicio()">Agregar Servicio</ion-button>
+        <ion-button *ngIf="datosTrabajador.length > 0 && mostrarBotonSolicitar" shape="round"
+          class="button-solicitar-servicio custom-buttonx" (click)="navigateToSolicitud()">Solicitar</ion-button> <br>
+        <ion-button *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0" shape="round"
+          class="button-solicitar-servicio custom-buttonx" (click)="agregarServicio()">Agregar Servicio</ion-button>
       </div>
     </ion-card>
     <br><br>
-    
+
     <ion-label class="titulo">
       <h1 *ngIf="datosServicio.length > 0">SERVICIOS</h1>
     </ion-label>
-    
+
 
     <ion-card class="custom-card custom-white-background" *ngFor="let datos of datosServicio">
       <div class="div-tarjeta-servicio">
@@ -71,18 +84,22 @@
           <div>
             <h2 class="tipo_servicio_h2">{{ datos.name_serv }}</h2>
             <p style="text-align: center;">{{ datos.name_comuna }},{{ datos.name_region }}</p>
-            <div class="star-container" >
-              <ion-icon *ngFor="let i of getStarArray()" [name]="getStarIconAvgService(i, promedioServicio)" class="star-filled"></ion-icon>
+            <div class="star-container">
+              <ion-icon *ngFor="let i of getStarArray()" [name]="getStarIconAvgService(i, promedioServicio)"
+                class="star-filled"></ion-icon>
             </div>
             <p style="text-align: center;">{{ datos.des_serv }}</p>
             <div style="text-align: center;">
               <!-- Utilizamos Angular RouterLink para la navegación -->
               <a [routerLink]="'/modificar-servicio/' + datos.id_des_serv">
-                <ion-button shape="round" *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0" class="button-solicitar-servicio custom-buttonx" color="tertiary">
+                <ion-button shape="round" *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0"
+                  class="button-solicitar-servicio custom-buttonx" color="tertiary">
                   <ion-icon name="create-outline"></ion-icon>
                 </ion-button>
               </a>
-              <ion-button shape="round" *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0" class="button-solicitar-servicio custom-buttonx" color="danger" (click)="confirmarEliminarServicio(datos.id_des_serv)">
+              <ion-button shape="round" *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0"
+                class="button-solicitar-servicio custom-buttonx" color="danger"
+                (click)="confirmarEliminarServicio(datos.id_des_serv)">
                 <ion-icon name="trash-outline"></ion-icon>
               </ion-button>
             </div>

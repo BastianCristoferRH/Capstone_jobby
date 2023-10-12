@@ -64,7 +64,7 @@ function obtenerDatosUsuarioPorCorreo(correoElectronico, callback) {
   fecha_creacion
 FROM usuario
 WHERE correo_electronico = ?;`;
-  
+
   const valores = [correoElectronico];
 
   db.query(sql, valores, (err, resultados) => {
@@ -88,7 +88,7 @@ function modificarServicio(id_des_serv, serviceData, callback) {
 
   // Actualizar el servicio en la base de datos
   db.query('UPDATE `descrip_servicio` SET `id_des_serv`=?,`des_serv`=?,`presencial`=?,`id_trabajador`=?,`id_serv`=?,`id_comuna`=?,`id_region`=? WHERE id_des_serv=?',
-    [serviceData.id_des_serv,serviceData.des_serv, serviceData.presencial, serviceData.id_trabajador, serviceData.id_serv, serviceData.id_comuna, serviceData.id_region, id_des_serv],
+    [serviceData.id_des_serv, serviceData.des_serv, serviceData.presencial, serviceData.id_trabajador, serviceData.id_serv, serviceData.id_comuna, serviceData.id_region, id_des_serv],
     (err, result) => {
       if (err) {
         console.error('Error al modificar el servicio:', err);
@@ -143,7 +143,12 @@ function eliminarServicio(id_des_serv, callback) {
                       callback(null, { message: 'Servicio eliminado con éxito en todas las tablas relacionadas' });
                     }
                   }
-                });}});}});}// Fin de funcion Eliminar servicio por id de servicio
+                });
+            }
+          });
+      }
+    });
+}
 
 
 
@@ -183,7 +188,8 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) {
     descrip_servicio.des_serv,
     usuario.correo_electronico,
     comuna.name_comuna,
-    region.name_region
+    region.name_region,
+    trabajador.disponibilidad
     FROM trabajador
     JOIN descrip_servicio ON descrip_servicio.id_trabajador = trabajador.id_trabajador
     JOIN servicio ON servicio.id_serv = descrip_servicio.id_serv
@@ -232,11 +238,11 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) {
       });
     }
   });
-} 
+}
 
 function agregarServicio(serviceData, callback) {
 
-  const query ='INSERT INTO descrip_servicio (des_serv, presencial, id_trabajador, id_serv, id_comuna, id_region) VALUES (?, ?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO descrip_servicio (des_serv, presencial, id_trabajador, id_serv, id_comuna, id_region) VALUES (?, ?, ?, ?, ?, ?)';
   const valores = [
     serviceData.des_serv,
     serviceData.presencial,
@@ -246,17 +252,17 @@ function agregarServicio(serviceData, callback) {
     serviceData.id_region
   ];
 
-  db.query(query, valores, (err, result)=>{
+  db.query(query, valores, (err, result) => {
     if (err) {
       console.error('Error al agregar el servicio:', err);
       callback({ error: 'Error interno al agregar el servicio', details: err.message }, null);
     } else {
       console.log('Servicio agregado con éxito');
-      callback(null, { message: 'Servicio agregado con éxito' },result);
+      callback(null, { message: 'Servicio agregado con éxito' }, result);
     }
 
   })
-    
+
 };
 
 function obtenerServiciosSolicitadosPorTrabajador(correoElectronico, callback) {
@@ -339,7 +345,7 @@ function obtenerServiciosSolicitadosPorCliente(correoElectronico, callback) {
 
 
 
-function servEspecifico(id_des_serv,callback){
+function servEspecifico(id_des_serv, callback) {
   const query = `SELECT ds.des_serv, ds.id_des_serv, ds.presencial, ds.id_trabajador, ds.id_serv, ds.id_region, ds.id_comuna, ds.presencial, t.correo_electronico, t.disponibilidad, name_serv, name_comuna, name_region 
   FROM descrip_servicio ds JOIN trabajador t ON(ds.id_trabajador = t.id_trabajador) 
   JOIN servicio s ON(ds.id_serv = s.id_serv) 
@@ -350,10 +356,10 @@ function servEspecifico(id_des_serv,callback){
   db.query(query, valores, (error, result) => {
     if (error) {
       console.log("Error al obtener listado de servicios", error);
-      callback(error,null);
+      callback(error, null);
       return;
-    }else{
-      callback(null,result)
+    } else {
+      callback(null, result)
     }
   })
 }
@@ -377,52 +383,52 @@ function aceptarSolicitud(solicitudId, nuevoEstado, callback) {
 
 function obtenerRegiones(callback) {
   const query = 'SELECT * FROM region';
-  db.query(query,(error, result) => {
+  db.query(query, (error, result) => {
     if (error) {
       console.log("Error al obtener regiones", error);
-      callback(error,null)
+      callback(error, null)
       return;
-      
-    }else{
-      callback(null,result)
+
+    } else {
+      callback(null, result)
     }
-    
+
   });
 
 }
 
 function obtenerComunas(callback) {
   const query = 'SELECT * FROM comuna';
-  db.query(query,(error, result) => {
+  db.query(query, (error, result) => {
     if (error) {
       console.log("Error al obtener Comunas", error);
-      callback(error,null)
+      callback(error, null)
       return;
-      
-    }else{
-      callback(null,result)
+
+    } else {
+      callback(null, result)
     }
-    
+
   });
 
 }
 
 function obtenerServicios(callback) {
   const query = 'SELECT * FROM servicio';
-  db.query(query, (error, result)=> {
+  db.query(query, (error, result) => {
     if (error) {
-      console.log("Error al obtener servicios",error);
-      callback(error,null);
+      console.log("Error al obtener servicios", error);
+      callback(error, null);
       return;
-      
-    }else{
-      callback(null,result)
+
+    } else {
+      callback(null, result)
     }
   })
 
 }
 
-function listarServicios(callback){
+function listarServicios(callback) {
   const query = `SELECT ds.des_serv, ds.presencial, t.correo_electronico, t.disponibilidad, name_serv, name_comuna, name_region 
   FROM descrip_servicio ds JOIN trabajador t ON(ds.id_trabajador = t.id_trabajador) 
   JOIN servicio s ON(ds.id_serv = s.id_serv) 
@@ -431,10 +437,10 @@ function listarServicios(callback){
   db.query(query, (error, result) => {
     if (error) {
       console.log("Error al obtener listado de servicios", error);
-      callback(error,null);
+      callback(error, null);
       return;
-    }else{
-      callback(null,result)
+    } else {
+      callback(null, result)
     }
   })
 }
@@ -484,23 +490,23 @@ const registrarTrabajador = (disponibilidad, des_perfil, correo_electronico, cal
   db.query(query, [disponibilidad, des_perfil, correo_electronico], (error, result) => {
     if (error) {
       console.error('Error al registrar el trabajador:', error);
-      return callback(error, null); 
+      return callback(error, null);
     }
     callback(null, result);
   });
 };
 
 
-function obtenerSolicitudIdPorTrabajadorId(trabajadorId, callback){
+function obtenerSolicitudIdPorTrabajadorId(trabajadorId, callback) {
   const query = `SELECT id_solicitud, estado FROM solicitud
   WHERE id_trabajador = ? AND estado = 'Finalizado'`;
   const valores = [trabajadorId];
-  db.query(query, valores, (error,result)=>{
+  db.query(query, valores, (error, result) => {
     if (error) {
       console.log("Error al obtener el idsolicitud en cuestion", error);
-      callback({error: "Error interno al obtener el idsolicitud en cuestion", details:error.message}, null);
-      
-    } else{
+      callback({ error: "Error interno al obtener el idsolicitud en cuestion", details: error.message }, null);
+
+    } else {
       console.log("Solicitud id obtenida con exito");
       callback(null, result)
     }
@@ -515,7 +521,7 @@ function agregarFavorito(req, res) {
       console.error('Error al agregar como favorito:', error);
       return res.status(500).json({ error: 'Error interno al agregar como favorito' });
     }
-    
+
     console.log('Trabajador agregado como favorito con éxito');
     res.status(200).json({ message: 'Trabajador agregado como favorito con éxito' });
   });
@@ -528,7 +534,7 @@ function quitarFavorito(req, res) {
       console.error('Error al quitar como favorito:', error);
       return res.status(500).json({ error: 'Error interno al quitar como favorito' });
     }
-    
+
     console.log('Trabajador quitado de favoritos con éxito');
     res.status(200).json({ message: 'Trabajador quitado de favoritos con éxito' });
   });
@@ -576,7 +582,7 @@ function listarFavoritos(req, res) {
 
 
 
-function agregarDocumentacionTrabajador(documentData,callback){
+function agregarDocumentacionTrabajador(documentData, callback) {
   const query = `INSERT INTO documento_trabajador(titulo, documento, id_trabajador) VALUES(?,?,?)`;
   const valores = [
     documentData.titulo,
@@ -584,12 +590,12 @@ function agregarDocumentacionTrabajador(documentData,callback){
     documentData.id_trabajador
   ];
 
-  db.query(query, valores, (error,result)=>{
+  db.query(query, valores, (error, result) => {
     if (error) {
       console.log("Error al insertar documentacion", error);
-      callback({error:"Error al insertar la documentacion", details:error.message}, null);
-      
-    } else{
+      callback({ error: "Error al insertar la documentacion", details: error.message }, null);
+
+    } else {
       console.log("Documentacion agregada con exito");
       callback(null, result)
     }
@@ -598,7 +604,7 @@ function agregarDocumentacionTrabajador(documentData,callback){
 }
 
 
-function calcularPromedioCalificacionTrabajador(correoElectronico, callback){
+function calcularPromedioCalificacionTrabajador(correoElectronico, callback) {
   const query = `SELECT 
   (SUM(reseña.calificacion)/COUNT(reseña.id_reseña))AS promedio_calificacion
   FROM trabajador
@@ -610,21 +616,21 @@ function calcularPromedioCalificacionTrabajador(correoElectronico, callback){
 
   const valores = [correoElectronico];
 
-  db.query(query, valores, (error,result)=>{
+  db.query(query, valores, (error, result) => {
     if (error) {
       console.log("Error al obtener promedio calificaciones por trabajador");
-      callback({error:"Error interno al obtener el promedio de calificaciones por trabajador", details:error.message}, null)
-      
-    }else{
+      callback({ error: "Error interno al obtener el promedio de calificaciones por trabajador", details: error.message }, null)
+
+    } else {
       console.log("Promedio de calificaciones por trabajador obtenido con éxito");
-      callback(null,result)
+      callback(null, result)
     }
   })
 }
 
 
 
-function calcularPromedioCalificacionServicio(id_des_serv,trabajadorId, callback){
+function calcularPromedioCalificacionServicio(id_des_serv, trabajadorId, callback) {
   const query = `SELECT (SUM(r.calificacion)/COUNT(r.id_reseña))AS promedio_servicio, s.id_trabajador 
   FROM reseña r 
   JOIN solicitud s ON(r.id_solicitud = s.id_solicitud) 
@@ -633,7 +639,7 @@ function calcularPromedioCalificacionServicio(id_des_serv,trabajadorId, callback
   WHERE s.id_des_serv = ? AND s.id_trabajador = ?`;
   const valores = [id_des_serv, trabajadorId];
 
-  db.query(query, valores,(err, result)=>{
+  db.query(query, valores, (err, result) => {
     if (err) {
       console.error('Error al obtener el promedio de calificaciones por servicio:', err);
       callback({ error: 'Error interno al obtener el promedio de calificaciones por servicio', details: err.message }, null);
@@ -644,6 +650,20 @@ function calcularPromedioCalificacionServicio(id_des_serv,trabajadorId, callback
   });
 
 
+}
+
+function actualizarDisponibilidad(correo_electronico, disponibilidad, callback) {
+  const sql = 'UPDATE trabajador SET disponibilidad = ? WHERE correo_electronico = ?';
+
+  db.query(sql, [disponibilidad, correo_electronico], (error, results) => {
+    if (error) {
+      console.error('Error al ejecutar la consulta SQL:', error);
+      callback(error, null); 
+    } else {
+      console.log('Actualización exitosa:', results);
+      callback(null, results); 
+    }
+  });
 }
 
 
@@ -679,5 +699,6 @@ module.exports = {
   listarFavoritos,
   calcularPromedioCalificacionServicio,
   calcularPromedioCalificacionTrabajador,
+  actualizarDisponibilidad,
 
 };

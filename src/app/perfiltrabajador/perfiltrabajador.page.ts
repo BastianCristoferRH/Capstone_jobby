@@ -20,7 +20,7 @@ export class PerfiltrabajadorPage implements OnInit {
   //datosTrabajador: any = []; // Ahora inicializado como un arreglo
   id_trabajador: number = 0;
   datosTrabajador: any[] = [];
-  aa:any[]=[];
+  aa: any[] = [];
   //promedio_trabajador: any[]=[];
   datosServicio: any[] = [];
   esFavorito: boolean = false;
@@ -28,9 +28,9 @@ export class PerfiltrabajadorPage implements OnInit {
   promedioServicio: number = 1;
   starData1!: { enteras: number; fraccion: number; };
   starData2!: { enteras: number; fraccion: number; };
-  
-  
-  
+
+
+
 
   constructor(
     private authService: AuthService,
@@ -44,19 +44,19 @@ export class PerfiltrabajadorPage implements OnInit {
     const enteras = Math.floor(promedioTrabajador); // Parte entera
     const fraccion = promedioTrabajador - enteras; // Parte fraccionaria
     return { enteras, fraccion };
-    
+
   }
 
   getStarDataAverageService(promedioServicio: number): { enteras: number, fraccion: number } {
     const enteras = Math.floor(promedioServicio); // Parte entera
     const fraccion = promedioServicio - enteras; // Parte fraccionaria
     return { enteras, fraccion };
-    
+
   }
-  
+
 
   ngOnInit() {
-    
+
     this.starData1 = this.getStarDataAverageWorker(this.promedioTrabajador);
     this.starData2 = this.getStarDataAverageService(this.promedioServicio);
     console.log(this.promedioServicio);
@@ -74,107 +74,107 @@ export class PerfiltrabajadorPage implements OnInit {
               trabajador.img_base64 = this.sanitizer.bypassSecurityTrustUrl('data:image/jpeg;base64,' + trabajador.img_base64);
             }
           }
-          
-          
+
+
 
 
 
           for (let i = 0; i < data.datosServicio.length; i++) {
             const element = data.datosServicio[i];
             this.aa.push(element)
-            
+
 
           }
-          this.authService.getPromedioCalificacionesServicio(this.aa[0].id_des_serv,this.aa[0].id_trabajador).subscribe((dataAvgServicio:any)=>{
+          this.authService.getPromedioCalificacionesServicio(this.aa[0].id_des_serv, this.aa[0].id_trabajador).subscribe((dataAvgServicio: any) => {
             console.log(dataAvgServicio);
             this.promedioServicio = dataAvgServicio;
           })
           console.log(this.aa);
 
-          console.log('promedio servicioreklxD',this.promedioServicio);
+          console.log('promedio servicioreklxD', this.promedioServicio);
           this.datosTrabajador = data.datosTrabajador;
 
-          
+
           this.datosServicio = data.datosServicio;
-          console.log('promedio',this.promedioTrabajador);
+          console.log('promedio', this.promedioTrabajador);
           console.log('Datos Trabajador obtenidos', this.datosTrabajador);
           console.log('Datos servicios obtenidos', this.datosServicio);
-          console.log('Promedios servicio:',this.promedioServicio);
+          console.log('Promedios servicio:', this.promedioServicio);
 
-        // Verificar si el correo del trabajador coincide con el usuario autenticado
-        const usuarioAutenticado = this.authService.getCorreoElectronico();
-        if (usuarioAutenticado === this.correoElectronico) {
-          this.mostrarBotonAgregarServicio = true;
-          this.mostrarBotonAgregarDocumentacion = true;
-          this.mostrarBotonSolicitar = false; // Ocultar el botón "Solicitar"
+          // Verificar si el correo del trabajador coincide con el usuario autenticado
+          const usuarioAutenticado = this.authService.getCorreoElectronico();
+          if (usuarioAutenticado === this.correoElectronico) {
+            this.mostrarBotonAgregarServicio = true;
+            this.mostrarBotonAgregarDocumentacion = true;
+            this.mostrarBotonSolicitar = false; // Ocultar el botón "Solicitar"
 
+          }
+          this.verificarFavorito();
+        },
+        (error: any) => {
+          console.error('Error al recibir los datos del trabajador', error);
         }
-        this.verificarFavorito();
-      },
-      (error: any) => {
-        console.error('Error al recibir los datos del trabajador', error);
-      }
-    );
+      );
 
 
-    this.authService.getPromedioCalificacionesTrabajador(this.correoElectronico).subscribe((data:any)=>{
-      //console.log(data);
-      this.promedioTrabajador = data[0].promedio_calificacion;
-      console.log(this.promedioTrabajador);
+      this.authService.getPromedioCalificacionesTrabajador(this.correoElectronico).subscribe((data: any) => {
+        //console.log(data);
+        this.promedioTrabajador = data[0].promedio_calificacion;
+        console.log(this.promedioTrabajador);
 
-    })
-  });
+      })
+    });
 
 
-  
-}
-navigateToHistorialServicios(){
-  this.router.navigate(['/trabajador',this.correoElectronico,'historial-trabajador'])
-}
 
-getStarArray(): number[] {
-  return [1, 2, 3, 4, 5];
-}
-getStarIconAvgWorker(index: number, promedioTrabajador: number): string {
-  // Determina el nombre del ícono de estrella (star, star-half o star-outline) en función de 'index' y 'promedio'
-  if (index <= Math.floor(promedioTrabajador)) {
-    return 'star'; // Estrella completa
-  } else if (index === Math.ceil(promedioTrabajador)) {
-    return 'star-half'; // Media estrella si el índice es igual al valor entero más cercano del promedio
-  } else {
-    return 'star-outline'; // Estrella vacía
   }
-}
-
-getStarIconAvgService(index: number, promedioServicio: number): string {
-  // Determina el nombre del ícono de estrella (star, star-half o star-outline) en función de 'index' y 'promedio'
-  if (index <= Math.floor(promedioServicio)) {
-    return 'star'; // Estrella completa
-  } else if (index === Math.ceil(promedioServicio)) {
-    return 'star-half'; // Media estrella si el índice es igual al valor entero más cercano del promedio
-  } else {
-    return 'star-outline'; // Estrella vacía
+  navigateToHistorialServicios() {
+    this.router.navigate(['/trabajador', this.correoElectronico, 'historial-trabajador'])
   }
-}
+
+  getStarArray(): number[] {
+    return [1, 2, 3, 4, 5];
+  }
+  getStarIconAvgWorker(index: number, promedioTrabajador: number): string {
+    // Determina el nombre del ícono de estrella (star, star-half o star-outline) en función de 'index' y 'promedio'
+    if (index <= Math.floor(promedioTrabajador)) {
+      return 'star'; // Estrella completa
+    } else if (index === Math.ceil(promedioTrabajador)) {
+      return 'star-half'; // Media estrella si el índice es igual al valor entero más cercano del promedio
+    } else {
+      return 'star-outline'; // Estrella vacía
+    }
+  }
+
+  getStarIconAvgService(index: number, promedioServicio: number): string {
+    // Determina el nombre del ícono de estrella (star, star-half o star-outline) en función de 'index' y 'promedio'
+    if (index <= Math.floor(promedioServicio)) {
+      return 'star'; // Estrella completa
+    } else if (index === Math.ceil(promedioServicio)) {
+      return 'star-half'; // Media estrella si el índice es igual al valor entero más cercano del promedio
+    } else {
+      return 'star-outline'; // Estrella vacía
+    }
+  }
 
 
 
-  goToFormularioDocumentacion(){
+  goToFormularioDocumentacion() {
     const correoElectronico = this.authService.getCorreoElectronico();
     if (correoElectronico) {
-      this.authService.getTrabajadorIdPorCorreo(correoElectronico).subscribe((data:any)=>{
+      this.authService.getTrabajadorIdPorCorreo(correoElectronico).subscribe((data: any) => {
         console.log(data[0].id_trabajador);
         this.id_trabajador = data[0].id_trabajador;
         console.log(this.id_trabajador);
 
       });
       this.id_trabajador = 0
-      this.router.navigate(['/subir-documentacion',this.id_trabajador])
-      
-    }else{
+      this.router.navigate(['/subir-documentacion', this.id_trabajador])
+
+    } else {
       this.router.navigate(['/login'])
     }
-    
+
   }
 
 
@@ -208,7 +208,7 @@ getStarIconAvgService(index: number, promedioServicio: number): string {
     this.router.navigate(['/trabajador', this.correoElectronico]);
   }
 
-  
+
   eliminarServicio(id_des_serv: number) {
     this.authService.eliminarServicio(id_des_serv).subscribe(
       (response: any) => {
@@ -257,7 +257,7 @@ getStarIconAvgService(index: number, promedioServicio: number): string {
     this.router.navigate(['/perfil', correoElectronico]);
   }
 
-  
+
 
   navegarAServicioSolicitado() {
     const correoElectronico = this.authService.getCorreoElectronico();
@@ -335,4 +335,45 @@ getStarIconAvgService(index: number, promedioServicio: number): string {
         );
     }
   }
+  actualizarDisponibilidadUsuarioAutenticado() {
+    const correoElectronico = this.authService.getCorreoElectronico();
+    if (correoElectronico) {
+      console.log(correoElectronico); // Agrega esto para depuración
+      console.log('Cambiando disponibilidad a "disponible"'); // Agrega esto para depuración
+      this.authService.actualizarDisponibilidad(correoElectronico, 'disponible')
+        .subscribe(
+          (response: any) => {
+            console.log('Disponibilidad actualizada con éxito', response);
+            window.location.reload(); // Recargar la página
+          },
+          (error: any) => {
+            console.error('Error al actualizar la disponibilidad', error);
+          }
+        );
+    } else {
+      console.error('No se pudo obtener el correo electrónico del usuario autenticado.');
+    }
+  }
+
+  actualizarDisponibilidadUsuarioAutenticadoocupado() {
+    const correoElectronico = this.authService.getCorreoElectronico();
+    if (correoElectronico) {
+      console.log(correoElectronico); 
+      console.log('Cambiando disponibilidad a "ocupado"'); 
+      this.authService.actualizarDisponibilidad(correoElectronico, 'ocupado')
+        .subscribe(
+          (response: any) => {
+            console.log('Disponibilidad actualizada con éxito', response);
+            window.location.reload(); 
+          },
+          (error: any) => {
+            console.error('Error al actualizar la disponibilidad', error);
+          }
+        );
+    } else {
+      console.error('No se pudo obtener el correo electrónico del usuario autenticado.');
+    }
+  }
+
+
 }

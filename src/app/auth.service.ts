@@ -213,6 +213,13 @@ export class AuthService {
   getPromedioCalificacionesTrabajador(correoElectronico:string): Observable<any> {
     return this.http.get(`${this.apiUrl}/promedio-calificaciones-trabajador/${correoElectronico}`);
   }
+  actualizarDisponibilidad(correo_electronico: string, disponibilidad: string): Observable<any> {
+    const url = `${this.apiUrl}/actualizar-disponibilidad`;
+    const data = { correo_electronico, disponibilidad };
+    console.log(correo_electronico,disponibilidad);
+    return this.http.put(url, data);
+  }
+  
 }
 
 

@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { listarFavoritos,verificarFavorito,eliminarServicio,agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador,obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador,agregarDocumentacionTrabajador,calcularPromedioCalificacionServicio,calcularPromedioCalificacionTrabajador } = require('./controller');
+const { actualizarDisponibilidad, listarFavoritos, verificarFavorito, eliminarServicio, agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador, agregarDocumentacionTrabajador, calcularPromedioCalificacionServicio, calcularPromedioCalificacionTrabajador } = require('./controller');
 const { ifError } = require('assert');
 
 
@@ -91,9 +91,6 @@ app.delete('/eliminar_servicio/:id_des_serv', (req, res) => {
     }
   });
 });
-
-
-
 
 
 app.get('/usuario/:correo', (req, res) => {
@@ -262,14 +259,14 @@ app.put('/actualizar-solicitud/:id', (req, res) => {
 
 app.post('/agregar-resena', (req, res) => {
   const reseñaData = req.body;
-  
+
   agregarReseña(reseñaData, (error, result) => {
     if (error) {
       return res.status(500).json({ error: 'Error al agregar reseña' });
-    }else{
+    } else {
       return res.status(200).json({ mensaje: 'Reseña agregada con éxito' });
     }
-    
+
   });
 });
 
@@ -330,7 +327,7 @@ app.post('/agregar-favorito', (req, res) => {
     return res.status(400).json({ error: 'Falta información requerida.' });
   }
 
-  agregarFavorito(req, res); 
+  agregarFavorito(req, res);
 });
 
 app.post('/quitar-favorito', (req, res) => {
@@ -357,19 +354,19 @@ app.post('/listar-favoritos', (req, res) => {
 
 
 
-app.post('/agregar-documentacion', (req, res)=>{
+app.post('/agregar-documentacion', (req, res) => {
   const trabajadorId = req.params.id_solicitud;
   const documentData = req.body;
 
-  agregarDocumentacionTrabajador(documentData,(error,result)=>{
-      if (error) {
-        console.log("Error al agregar documentacion", error);
-        res.status(500).json({error:"Error interno al agregar documentacion"});
-      }else{
-        console.log("Documentacion agregada con exito", result);
-        res.status(200).json({message:"Documentacion agregada con exito"});
-      }
+  agregarDocumentacionTrabajador(documentData, (error, result) => {
+    if (error) {
+      console.log("Error al agregar documentacion", error);
+      res.status(500).json({ error: "Error interno al agregar documentacion" });
+    } else {
+      console.log("Documentacion agregada con exito", result);
+      res.status(200).json({ message: "Documentacion agregada con exito" });
     }
+  }
   );
 });
 
@@ -377,16 +374,16 @@ app.post('/agregar-documentacion', (req, res)=>{
 
 
 
-app.get('/promedio-calificacion-servicio/:id_des_serv/:id_trabajador', (req, res)=>{
+app.get('/promedio-calificacion-servicio/:id_des_serv/:id_trabajador', (req, res) => {
   const idServicio = req.params.id_des_serv;
   const trabajadorId = req.params.id_trabajador;
-  calcularPromedioCalificacionServicio(idServicio,trabajadorId, (error, result)=>{
+  calcularPromedioCalificacionServicio(idServicio, trabajadorId, (error, result) => {
     if (error) {
-      console.log("Error al obtener el promedio de calificaciones por servicio",error);
-      return res.status(500).json({error:"Error interno al obtener promedio de calificaciones"});
-      
-    }else{
-      console.log("Promedio de calificaciones por servicio obtenido con éxito",result);
+      console.log("Error al obtener el promedio de calificaciones por servicio", error);
+      return res.status(500).json({ error: "Error interno al obtener promedio de calificaciones" });
+
+    } else {
+      console.log("Promedio de calificaciones por servicio obtenido con éxito", result);
       return res.status(200).json(result);
     }
   });
@@ -395,20 +392,33 @@ app.get('/promedio-calificacion-servicio/:id_des_serv/:id_trabajador', (req, res
 
 
 
-app.get('/promedio-calificaciones-trabajador/:correoElectronico',(req,res)=>{
+app.get('/promedio-calificaciones-trabajador/:correoElectronico', (req, res) => {
   const correoElectronico = req.params.correoElectronico;
-  calcularPromedioCalificacionTrabajador(correoElectronico, (error, result)=>{
+  calcularPromedioCalificacionTrabajador(correoElectronico, (error, result) => {
     if (error) {
       console.log("Error al obtener el promedio de calificaciones por trabajador", error);
-      return res.status(500).json({error:"Error interno al obtener promedio de calificaciones por trabajador"});
+      return res.status(500).json({ error: "Error interno al obtener promedio de calificaciones por trabajador" });
 
-      
-    }else{
+
+    } else {
       console.log("Promedio de calificaciones por trabajador obtenido con éxito", result);
       return res.status(200).json(result);
     }
   })
 });
+
+app.put('/actualizar-disponibilidad', (req, res) => {
+  const { correo_electronico, disponibilidad } = req.body; 
+  
+  actualizarDisponibilidad(correo_electronico, disponibilidad, (error, results) => {
+    if (error) {
+      res.status(500).json({ error: 'Error al actualizar la disponibilidad' });
+    } else {
+      res.status(200).json({ message: 'Disponibilidad actualizada con éxitoo' });
+    }
+  });
+});
+
 
 const puerto = 4001;
 
