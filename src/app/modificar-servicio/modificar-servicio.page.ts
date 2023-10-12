@@ -36,7 +36,7 @@ export class ModificarServicioPage implements OnInit {
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.cargarRegiones();
@@ -87,8 +87,7 @@ export class ModificarServicioPage implements OnInit {
     this.serviceData.id_region = this.obtenerIdRegion(this.serviceData.name_region);
 
     console.log('Datos de serviceData antes de enviar la solicitud HTTP:', this.serviceData);
-
-    this.http.put(`http://localhost:4001/modificar_servicio/${this.id_des_serv}`, this.serviceData).subscribe(
+    this.http.put(`http://192.168.59.42:4002/modificar_servicio/${this.id_des_serv}`, this.serviceData).subscribe(
       (response) => {
         console.log('Servicio modificado con éxito', response);
         console.log('Así quedaron los datos modificados', this.serviceData);
@@ -104,21 +103,21 @@ export class ModificarServicioPage implements OnInit {
   }
 
   cargarRegiones() {
-    this.http.get('http://localhost:4001/obtener-regiones').subscribe((data: any) => {
+    this.http.get('http://192.168.59.42:4002/obtener-regiones').subscribe((data: any) => {
       this.regiones = data;
       console.log('Regiones cargadas con éxito', data);
     });
   }
 
   cargarComunas() {
-    this.http.get('http://localhost:4001/obtener-comunas').subscribe((data: any) => {
+    this.http.get('http://192.168.59.42:4002/obtener-comunas').subscribe((data: any) => {
       this.comunas = data;
       console.log('Comunas cargadas con éxito', data);
     });
   }
 
   cargarServicios() {
-    this.http.get('http://localhost:4001/obtener-servicios').subscribe((data: any) => {
+    this.http.get('http://192.168.59.42:4002/obtener-servicios').subscribe((data: any) => {
       this.servicios = data;
       console.log('Servicios cargados con éxito', data);
     });

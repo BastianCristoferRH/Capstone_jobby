@@ -63,9 +63,8 @@
             </div>
             
             </div>
-            <ion-button  shape="round" expand="full" *ngIf="datos.estado  === 'Finalizado'" class="button-completado" (click)="CompletadoEncargo(datos.id_solicitud)" >Trabajo completado</ion-button>
             <ion-button shape="round"  expand="full" *ngIf="datos.estado  === 'Finalizado'" class="button-incompleto" (click)="IncompletoEncargo(datos.id_solicitud)">Incompleto</ion-button>
-            <ion-button shape="round"  expand="full" *ngIf="datos.estado  === 'Completado'" class="button-reseña" (click)="goToResena(datos.id_solicitud)">Realizar reseña</ion-button>
+            <ion-button shape="round"  expand="full" *ngIf="datos.estado  === 'Finalizado'" class="button-reseña" (click)="goToResena(datos.id_solicitud)">Realizar reseña</ion-button>
             <ion-button   *ngIf="datos.estado === 'gestionando' || datos.estado === 'Desarrollo'" class="custom-button" target="_blank" href="https://wa.me/569{{ datos.telefono }}">Hablar WhatsApp</ion-button>
       </div>
     </ion-card>

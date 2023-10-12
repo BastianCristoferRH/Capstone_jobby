@@ -56,6 +56,7 @@ export class PerfiltrabajadorPage implements OnInit {
   
 
   ngOnInit() {
+    
     this.starData1 = this.getStarDataAverageWorker(this.promedioTrabajador);
     this.starData2 = this.getStarDataAverageService(this.promedioServicio);
     console.log(this.promedioServicio);
