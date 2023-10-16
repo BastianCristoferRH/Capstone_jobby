@@ -69,6 +69,9 @@
           class="button-solicitar-servicio custom-buttonx" (click)="navigateToSolicitud()">Solicitar</ion-button> <br>
         <ion-button *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0" shape="round"
           class="button-solicitar-servicio custom-buttonx" (click)="agregarServicio()">Agregar Servicio</ion-button>
+        <ion-button *ngIf="datosTrabajador.length > 0 && mostrarBotonGestionarResenas" shape="round"
+            class="button" (click)="gestionarResenas()">Gestionar reseñas
+        </ion-button>
       </div>
     </ion-card>
     <br><br>

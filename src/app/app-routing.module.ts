@@ -90,8 +90,21 @@ const routes: Routes = [
   },
   {
     path: 'trabajador/:correoElectronico/historial-trabajador',
-    loadChildren: () => import('./historial-trabajador/historial-trabajador.module').then( m => m.HistorialTrabajadorPageModule)
+    loadChildren: () => import('./historial-trabajador/historial-trabajador.module').then( m => m.HistorialTrabajadorPageModule),
+    canActivate: [AuthGuard],
   },
+  {
+    path: 'trabajador/:correoElectronico/historial-trabajador/resena-info/:correoElectronicoo/:solicitudId',
+    loadChildren: () => import('./resena-info/resena-info.module').then( m => m.ResenaInfoPageModule),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'trabajador/:correoElectronico/gestionar-resenas',
+    loadChildren: () => import('./gestionar-resenas/gestionar-resenas.module').then( m => m.GestionarResenasPageModule),
+    canActivate: [AuthGuard],
+  },
+
+
 
 
 

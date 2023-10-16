@@ -16,6 +16,7 @@ export class PerfiltrabajadorPage implements OnInit {
   mostrarBotonAgregarServicio: boolean = false;
   mostrarBotonAgregarDocumentacion: boolean = false;
   mostrarBotonSolicitar: boolean = true;
+  mostrarBotonGestionarResenas:boolean=false;
   correoElectronico: string = '';
   //datosTrabajador: any = []; // Ahora inicializado como un arreglo
   id_trabajador: number = 0;
@@ -25,7 +26,7 @@ export class PerfiltrabajadorPage implements OnInit {
   datosServicio: any[] = [];
   esFavorito: boolean = false;
   promedioTrabajador: number = 0;
-  promedioServicio: number = 1;
+  promedioServicio: number = 0;
   starData1!: { enteras: number; fraccion: number; };
   starData2!: { enteras: number; fraccion: number; };
 
@@ -54,9 +55,17 @@ export class PerfiltrabajadorPage implements OnInit {
 
   }
 
+  obtenerPromedioPorIdDesServ(servicioId:number, trabajadorId:number){
+    this.authService.getPromedioCalificacionesServicio(servicioId, trabajadorId).subscribe((dataAvgServicio: any) => {
+      console.log(dataAvgServicio[0]);
+      this.promedioServicio = dataAvgServicio[0].promedio_servicio;
+    })
+  }
+
 
   ngOnInit() {
-
+    //this.obtenerPromedioPorIdDesServ("9","3");
+    console.log(this.promedioServicio);
     this.starData1 = this.getStarDataAverageWorker(this.promedioTrabajador);
     this.starData2 = this.getStarDataAverageService(this.promedioServicio);
     console.log(this.promedioServicio);
@@ -75,27 +84,20 @@ export class PerfiltrabajadorPage implements OnInit {
             }
           }
 
+          
 
 
 
+         
+          
 
-          for (let i = 0; i < data.datosServicio.length; i++) {
-            const element = data.datosServicio[i];
-            this.aa.push(element)
-
-
-          }
-          this.authService.getPromedioCalificacionesServicio(this.aa[0].id_des_serv, this.aa[0].id_trabajador).subscribe((dataAvgServicio: any) => {
-            console.log(dataAvgServicio);
-            this.promedioServicio = dataAvgServicio;
-          })
-          console.log(this.aa);
 
           console.log('promedio servicioreklxD', this.promedioServicio);
           this.datosTrabajador = data.datosTrabajador;
 
 
           this.datosServicio = data.datosServicio;
+          this.obtenerPromedioPorIdDesServ(this.datosServicio[0].id_des_serv,this.datosServicio[0].id_trabajador)
           console.log('promedio', this.promedioTrabajador);
           console.log('Datos Trabajador obtenidos', this.datosTrabajador);
           console.log('Datos servicios obtenidos', this.datosServicio);
@@ -107,7 +109,7 @@ export class PerfiltrabajadorPage implements OnInit {
             this.mostrarBotonAgregarServicio = true;
             this.mostrarBotonAgregarDocumentacion = true;
             this.mostrarBotonSolicitar = false; // Ocultar el botón "Solicitar"
-
+            this.mostrarBotonGestionarResenas = true;
           }
           this.verificarFavorito();
         },
@@ -144,6 +146,10 @@ export class PerfiltrabajadorPage implements OnInit {
     } else {
       return 'star-outline'; // Estrella vacía
     }
+  }
+
+  gestionarResenas(){
+    this.router.navigate(['/trabajador',this.correoElectronico,'gestionar-resenas'])
   }
 
   getStarIconAvgService(index: number, promedioServicio: number): string {

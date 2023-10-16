@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { HistorialTrabajadorPageRoutingModule } from './historial-trabajador-routing.module';
+import { GestionarResenasPageRoutingModule } from './gestionar-resenas-routing.module';
 
-import { HistorialTrabajadorPage } from './historial-trabajador.page';
+import { GestionarResenasPage } from './gestionar-resenas.page';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
@@ -14,9 +14,9 @@ import { SharedModule } from '../shared/shared.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    HistorialTrabajadorPageRoutingModule,
+    GestionarResenasPageRoutingModule,
     SharedModule
   ],
-  declarations: [HistorialTrabajadorPage]
+  declarations: [GestionarResenasPage]
 })
-export class HistorialTrabajadorPageModule {}
+export class GestionarResenasPageModule {}

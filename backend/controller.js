@@ -447,7 +447,7 @@ function listarServicios(callback) {
 
 
 function agregarReseña(reseñaData, callback) {
-  const query = 'INSERT INTO reseña (descripcion, calificacion, id_solicitud) VALUES (?, ?, ?)';
+  const query = `INSERT INTO reseña (descripcion, calificacion, id_solicitud) VALUES (?, ?, ?)`;
   const valores = [reseñaData.descripcion, reseñaData.calificacion, reseñaData.id_solicitud];
 
   db.query(query, valores, (error, result) => {
@@ -462,8 +462,64 @@ function agregarReseña(reseñaData, callback) {
 }
 
 
+function listarReseñaPorTrabajador(trabajadorId, callback){
+  const query = `SELECT r.descripcion, r.calificacion from reseña r 
+  JOIN solicitud s ON (r.id_solicitud = s.id_solicitud)
+  JOIN trabajador t ON (s.id_trabajador = t.id_trabajador)
+  WHERE s.id_trabajador = ?`;
+
+  const valores = [trabajadorId];
+  db.query(query, valores,(error,result)=>{
+    if (error) {
+      console.log("Error al obtener el listado de reseñas por trabajador");
+      callback(error,null);
+      
+    }else{
+      console.log("éxito al obtener el listado de reseñas por trabajador");
+      callback(null,result);
+    }
+  });
+}
 
 
+function listarReseña(correoElectronicoo, solicitudId, callback){
+  const query = `SELECT id_reseña AS id_resena, descripcion, calificacion,r.id_solicitud, t.correo_electronico
+  from reseña r 
+  JOIN solicitud s ON (r.id_solicitud = s.id_solicitud)
+  JOIN trabajador t ON (s.id_trabajador = t.id_trabajador)
+  WHERE t.correo_electronico = ? AND s.id_solicitud = ?`;
+  const valores = [correoElectronicoo, solicitudId];
+  db.query(query, valores,(error, result)=>{
+    if (error) {
+      console.log("Error al obtener la reseña");
+      callback(error,null);
+
+    }else{
+      console.log("Reseña obtenida exitosamente");
+      callback(null,result);
+    }
+  });
+}
+
+
+function obtenerResenas(correoElectronico,callback){
+  const query = `SELECT r.id_reseña AS id_resena, r.descripcion, r.calificacion, r.id_solicitud
+  from reseña r JOIN solicitud s ON (r.id_solicitud = s.id_solicitud) 
+  JOIN trabajador t ON (s.id_trabajador = t.id_trabajador)
+  WHERE t.correo_electronico = ?`;
+  const valores = [correoElectronico]
+  
+  db.query(query, valores, (error, result)=>{
+    if (error) {
+      console.log("Error al obtener las reseñas");
+      callback(error, null);
+      
+    }else{
+      console.log("Reseñas obtenidas correctamente");
+      callback(null, result)
+    }
+  });
+}
 
 
 
@@ -630,14 +686,14 @@ function calcularPromedioCalificacionTrabajador(correoElectronico, callback) {
 
 
 
-function calcularPromedioCalificacionServicio(id_des_serv, trabajadorId, callback) {
+function calcularPromedioCalificacionServicio(idServicio, trabajadorId, callback) {
   const query = `SELECT (SUM(r.calificacion)/COUNT(r.id_reseña))AS promedio_servicio, s.id_trabajador 
   FROM reseña r 
   JOIN solicitud s ON(r.id_solicitud = s.id_solicitud) 
   JOIN descrip_servicio ds ON (s.id_des_serv = ds.id_des_serv)
 
   WHERE s.id_des_serv = ? AND s.id_trabajador = ?`;
-  const valores = [id_des_serv, trabajadorId];
+  const valores = [idServicio, trabajadorId];
 
   db.query(query, valores, (err, result) => {
     if (err) {
@@ -700,5 +756,7 @@ module.exports = {
   calcularPromedioCalificacionServicio,
   calcularPromedioCalificacionTrabajador,
   actualizarDisponibilidad,
-
+  listarReseñaPorTrabajador,
+  listarReseña,
+  obtenerResenas,
 };

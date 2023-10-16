@@ -1,34 +1,36 @@
+<app-menu></app-menu>
+
+<div class="ion-page" id="main-content">
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>historial-trabajador</ion-title>
+    <ion-title>JOBBY</ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">historial-trabajador</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  
 
 
 
 
-  <div class="row" *ngFor="let servicios of serviciosFinalizados">
-    <div class="column">
-    <h1>Datos del cliente:</h1>
-    <p>{{servicios.nombre}} {{servicios.apellidos}}</p>
-    <p>Correo:{{servicios.correo_cliente}}</p>
-    <h1>Servicio solicitado:</h1>
-    <p>{{servicios.name_serv}}</p>
-    <p>Descripcion de la solicitud: {{servicios.des_solicitud}}</p>
-    <p>Fecha: {{servicios.fecha_solicitud | date:'dd-MM-yyyy'}}</p>
-    <ion-button>Ver reseña(por implementar)</ion-button>
-    </div>
-   
+  <div class="row" *ngFor="let servicio of servicios">
+      <div class="column" *ngIf="servicio.estado !='Rechazado'">
+        <h1>Datos del cliente:</h1>
+        <p>{{servicio.nombre}} {{servicio.apellidos}}</p>
+        <p>Correo:{{servicio.correo_cliente}}</p>
+        <h1>Servicio solicitado:</h1>
+        <p>{{servicio.name_serv}}</p>
+        <p>Descripcion de la solicitud: {{servicio.des_solicitud}}</p>
+        <p>Fecha: {{servicio.fecha_solicitud | date:'dd-MM-yyyy'}}</p>
+        <ion-button (click)="goToResenaInfo(servicio.id_solicitud)">Ver reseña</ion-button>
+      </div>
   </div>
 
 
 
  
 </ion-content>
+</div>
