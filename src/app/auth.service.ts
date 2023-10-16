@@ -230,6 +230,11 @@ export class AuthService {
     console.log(correo_electronico,disponibilidad);
     return this.http.put(url, data);
   }
+  modificarServicio(id_des_serv: string, serviceData: any): Observable<any> {
+    const url = `${this.apiUrl}/modificar_servicio/${id_des_serv}`;
+    return this.http.put(url, serviceData);
+  }
+
   
 }
 
