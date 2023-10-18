@@ -103,6 +103,12 @@ const routes: Routes = [
     loadChildren: () => import('./gestionar-resenas/gestionar-resenas.module').then( m => m.GestionarResenasPageModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'agendar-visita-servicio/:id_solicitud',
+    loadChildren: () => import('./agendar-visita-servicio/agendar-visita-servicio.module').then( m => m.AgendarVisitaServicioPageModule),
+    canActivate: [AuthGuard],
+  },
+
 
 
 

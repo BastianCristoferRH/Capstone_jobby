@@ -235,6 +235,11 @@ export class AuthService {
     return this.http.put(url, serviceData);
   }
 
+  agregarVisitaConSolicitud(visitaData: any): Observable<any> {
+    const url = `${this.apiUrl}/agregar-visita`;
+    return this.http.post(url, visitaData);
+  }
+
   
 }
 

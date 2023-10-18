@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { actualizarDisponibilidad, listarFavoritos, verificarFavorito, eliminarServicio, agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador, agregarDocumentacionTrabajador, calcularPromedioCalificacionServicio, calcularPromedioCalificacionTrabajador } = require('./controller');
+const { agregarVisitaConSolicitud,actualizarDisponibilidad, listarFavoritos, verificarFavorito, eliminarServicio, agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador, agregarDocumentacionTrabajador, calcularPromedioCalificacionServicio, calcularPromedioCalificacionTrabajador } = require('./controller');
 const { ifError } = require('assert');
 
 
@@ -418,6 +418,21 @@ app.put('/actualizar-disponibilidad', (req, res) => {
     }
   });
 });
+
+app.post('/agregar-visita', (req, res) => {
+  const visitaData = req.body;
+
+  agregarVisitaConSolicitud(visitaData, (error, result) => {
+    if (error) {
+      console.log("Error al agregar la visita", error);
+      res.status(500).json({ error: "Error interno al agregar la visita" });
+    } else {
+      console.log("Visita agregada con éxito con ID de solicitud", result);
+      res.status(200).json({ message: "Visita agregada con éxito" });
+    }
+  });
+});
+
 
 
 const puerto = 4001;

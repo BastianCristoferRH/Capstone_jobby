@@ -722,6 +722,27 @@ function actualizarDisponibilidad(correo_electronico, disponibilidad, callback) 
   });
 }
 
+function agregarVisitaConSolicitud(visitaData, callback) {
+  const query = `INSERT INTO agenda(titulo, descripcion, fecha, hora, id_solicitud) VALUES(?,?,?,?,?)`;
+  const valores = [
+    visitaData.titulo,
+    visitaData.descripcion,
+    visitaData.fecha,
+    visitaData.hora,
+    visitaData.id_solicitud
+  ];
+
+  db.query(query, valores, (error, result) => {
+    if (error) {
+      console.log("Error al insertar visita", error);
+      callback({ error: "Error al insertar la visita", details: error.message }, null);
+    } else {
+      console.log("Visita agregada con éxito con ID de solicitud");
+      callback(null, result);
+    }
+  });
+}
+
 
 
 
@@ -759,4 +780,5 @@ module.exports = {
   listarReseñaPorTrabajador,
   listarReseña,
   obtenerResenas,
+  agregarVisitaConSolicitud,
 };
