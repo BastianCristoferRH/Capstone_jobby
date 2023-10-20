@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 
 function registroUsuario(usuario, callback) {
-  const sql = 'INSERT INTO usuario (correo_electronico, nombre, apellidos, telefono, fecha_creacion, fecha_nacimiento, password, img) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+  const sql = `INSERT INTO usuario (correo_electronico, nombre, apellidos, telefono, fecha_creacion, fecha_nacimiento, contrasena, img) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
   const valores = [
     usuario.correo_electronico,
     usuario.nombre,
@@ -27,9 +27,56 @@ function registroUsuario(usuario, callback) {
   });
 }
 
+function registroAdmin(userAdmin, callback) {
+  const sql = `INSERT INTO user_admin (username, password) VALUES (?, ?)`;
+  const valores = [
+    userAdmin.username,
+    userAdmin.password,
+    
+  ];
+
+  db.query(sql, valores, (err, resultado) => {
+    if (err) {
+      console.log("error al insertar a la base de datos: ", err);
+      callback(err, null);
+    } else {
+      console.log("se ingresaron los valores con éxito: ", resultado);
+      callback(null, resultado);
+    }
+  });
+}
+
+function loginAdmin(datosAdmin, callback) {
+  const sql = `SELECT * FROM user_admin WHERE username = ?`;
+  const valores = [datosAdmin.username];
+
+  db.query(sql, valores, (err, resultados) => {
+    if (err) {
+      console.log("Error al consultar la base de datos: ", err);
+      callback(err, null);
+    } else {
+      if (resultados.length === 0) {
+        callback({ mensaje: "usuario o contraseña incorrectos" }, null);
+      } else {
+        const usuarioAdmin = resultados[0];
+
+
+        if (datosAdmin.password === usuarioAdmin.password) {
+          const token = jwt.sign({ usuarioId: usuarioAdmin.username }, 'tu_secreto', { expiresIn: '1h' }); //cambie el usuario id
+          callback(null, { mensaje: "Inicio de sesión exitoso", token });
+        } else {
+          callback({ mensaje: "Contraseña incorrecta" }, null);
+        }
+      }
+    }
+  });
+}
+
+
+
 
 function iniciarSesion(datosUsuario, callback) {
-  const sql = 'SELECT * FROM usuario WHERE correo_electronico = ?';
+  const sql = `SELECT * FROM usuario WHERE correo_electronico = ?`;
   const valores = [datosUsuario.correo_electronico];
 
   db.query(sql, valores, (err, resultados) => {
@@ -43,7 +90,7 @@ function iniciarSesion(datosUsuario, callback) {
         const usuario = resultados[0];
 
 
-        if (datosUsuario.password === usuario.password) {
+        if (datosUsuario.contrasena === usuario.password) {
           const token = jwt.sign({ usuarioId: usuario.correo_electronico }, 'tu_secreto', { expiresIn: '1h' }); //cambie el usuario id
           callback(null, { mensaje: "Inicio de sesión exitoso", token });
         } else {
@@ -483,7 +530,7 @@ function listarReseñaPorTrabajador(trabajadorId, callback){
 
 
 function listarReseña(correoElectronicoo, solicitudId, callback){
-  const query = `SELECT id_reseña AS id_resena, descripcion, calificacion,r.id_solicitud, t.correo_electronico
+  const query = `SELECT id_reseña AS id_resena, descripcion, calificacion,r.estado,r.id_solicitud, t.correo_electronico
   from reseña r 
   JOIN solicitud s ON (r.id_solicitud = s.id_solicitud)
   JOIN trabajador t ON (s.id_trabajador = t.id_trabajador)
@@ -500,10 +547,23 @@ function listarReseña(correoElectronicoo, solicitudId, callback){
     }
   });
 }
-
+function getReseñasAdmin(callback){
+  const query = `SELECT id_reseña as id_resena, descripcion, calificacion, estado, created_at, updated_at
+  FROM reseña WHERE estado = 'reportado'`;
+  db.query(query, (error, result) => {
+    if (error) {
+      console.log("Error al obtener las resenas reportadas");
+      callback(error,null)
+    }else{
+      console.log("reseñas reportadas obtenidas con exito");
+      callback(null,result);
+    }
+  });
+}
+  
 
 function obtenerResenas(correoElectronico,callback){
-  const query = `SELECT r.id_reseña AS id_resena, r.descripcion, r.calificacion, r.id_solicitud
+  const query = `SELECT r.id_reseña AS id_resena, r.descripcion, r.calificacion,r.estado, r.id_solicitud
   from reseña r JOIN solicitud s ON (r.id_solicitud = s.id_solicitud) 
   JOIN trabajador t ON (s.id_trabajador = t.id_trabajador)
   WHERE t.correo_electronico = ?`;
@@ -724,7 +784,39 @@ function actualizarDisponibilidad(correo_electronico, disponibilidad, callback) 
 
 
 
+function emitirReporteResena(resenaId, nuevoEstado, callback){
+  const sql = `UPDATE reseña SET estado = ? WHERE id_reseña = ?`;
 
+  db.query(sql, [nuevoEstado, resenaId], (error, result) => {
+    if (error) {
+      console.log("Error al actualizar el estado de la resena");
+      callback(error,null);
+    }else{
+      console.log("Estado de resena actualizado con exito",resenaId, nuevoEstado );
+      callback(null,result);
+    }
+  });
+}
+
+function modificarResena(resenaId, resenaData, callback){
+  db.query('UPDATE reseña SET descripcion = ?, estado = ? WHERE id_reseña = ?',
+    [resenaData.descripcion, resenaData.estado,resenaId], 
+    (err, result) => {
+      if (err) {
+        console.error('Error al modificar la reseña:', err);
+        callback({ error: 'Error interno al modificar la reseña', details: err.message }, null);
+      } else {
+        if (result.affectedRows === 0) {
+          // Si no se encontró ningún registro para actualizar
+          callback({ error: 'Reseña no encontrada', details: 'No se encontró la reseña para modificar' }, null);
+        } else {
+          console.log('Reseña modificada con éxito');
+          callback(null, { message: 'Reseña modificada con éxito' });
+        }
+      }
+    }
+  );
+}
 
 
 module.exports = {
@@ -759,4 +851,9 @@ module.exports = {
   listarReseñaPorTrabajador,
   listarReseña,
   obtenerResenas,
+  registroAdmin,
+  loginAdmin,
+  emitirReporteResena,
+  getReseñasAdmin,
+  modificarResena
 };

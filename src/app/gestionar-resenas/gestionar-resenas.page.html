@@ -10,8 +10,8 @@
       <ion-title size="large">gestionar-resenas</ion-title>
     </ion-toolbar>
   </ion-header>
-
-  <div class="row" *ngFor="let resena of resenaData">
+<div class="row" *ngFor="let resena of resenaData">
+  <div *ngIf="resena.estado != 'reportado'">
     <div class="column" style="margin-top:10%">
       <h1>Comentario del cliente:</h1>
       <p>{{ resena.descripcion }}</p>
@@ -19,9 +19,11 @@
         <div class="star-container" style="text-align: center; flex: 1;">
           <ion-icon *ngFor="let i of getStarArray()" [name]="getStarIcon(i, resena.calificacion)" class="star-filled"></ion-icon>
         </div>
-        <ion-button><ion-icon name="alert-circle"></ion-icon> Emitir reporte</ion-button>
+        <ion-button (click)="emitirReporte(resena.id_resena)">Emitir reporte</ion-button>
       </div>
 
     </div>
 </div>
+</div>
+ 
 </ion-content>

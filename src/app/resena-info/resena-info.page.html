@@ -17,7 +17,13 @@
   <div class="row" *ngFor="let resena of resenaData">
     <div class="column" style="margin-top:15%">
       <h1>Comentario del cliente:</h1>
-      <p>{{resena.descripcion}}</p>
+      <div *ngIf="resena.estado !='reportado'">
+        <p >{{resena.descripcion}}</p>
+      </div>
+      <div *ngIf="resena.estado == 'reportado'">
+        <p >Esta reseña fue emitida con malas intenciones, por la seguridad del trabajador está siendo revisada.</p>
+      </div>
+     
       <div class="star-container">
         <ion-icon *ngFor="let i of getStarArray()" [name]="getStarIcon(i, calificacion)"
           class="star-filled"></ion-icon>

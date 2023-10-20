@@ -2,9 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { actualizarDisponibilidad, listarFavoritos, verificarFavorito, eliminarServicio, agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador, agregarDocumentacionTrabajador, calcularPromedioCalificacionServicio, calcularPromedioCalificacionTrabajador, listarReseñaPorTrabajador, listarReseña, obtenerResenas } = require('./controller');
+const { actualizarDisponibilidad, listarFavoritos, verificarFavorito, eliminarServicio, agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador, agregarDocumentacionTrabajador, calcularPromedioCalificacionServicio, calcularPromedioCalificacionTrabajador, listarReseñaPorTrabajador, listarReseña, obtenerResenas,registroAdmin,loginAdmin, emitirReporteResena,getReseñasAdmin } = require('./controller');
 const { ifError } = require('assert');
-
+const controller = require('./controller.js');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 
 
@@ -31,6 +33,36 @@ app.post('/registro', (req, res) => {
   });
 });
 
+//registro admin
+app.post('/registro-admin', (req, res) => {
+  const datosAdmin = req.body;
+
+  registroAdmin(datosAdmin, (error, resultado) => {
+    if (error) {
+      console.log("error json registro", error);
+      res.status(500).json({ error: 'error al registar usuario', error });
+    } else {
+      console.log("exito al ingresar los datos");
+      res.status(201).json({ mensaje: "Usuario registrado con exito" });
+    }
+  });
+});
+
+
+app.post('/login-admin', (req, res) => {
+  const datosAdmin = req.body;
+
+  loginAdmin(datosAdmin, (error, resultado) => {
+    if (error) {
+      console.log("Error en el inicio de sesión: ", error);
+      res.status(401).json(error);
+    } else {
+      console.log("Inicio de sesión exitoso");
+      res.status(200).json(resultado);
+    }
+  });
+});
+
 app.post('/login', (req, res) => {
   const datosUsuario = req.body;
 
@@ -44,6 +76,8 @@ app.post('/login', (req, res) => {
     }
   });
 });
+
+
 
 app.post('/agregar_servicio', (req, res) => {
   const serviceData = req.body;
@@ -466,13 +500,55 @@ app.put('/actualizar-disponibilidad', (req, res) => {
   });
 });
 
+app.put('/emitir-reporte/:id_resena', (req, res) => {
+  const nuevoEstado  = req.body.estado;
+  const resenaId = req.params.id_resena;
+  emitirReporteResena(resenaId, nuevoEstado,  (error, results) => {
+    if (error) {
+      console.log("Error al emitir el reporte");
+      res.status(500).json(error);
+    }else{
+      console.log("reporte emitido correctamente", nuevoEstado);
+      res.status(200).json(results);
+    }
+  })
+})
+
+app.get('/obtener-resenas-admin', (req, res) => {
+  getReseñasAdmin((error, result)=>{
+    if (error) {
+      console.log("Error al obtener las reseñas reportadas");
+      res.status(500).json(error);
+    }else{
+      console.log("Reseñas reportadas obtenidas con exito");
+      res.status(200).json(result);
+    }
+  })
+}
+)
+
+
+app.put('/modificar-resena/:id_resena', (req, res) => {
+  const resenaId = req.params.id_resena;
+  const resenaData = req.body;
+  modificarResena(resenaId, resenaData, (error, resultado) => {
+    if (error) {
+      console.error('Error al modificar la reseña:', error);
+      res.status(500).json(error);
+    } else {
+      console.log('Reseña modificada con éxito');
+      res.status(200).json(resultado);
+    }
+  });
+});
+
 
 const puerto = 4001;
 
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:8100'); // Permite solicitudes desde localhost:8100
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  res.header('Access-Control-Allow-Methods', 'POST'); // Puedes ajustar los métodos permitidos según tus necesidades
+  res.header('Access-Control-Allow-Origin', '*'); // Permite solicitudes desde localhost:8100
+  res.header('Access-Control-Allow-Headers', '*');
+  res.header('Access-Control-Allow-Methods', '*'); // Puedes ajustar los métodos permitidos según tus necesidades
   next();
 });
 

@@ -230,6 +230,11 @@ export class AuthService {
     console.log(correo_electronico,disponibilidad);
     return this.http.put(url, data);
   }
+
+  actualizarEstadoResena(resenaId: number, nuevoEstado: string): Observable<any>{
+    const data = { estado:nuevoEstado };
+    return this.http.put(`${this.apiUrl}/emitir-reporte/${resenaId}`, data);
+  }
   
 }
 

@@ -36,6 +36,17 @@ export class GestionarResenasPage implements OnInit {
     });
   }
 
+  emitirReporte(resenaId: number) {
+    this.authService.actualizarEstadoResena(resenaId,'reportado').subscribe(
+      (data: any) => {
+        console.log(resenaId);
+        console.log('Reporte emitido con exito');
+        location.reload();
+      (error: any) => {
+        console.error('Error al emitir el reporte:', error);
+      }}
+    );
+  }
 
   getStarArray(): number[] {
     return [1, 2, 3, 4, 5];
