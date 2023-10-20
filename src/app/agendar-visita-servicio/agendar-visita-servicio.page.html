@@ -1,0 +1,44 @@
+<app-menu></app-menu>
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>JOBBY</ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">AGENDAR VISITA</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <form [formGroup]="agendaForm" (ngSubmit)="onSubmit()">
+
+    <ion-item>
+      <ion-label position="floating">Título</ion-label>
+      <ion-input formControlName="titulo" type="text" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Descripción</ion-label>
+      <ion-textarea formControlName="descripcion" required></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Fecha (DD/MM/YYYY)</ion-label>
+      <ion-input formControlName="fecha" type="date" placeholder="DD/MM/YYYY" required></ion-input>
+     
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Hora (HH:mm)</ion-label>
+      <ion-input formControlName="hora" type="text" placeholder="HH:mm" required></ion-input>
+    </ion-item>
+
+    <ion-button expand="full" type="submit" [disabled]="!agendaForm.valid">Registrar</ion-button>
+
+  </form>
+</ion-content>

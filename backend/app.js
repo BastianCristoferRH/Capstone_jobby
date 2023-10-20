@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { actualizarDisponibilidad, listarFavoritos, verificarFavorito, eliminarServicio, agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador, agregarDocumentacionTrabajador, calcularPromedioCalificacionServicio, calcularPromedioCalificacionTrabajador, listarReseñaPorTrabajador, listarReseña, obtenerResenas,registroAdmin,loginAdmin, emitirReporteResena,getReseñasAdmin } = require('./controller');
+const { visitasAgendadas, horasAgendadasParaCliente, agregarVisitaConSolicitud, actualizarDisponibilidad, listarFavoritos, verificarFavorito, eliminarServicio, agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador, agregarDocumentacionTrabajador, calcularPromedioCalificacionServicio, calcularPromedioCalificacionTrabajador,listarReseñaPorTrabajador, listarReseña, obtenerResenas } = require('./controller');
 const { ifError } = require('assert');
 const controller = require('./controller.js');
 const bcrypt = require('bcrypt');
@@ -306,53 +306,6 @@ app.post('/agregar-resena', (req, res) => {
 
 
 
-app.get('/listar-resena-trabajador/:trabajadorId',(req,res)=>{
-  const trabajadorId = req.params.trabajadorId;
-
-  listarReseñaPorTrabajador(trabajadorId,(error, result)=>{
-    if (error) {
-      console.log("Error al obtener el listado de reseñas por trabajador", error);
-      return res.status(500).json(error);
-      
-    }else{
-      console.log("Listado de reseñas por trabajador obtenido con exito");
-      return res.status(200).json(result);
-    }
-  })
-});
-//Esta es para un historial de reseñas por trabajador, botón que irá en el menú
-
-
-
-app.get('/listar-resena/:correoElectronicoo/:solicitudId',(req, res)=> {
-  const correoElectronicoo = req.params.correoElectronicoo;
-  const solicitudId = req.params.solicitudId;
-  listarReseña(correoElectronicoo,solicitudId, (error, result)=>{
-    if (error) {
-      console.log("Error al obtener la reseña", error);
-      return res.status(500).json(error);
-      
-    }else{
-      console.log("Reseña obtenida exitosamente");
-      return res.status(200).json(result);
-    }
-  });
-});
-//Esta es para listar las reseñas de cada solicitud con estado "Finalizado"
-
-app.get('/obtener-resenas/:correoElectronico', (req, res)=>{
-  const correoElectronico = req.params.correoElectronico;
-  obtenerResenas(correoElectronico, (error,result)=>{
-    if (error) {
-      console.log("Error al obtener las reseñas", error);
-      return res.status(500).json(error);
-      
-    }else{
-      console.log("Reseñas obtenidas correctamente");
-      return res.status(200).json(result);
-    }
-  })
-})
 
 
 app.get('/obtener-trabajadorid/:correoElectronico', (req, res) => {
@@ -489,8 +442,8 @@ app.get('/promedio-calificaciones-trabajador/:correoElectronico', (req, res) => 
 });
 
 app.put('/actualizar-disponibilidad', (req, res) => {
-  const { correo_electronico, disponibilidad } = req.body; 
-  
+  const { correo_electronico, disponibilidad } = req.body;
+
   actualizarDisponibilidad(correo_electronico, disponibilidad, (error, results) => {
     if (error) {
       res.status(500).json({ error: 'Error al actualizar la disponibilidad' });
@@ -539,8 +492,58 @@ app.put('/modificar-resena/:id_resena', (req, res) => {
       console.log('Reseña modificada con éxito');
       res.status(200).json(resultado);
     }
+});
+});
+app.post('/agregar-visita', (req, res) => {
+  const visitaData = req.body;
+
+  agregarVisitaConSolicitud(visitaData, (error, result) => {
+    if (error) {
+      console.log("Error al agregar la visita", error);
+      res.status(500).json({ error: "Error interno al agregar la visita" });
+    } else {
+      console.log("Visita agregada con éxito con ID de solicitud", result);
+      res.status(200).json({ message: "Visita agregada con éxito" });
+    }
   });
 });
+
+app.post('/visitas-agendadas', (req, res) => {
+
+  const correoTrabajador = req.body.correoTrabajador;
+
+  if (!correoTrabajador) {
+    return res.status(400).json({ error: 'El correo del trabajador es requerido' });
+  }
+
+  visitasAgendadas(correoTrabajador, (err, result) => {
+    if (err) {
+      return res.status(500).json(err);
+    }
+    res.json(result);
+  });
+});
+
+app.post('/visitas-agendadas-cliente', (req, res) => {
+
+  const correoCliente = req.body.correoCliente;
+
+  if (!correoCliente) {
+    return res.status(400).json({ error: 'El correo del cliente es requerido' });
+  }
+
+  horasAgendadasParaCliente(correoCliente, (err, result) => {
+    if (err) {
+      return res.status(500).json(err);
+    }
+    res.json(result);
+  });
+});
+
+
+
+
+
 
 
 const puerto = 4001;

@@ -16,6 +16,10 @@
         *ngIf="datosTrabajador.length>0 && mostrarBotonSolicitar">
         <ion-icon [name]="esFavorito ? 'heart' : 'heart-outline'"></ion-icon>
       </ion-button>
+      <ion-button *ngIf="mostrarBotonAgregarServicio && datosServicio[0]?.disponibilidad=='ocupado'"
+        (click)="actualizarDisponibilidadUsuarioAutenticado()" class="btn-estado-disponible" >Disponible</ion-button>
+      <ion-button *ngIf="mostrarBotonAgregarServicio && datosServicio[0]?.disponibilidad=='disponible'"
+        (click)=" actualizarDisponibilidadUsuarioAutenticadoocupado()" class="btn-estado-ocupado">Ocupado</ion-button>
 
       <div class="user-profile">
         <ion-row responsive-sm>
@@ -47,8 +51,7 @@
               <h3>{{ datosTrabajador[0]?.nombre }} {{ datosTrabajador[0]?.apellidos }}</h3>
             </ion-label>
           </div>
-          <ion-button *ngIf="datosServicio.length > 0 " (click)="navigateToHistorialServicios()">Historial de
-            servicios</ion-button>
+
         </div>
         <p>Fecha de nacimiento: {{ datosTrabajador[0]?.fecha_nacimiento | date:'dd-MM-yyyy' }}</p>
         <p>{{datosTrabajador[0]?.des_perfil}}</p>
@@ -61,20 +64,25 @@
           (click)="goToFormularioDocumentacion()">Subir documentacion</ion-button>
       </div>
       <!-- boton para actualizar estado -->
-      <ion-button *ngIf="mostrarBotonAgregarServicio && datosServicio[0]?.disponibilidad=='ocupado'" (click)="actualizarDisponibilidadUsuarioAutenticado()"  >Disponible</ion-button>
-      <ion-button *ngIf="mostrarBotonAgregarServicio && datosServicio[0]?.disponibilidad=='disponible'" (click)=" actualizarDisponibilidadUsuarioAutenticadoocupado()">Ocupado</ion-button>
+
 
       <div style="text-align: center; padding-bottom: 5px;">
-        <ion-button *ngIf="datosTrabajador.length > 0 && mostrarBotonSolicitar" shape="round"
+        <ion-button *ngIf="datosTrabajador.length > 0 && mostrarBotonSolicitar && datosServicio[0]?.disponibilidad=='disponible'" shape="round"
           class="button-solicitar-servicio custom-buttonx" (click)="navigateToSolicitud()">Solicitar</ion-button> <br>
         <ion-button *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0" shape="round"
           class="button-solicitar-servicio custom-buttonx" (click)="agregarServicio()">Agregar Servicio</ion-button>
-        <ion-button *ngIf="datosTrabajador.length > 0 && mostrarBotonGestionarResenas" shape="round"
-            class="button" (click)="gestionarResenas()">Gestionar reseñas
+        <ion-button *ngIf="datosTrabajador.length > 0 && mostrarBotonGestionarResenas" shape="round" class="button"
+          (click)="gestionarResenas()">Gestionar reseñas
         </ion-button>
       </div>
     </ion-card>
     <br><br>
+    <div class="contenedor-btn-historial-serv">
+      <ion-button shape="round" *ngIf="datosServicio.length > 0 " class="btn-historial-servicios "
+        (click)="navigateToHistorialServicios()">
+        Historial de servicios
+      </ion-button>
+    </div>
 
     <ion-label class="titulo">
       <h1 *ngIf="datosServicio.length > 0">SERVICIOS</h1>

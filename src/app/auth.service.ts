@@ -235,6 +235,25 @@ export class AuthService {
     const data = { estado:nuevoEstado };
     return this.http.put(`${this.apiUrl}/emitir-reporte/${resenaId}`, data);
   }
+  modificarServicio(id_des_serv: string, serviceData: any): Observable<any> {
+    const url = `${this.apiUrl}/modificar_servicio/${id_des_serv}`;
+    return this.http.put(url, serviceData);
+  }
+
+  agregarVisitaConSolicitud(visitaData: any): Observable<any> {
+    const url = `${this.apiUrl}/agregar-visita`;
+    return this.http.post(url, visitaData);
+  }
+
+  getVisitasAgendadas(correoElectronico:string): Observable<any> {
+   
+    return this.http.post(`${this.apiUrl}/visitas-agendadas`, { correoTrabajador: correoElectronico });
+  }
+
+  visitasARecibir(correoElectronico:string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/visitas-agendadas-cliente`,{ correoCliente: correoElectronico });
+  }
+
   
 }
 

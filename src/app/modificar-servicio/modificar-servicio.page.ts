@@ -87,14 +87,12 @@ export class ModificarServicioPage implements OnInit {
     this.serviceData.id_region = this.obtenerIdRegion(this.serviceData.name_region);
 
     console.log('Datos de serviceData antes de enviar la solicitud HTTP:', this.serviceData);
-    this.http.put(`http://192.168.59.42:4002/modificar_servicio/${this.id_des_serv}`, this.serviceData).subscribe(
+    this.authService.modificarServicio(this.id_des_serv, this.serviceData).subscribe(
       (response) => {
         console.log('Servicio modificado con éxito', response);
         console.log('Así quedaron los datos modificados', this.serviceData);
         this.perfil_trabajador();
 
-        // Puedes redirigir al usuario a otra página después de modificar el servicio si es necesario
-        // this.router.navigate(['/otra-pagina']);
       },
       (error) => {
         console.error('Error al modificar el servicio', error);
@@ -103,21 +101,22 @@ export class ModificarServicioPage implements OnInit {
   }
 
   cargarRegiones() {
-    this.http.get('http://192.168.59.42:4002/obtener-regiones').subscribe((data: any) => {
+    this.authService.cargarRegiones().subscribe((data: any) => {
       this.regiones = data;
       console.log('Regiones cargadas con éxito', data);
     });
   }
 
   cargarComunas() {
-    this.http.get('http://192.168.59.42:4002/obtener-comunas').subscribe((data: any) => {
+    this.authService.cargarComunas().subscribe((data: any) => {
       this.comunas = data;
       console.log('Comunas cargadas con éxito', data);
     });
+
   }
 
   cargarServicios() {
-    this.http.get('http://192.168.59.42:4002/obtener-servicios').subscribe((data: any) => {
+    this.authService.cargarServicios().subscribe((data: any) => {
       this.servicios = data;
       console.log('Servicios cargados con éxito', data);
     });

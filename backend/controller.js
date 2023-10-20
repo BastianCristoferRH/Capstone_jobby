@@ -1,7 +1,17 @@
 const db = require('./db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 
+let transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true, 
+  auth: {
+    user: 'jobbyjobcompany@gmail.com',
+    pass: 'pgjy neox thrb cisl'
+  }
+});
 
 function registroUsuario(usuario, callback) {
   const sql = `INSERT INTO usuario (correo_electronico, nombre, apellidos, telefono, fecha_creacion, fecha_nacimiento, contrasena, img) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
@@ -23,6 +33,21 @@ function registroUsuario(usuario, callback) {
     } else {
       console.log("se ingresaron los valores con éxito: ", resultado);
       callback(null, resultado);
+      let mailOptions = {
+        from: 'tuCorreo@gmail.com',
+        to: usuario.correo_electronico,
+        subject: '¡Bienvenido a Jobby!',
+        text: 'Gracias por registrarte, ' + usuario.nombre + '. ¡Esperamos que disfrutes nuestros servicios!'
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log('Error al enviar correo:', error);
+        } else {
+          console.log('Correo enviado:', info.response);
+        }
+      });
+
     }
   });
 }
@@ -509,21 +534,21 @@ function agregarReseña(reseñaData, callback) {
 }
 
 
-function listarReseñaPorTrabajador(trabajadorId, callback){
+function listarReseñaPorTrabajador(trabajadorId, callback) {
   const query = `SELECT r.descripcion, r.calificacion from reseña r 
   JOIN solicitud s ON (r.id_solicitud = s.id_solicitud)
   JOIN trabajador t ON (s.id_trabajador = t.id_trabajador)
   WHERE s.id_trabajador = ?`;
 
   const valores = [trabajadorId];
-  db.query(query, valores,(error,result)=>{
+  db.query(query, valores, (error, result) => {
     if (error) {
       console.log("Error al obtener el listado de reseñas por trabajador");
-      callback(error,null);
-      
-    }else{
+      callback(error, null);
+
+    } else {
       console.log("éxito al obtener el listado de reseñas por trabajador");
-      callback(null,result);
+      callback(null, result);
     }
   });
 }
@@ -536,14 +561,14 @@ function listarReseña(correoElectronicoo, solicitudId, callback){
   JOIN trabajador t ON (s.id_trabajador = t.id_trabajador)
   WHERE t.correo_electronico = ? AND s.id_solicitud = ?`;
   const valores = [correoElectronicoo, solicitudId];
-  db.query(query, valores,(error, result)=>{
+  db.query(query, valores, (error, result) => {
     if (error) {
       console.log("Error al obtener la reseña");
-      callback(error,null);
+      callback(error, null);
 
-    }else{
+    } else {
       console.log("Reseña obtenida exitosamente");
-      callback(null,result);
+      callback(null, result);
     }
   });
 }
@@ -568,13 +593,13 @@ function obtenerResenas(correoElectronico,callback){
   JOIN trabajador t ON (s.id_trabajador = t.id_trabajador)
   WHERE t.correo_electronico = ?`;
   const valores = [correoElectronico]
-  
-  db.query(query, valores, (error, result)=>{
+
+  db.query(query, valores, (error, result) => {
     if (error) {
       console.log("Error al obtener las reseñas");
       callback(error, null);
-      
-    }else{
+
+    } else {
       console.log("Reseñas obtenidas correctamente");
       callback(null, result)
     }
@@ -774,13 +799,97 @@ function actualizarDisponibilidad(correo_electronico, disponibilidad, callback) 
   db.query(sql, [disponibilidad, correo_electronico], (error, results) => {
     if (error) {
       console.error('Error al ejecutar la consulta SQL:', error);
-      callback(error, null); 
+      callback(error, null);
     } else {
       console.log('Actualización exitosa:', results);
-      callback(null, results); 
+      callback(null, results);
     }
   });
 }
+
+function agregarVisitaConSolicitud(visitaData, callback) {
+  const query = `INSERT INTO agenda(titulo, descripcion, fecha, hora, id_solicitud) VALUES(?,?,?,?,?)`;
+  const valores = [
+    visitaData.titulo,
+    visitaData.descripcion,
+    visitaData.fecha,
+    visitaData.hora,
+    visitaData.id_solicitud
+  ];
+
+  db.query(query, valores, (error, result) => {
+    if (error) {
+      console.log("Error al insertar visita", error);
+      callback({ error: "Error al insertar la visita", details: error.message }, null);
+    } else {
+      console.log("Visita agregada con éxito con ID de solicitud");
+      callback(null, result);
+    }
+  });
+}
+
+function visitasAgendadas(correoTrabajador, callback) {
+  const query = `
+      SELECT 
+          trabajador.correo_electronico as correo_trabajador,
+          usuario.correo_electronico AS correo_usuario,
+          agenda.titulo,
+          agenda.descripcion,
+          agenda.fecha,
+          agenda.hora,
+          servicio.name_serv,
+          solicitud.des_solicitud
+      FROM solicitud
+      JOIN trabajador ON solicitud.id_trabajador = trabajador.id_trabajador
+      JOIN usuario ON usuario.correo_electronico = solicitud.correo_electronico
+      JOIN agenda ON solicitud.id_solicitud = agenda.id_agenda
+      JOIN descrip_servicio ON solicitud.id_des_serv = descrip_servicio.id_des_serv
+      JOIN servicio ON descrip_servicio.id_serv = servicio.id_serv 
+      WHERE trabajador.correo_electronico = ?`;
+
+  db.query(query, [correoTrabajador], (err, result) => {
+    if (err) {
+      console.error('Error al obtener las visitas agendadas:', err);
+      callback({ error: 'Error interno al obtener las visitas agendadas', details: err.message }, null);
+    } else {
+      console.log('Visitas agendadas obtenidas con éxito');
+      callback(null, result);
+    }
+  });
+}
+
+function horasAgendadasParaCliente(correoCliente, callback) {
+  const query = `
+      SELECT 
+          trabajador.correo_electronico as correo_trabajador,
+          usuario.correo_electronico AS correo_usuario,
+          agenda.titulo,
+          agenda.descripcion,
+          agenda.fecha,
+          agenda.hora,
+          servicio.name_serv,
+          solicitud.des_solicitud
+      FROM solicitud
+      JOIN trabajador ON solicitud.id_trabajador = trabajador.id_trabajador
+      JOIN usuario ON usuario.correo_electronico = solicitud.correo_electronico
+      JOIN agenda ON solicitud.id_solicitud = agenda.id_agenda
+      JOIN descrip_servicio ON solicitud.id_des_serv = descrip_servicio.id_des_serv
+      JOIN servicio ON descrip_servicio.id_serv = servicio.id_serv 
+      WHERE usuario.correo_electronico = ?`;
+
+  db.query(query, [correoCliente], (err, result) => {
+    if (err) {
+      console.error('Error al obtener las visitas agendadas:', err);
+      callback({ error: 'Error interno al obtener las visitas agendadas', details: err.message }, null);
+    } else {
+      console.log('Visitas agendadas obtenidas con éxito');
+      callback(null, result);
+    }
+  });
+}
+
+
+
 
 
 
@@ -855,5 +964,9 @@ module.exports = {
   loginAdmin,
   emitirReporteResena,
   getReseñasAdmin,
-  modificarResena
+  modificarResena,
+  agregarVisitaConSolicitud,
+  visitasAgendadas,
+  horasAgendadasParaCliente
+
 };

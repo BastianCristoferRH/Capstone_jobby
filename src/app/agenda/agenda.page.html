@@ -1,0 +1,58 @@
+<app-menu></app-menu>
+<div class="ion-page" id="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>JOBBY</ion-title>
+      <ion-buttons slot="end">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content [fullscreen]="true">
+
+
+    <ion-buttons>
+      <ion-button (click)="toggleList2()" *ngIf="showVisitasAgenda" class="button-lista">Visitas agendadas</ion-button>
+    </ion-buttons>
+    <ion-buttons>
+      <ion-button expand="full" (click)="toggleList()" *ngIf="showVisitasAgendas" class="button-lista">Visitas a Recibir</ion-button>
+    </ion-buttons>
+    <ion-list *ngIf="showVisitasAgendas">
+      <ion-card *ngFor="let visita of visitasAgendas">
+        <ion-card-header>
+          <ion-card-title>{{ visita.titulo }}</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <p>Correo trabajador: {{ visita.correo_trabajador }}</p>
+          <p>Correo usuario: {{ visita.correo_usuario }}</p>
+          <p>Descripción: {{ visita.descripcion }}</p>
+          <p>Fecha: {{ visita.fecha | date:'dd-MM-yyyy' }}</p>
+          <p>Hora: {{ visita.hora }}</p>
+          <p>Servicio: {{ visita.name_serv }}</p>
+          <p>Detalles solicitud: {{ visita.des_solicitud }}</p>
+        </ion-card-content>
+      </ion-card>
+    </ion-list>
+
+    <ion-list *ngIf="showVisitasAgenda">
+      <ion-card *ngFor="let visita of VisitasAgendadas">
+        <ion-card-header>
+          <ion-card-title>{{ visita.titulo }}</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <p>Correo trabajador: {{ visita.correo_trabajador }}</p>
+          <p>Correo usuario: {{ visita.correo_usuario }}</p>
+          <p>Descripción: {{ visita.descripcion }}</p>
+          <p>Fecha: {{ visita.fecha | date:'dd-MM-yyyy' }}</p>
+          <p>Hora: {{ visita.hora }}</p>
+          <p>Servicio: {{ visita.name_serv }}</p>
+          <p>Detalles solicitud: {{ visita.des_solicitud }}</p>
+        </ion-card-content>
+      </ion-card>
+    </ion-list>
+
+  </ion-content>
+</div>

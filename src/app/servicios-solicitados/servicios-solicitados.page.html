@@ -29,6 +29,9 @@
       <ion-button class="custom-button" *ngIf="solicitud.estado === 'pendiente'" (click)="aceptarSolicitud(solicitud.id_solicitud)">
         Aceptar Solicitud
       </ion-button>
+      <ion-button class="custom-button" *ngIf="solicitud.estado !== 'pendiente' && solicitud.estado !== 'Cerrado' && solicitud.estado !== 'Rechazado'" (click)="agendarVisita(solicitud.id_solicitud) ">
+        Agendar visita
+      </ion-button>
       <ion-button class="custom-button" *ngIf="solicitud.estado === 'gestionando'" (click)="aceptarEncargo(solicitud.id_solicitud)">
         Aceptar Encargo
       </ion-button>
