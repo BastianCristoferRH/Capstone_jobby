@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { agregarVisitaConSolicitud,actualizarDisponibilidad, listarFavoritos, verificarFavorito, eliminarServicio, agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador, agregarDocumentacionTrabajador, calcularPromedioCalificacionServicio, calcularPromedioCalificacionTrabajador } = require('./controller');
+const { visitasAgendadas, horasAgendadasParaCliente, agregarVisitaConSolicitud, actualizarDisponibilidad, listarFavoritos, verificarFavorito, eliminarServicio, agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador, agregarDocumentacionTrabajador, calcularPromedioCalificacionServicio, calcularPromedioCalificacionTrabajador } = require('./controller');
 const { ifError } = require('assert');
 
 
@@ -408,8 +408,8 @@ app.get('/promedio-calificaciones-trabajador/:correoElectronico', (req, res) => 
 });
 
 app.put('/actualizar-disponibilidad', (req, res) => {
-  const { correo_electronico, disponibilidad } = req.body; 
-  
+  const { correo_electronico, disponibilidad } = req.body;
+
   actualizarDisponibilidad(correo_electronico, disponibilidad, (error, results) => {
     if (error) {
       res.status(500).json({ error: 'Error al actualizar la disponibilidad' });
@@ -432,6 +432,42 @@ app.post('/agregar-visita', (req, res) => {
     }
   });
 });
+
+app.post('/visitas-agendadas', (req, res) => {
+
+  const correoTrabajador = req.body.correoTrabajador;
+
+  if (!correoTrabajador) {
+    return res.status(400).json({ error: 'El correo del trabajador es requerido' });
+  }
+
+  visitasAgendadas(correoTrabajador, (err, result) => {
+    if (err) {
+      return res.status(500).json(err);
+    }
+    res.json(result);
+  });
+});
+
+app.post('/visitas-agendadas-cliente', (req, res) => {
+
+  const correoCliente = req.body.correoCliente;
+
+  if (!correoCliente) {
+    return res.status(400).json({ error: 'El correo del cliente es requerido' });
+  }
+
+  horasAgendadasParaCliente(correoCliente, (err, result) => {
+    if (err) {
+      return res.status(500).json(err);
+    }
+    res.json(result);
+  });
+});
+
+
+
+
 
 
 

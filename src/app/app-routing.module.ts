@@ -108,6 +108,12 @@ const routes: Routes = [
     loadChildren: () => import('./agendar-visita-servicio/agendar-visita-servicio.module').then( m => m.AgendarVisitaServicioPageModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'agenda',
+    loadChildren: () => import('./agenda/agenda.module').then( m => m.AgendaPageModule),
+    canActivate: [AuthGuard],
+  },
+
 
 
 

@@ -60,6 +60,10 @@ export class MenuComponent {
     this.navigateTo('/listar-servicios');
   }
 
+  NavegarAgenda(){
+    this.navigateTo('agenda');
+  }
+
   private navigateTo(url: string) {
    
     window.location.href = url;

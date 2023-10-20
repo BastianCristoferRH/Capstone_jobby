@@ -743,6 +743,69 @@ function agregarVisitaConSolicitud(visitaData, callback) {
   });
 }
 
+function visitasAgendadas(correoTrabajador, callback) {
+  const query = `
+      SELECT 
+          trabajador.correo_electronico as correo_trabajador,
+          usuario.correo_electronico AS correo_usuario,
+          agenda.titulo,
+          agenda.descripcion,
+          agenda.fecha,
+          agenda.hora,
+          servicio.name_serv,
+          solicitud.des_solicitud
+      FROM solicitud
+      JOIN trabajador ON solicitud.id_trabajador = trabajador.id_trabajador
+      JOIN usuario ON usuario.correo_electronico = solicitud.correo_electronico
+      JOIN agenda ON solicitud.id_solicitud = agenda.id_agenda
+      JOIN descrip_servicio ON solicitud.id_des_serv = descrip_servicio.id_des_serv
+      JOIN servicio ON descrip_servicio.id_serv = servicio.id_serv 
+      WHERE trabajador.correo_electronico = ?`;
+
+  db.query(query, [correoTrabajador], (err, result) => {
+      if (err) {
+          console.error('Error al obtener las visitas agendadas:', err);
+          callback({ error: 'Error interno al obtener las visitas agendadas', details: err.message }, null);
+      } else {
+          console.log('Visitas agendadas obtenidas con éxito');
+          callback(null, result);
+      }
+  });
+}
+
+function horasAgendadasParaCliente(correoCliente, callback) {
+  const query = `
+      SELECT 
+          trabajador.correo_electronico as correo_trabajador,
+          usuario.correo_electronico AS correo_usuario,
+          agenda.titulo,
+          agenda.descripcion,
+          agenda.fecha,
+          agenda.hora,
+          servicio.name_serv,
+          solicitud.des_solicitud
+      FROM solicitud
+      JOIN trabajador ON solicitud.id_trabajador = trabajador.id_trabajador
+      JOIN usuario ON usuario.correo_electronico = solicitud.correo_electronico
+      JOIN agenda ON solicitud.id_solicitud = agenda.id_agenda
+      JOIN descrip_servicio ON solicitud.id_des_serv = descrip_servicio.id_des_serv
+      JOIN servicio ON descrip_servicio.id_serv = servicio.id_serv 
+      WHERE usuario.correo_electronico = ?`;
+
+  db.query(query, [correoCliente], (err, result) => {
+      if (err) {
+          console.error('Error al obtener las visitas agendadas:', err);
+          callback({ error: 'Error interno al obtener las visitas agendadas', details: err.message }, null);
+      } else {
+          console.log('Visitas agendadas obtenidas con éxito');
+          callback(null, result);
+      }
+  });
+}
+
+
+
+
 
 
 
@@ -781,4 +844,7 @@ module.exports = {
   listarReseña,
   obtenerResenas,
   agregarVisitaConSolicitud,
+  visitasAgendadas,
+  horasAgendadasParaCliente
+
 };

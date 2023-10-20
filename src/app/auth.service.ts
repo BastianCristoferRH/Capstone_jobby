@@ -240,6 +240,15 @@ export class AuthService {
     return this.http.post(url, visitaData);
   }
 
+  getVisitasAgendadas(correoElectronico:string): Observable<any> {
+   
+    return this.http.post(`${this.apiUrl}/visitas-agendadas`, { correoTrabajador: correoElectronico });
+  }
+
+  visitasARecibir(correoElectronico:string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/visitas-agendadas-cliente`,{ correoCliente: correoElectronico });
+  }
+
   
 }
 
