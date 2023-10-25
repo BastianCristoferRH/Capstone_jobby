@@ -58,12 +58,7 @@ export class PerfiltrabajadorPage implements OnInit {
 
   }
 
-  obtenerPromedioPorIdDesServ(servicioId:number, trabajadorId:number){
-    this.authService.getPromedioCalificacionesServicio(servicioId, trabajadorId).subscribe((dataAvgServicio: any) => {
-      console.log(dataAvgServicio[0]);
-      this.promedioServicio = dataAvgServicio[0].promedio_servicio;
-    })
-  }
+
 
 
   ngOnInit() {
@@ -78,7 +73,6 @@ export class PerfiltrabajadorPage implements OnInit {
       // Obtener datos del trabajador
       this.authService.loadTrabajadorData(this.correoElectronico).subscribe(
         (data: any) => {
-
           if (data.datosTrabajador.length > 0) {
             const trabajador = data.datosTrabajador[0];
             if (trabajador.img_base64 !== null) {
@@ -108,12 +102,12 @@ export class PerfiltrabajadorPage implements OnInit {
             
           }
 
-          this.obtenerPromedioPorIdDesServ(this.datosServicio[0].id_des_serv,this.datosServicio[0].id_trabajador)
+          
           
           
 
 
-          console.log('promedio servicioreklxD', this.promedioServicio);
+          
           this.datosTrabajador = data.datosTrabajador;
 
 

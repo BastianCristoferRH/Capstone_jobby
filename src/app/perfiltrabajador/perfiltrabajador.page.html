@@ -17,7 +17,7 @@
         <ion-icon [name]="esFavorito ? 'heart' : 'heart-outline'"></ion-icon>
       </ion-button>
       <ion-button *ngIf="mostrarBotonAgregarServicio && datosServicio[0]?.disponibilidad=='ocupado'"
-        (click)="actualizarDisponibilidadUsuarioAutenticado()" class="btn-estado-disponible" >Disponible</ion-button>
+        (click)="actualizarDisponibilidadUsuarioAutenticado()" class="btn-estado-disponible">Disponible</ion-button>
       <ion-button *ngIf="mostrarBotonAgregarServicio && datosServicio[0]?.disponibilidad=='disponible'"
         (click)=" actualizarDisponibilidadUsuarioAutenticadoocupado()" class="btn-estado-ocupado">Ocupado</ion-button>
 
@@ -62,118 +62,101 @@
         <p>Estado:{{datosServicio[0]?.disponibilidad}}</p>
         <ion-button *ngIf="mostrarBotonAgregarDocumentacion && datosTrabajador.length>0" shape="round" class="button"
           (click)="goToFormularioDocumentacion()">Subir documentacion</ion-button>
+          <ion-button *ngIf="datosTrabajador.length > 0 && mostrarBotonGestionarResenas" shape="round"
+            class="button" (click)="gestionarResenas()">Gestionar reseñas
+          </ion-button>
+
       </div>
       <!-- boton para actualizar estado -->
 
 
       <div style="text-align: center; padding-bottom: 5px;">
-        <ion-button *ngIf="datosTrabajador.length > 0 && mostrarBotonSolicitar" shape="round" class="button-solicitar-servicio custom-buttonx" (click)="navigateToSolicitud()">Solicitar</ion-button> <br>
-        <ion-button *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0" shape="round" class="button-solicitar-servicio custom-buttonx" (click)="agregarServicio()">Agregar Servicio</ion-button>
-        
-        <ion-button *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0" shape="round" class="button-solicitar-servicio custom-buttonx" (click)="agregarGaleria()">Agregar Foto a galeria</ion-button>
+        <ion-button *ngIf="datosTrabajador.length > 0 && mostrarBotonSolicitar" shape="round"
+          class="button-solicitar-servicio custom-buttonx" (click)="navigateToSolicitud()">Solicitar</ion-button> <br>
+        <ion-button *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0" shape="round"
+          class="button-solicitar-servicio custom-buttonx" (click)="agregarServicio()">Agregar Servicio</ion-button>
+
+        <ion-button *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0" shape="round"
+          class="button-solicitar-servicio custom-buttonx" (click)="agregarGaleria()">Agregar Foto a
+          galeria</ion-button>
       </div>
     </ion-card>
     <br><br>
-    
 
-    
 
-    <div >
-    <ion-segment [(ngModel)]="selectedTab" class="custom-card"> 
-     
+
+
+    <div>
+      <ion-segment [(ngModel)]="selectedTab" class="custom-card">
+
         <ion-segment-button value="tab1">
           <p class="bartab">SERVICIOS</p>
         </ion-segment-button>
-      
+
         <ion-segment-button value="tab2">
           <p class="bartab">GALERIA</p>
         </ion-segment-button>
-       
-    </ion-segment>
-      
+
+      </ion-segment>
+
       <div [ngSwitch]="selectedTab">
+
+
+
         <div *ngSwitchCase="'tab1'">
           <!-- Contenido de la Opción 1 -->
           <ion-card class="custom-card custom-white-background" *ngFor="let datos of datosServicio">
             <div class="div-tarjeta-servicio">
               <div class="div-tarjeta-servicio-for">
                 <div>
-                  
+
                   <h2 class="tipo_servicio_h2">{{ datos.name_serv }}</h2>
                   <img [src]="datos.img_portada_base64" style="padding-top: 1%;" class="img-serv">
                   <p style="text-align: center;">{{ datos.des_serv }}</p>
                   <p style="text-align: center;">{{ datos.name_comuna }},{{ datos.name_region }}</p>
                   <div class="star-container" style="text-align: center;">
-                    <ion-icon *ngFor="let i of getStarArray()" [name]="getStarIconAvgService(i, promedioServicio)" class="star-filled"></ion-icon>
+                    <ion-icon *ngFor="let i of getStarArray()" [name]="getStarIconAvgService(i, promedioServicio)"
+                      class="star-filled"></ion-icon>
                   </div>
-                  
+
                   <div style="text-align: center;">
                     <!-- Utilizamos Angular RouterLink para la navegación -->
                     <a [routerLink]="'/modificar-servicio/' + datos.id_des_serv">
-                      <ion-button shape="round" *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0" class="button-solicitar-servicio custom-buttonx" color="tertiary">
+                      <ion-button shape="round" *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0"
+                        class="button-solicitar-servicio custom-buttonx" color="tertiary">
                         <ion-icon name="create-outline"></ion-icon>
                       </ion-button>
                     </a>
-                    <ion-button shape="round" *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0" class="button-solicitar-servicio custom-buttonx" color="danger" (click)="confirmarEliminarServicio(datos.id_des_serv)">
+                    <ion-button shape="round" *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0"
+                      class="button-solicitar-servicio custom-buttonx" color="danger"
+                      (click)="confirmarEliminarServicio(datos.id_des_serv)">
                       <ion-icon name="trash-outline"></ion-icon>
                     </ion-button>
                   </div>
                 </div>
               </div>
-        <ion-button *ngIf="datosTrabajador.length > 0 && mostrarBotonSolicitar && datosServicio[0]?.disponibilidad=='disponible'" shape="round"
-          class="button-solicitar-servicio custom-buttonx" (click)="navigateToSolicitud()">Solicitar</ion-button> <br>
-        <ion-button *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0" shape="round"
-          class="button-solicitar-servicio custom-buttonx" (click)="agregarServicio()">Agregar Servicio</ion-button>
-        <ion-button *ngIf="datosTrabajador.length > 0 && mostrarBotonGestionarResenas" shape="round" class="button"
-          (click)="gestionarResenas()">Gestionar reseñas
-        </ion-button>
-      </div>
-    </ion-card>
-    <br><br>
-    <div class="contenedor-btn-historial-serv">
-      <ion-button shape="round" *ngIf="datosServicio.length > 0 " class="btn-historial-servicios "
-        (click)="navigateToHistorialServicios()">
-        Historial de servicios
-      </ion-button>
-    </div>
 
-    <ion-label class="titulo">
-      <h1 *ngIf="datosServicio.length > 0">SERVICIOS</h1>
-    </ion-label>
-
-
-    <ion-card class="custom-card custom-white-background" *ngFor="let datos of datosServicio">
-      <div class="div-tarjeta-servicio">
-        <div class="div-tarjeta-servicio-for">
-          <div>
-            <h2 class="tipo_servicio_h2">{{ datos.name_serv }}</h2>
-            <p style="text-align: center;">{{ datos.name_comuna }},{{ datos.name_region }}</p>
-            <div class="star-container">
-              <ion-icon *ngFor="let i of getStarArray()" [name]="getStarIconAvgService(i, promedioServicio)"
-                class="star-filled"></ion-icon>
+              <ion-button
+                *ngIf="datosTrabajador.length > 0 && mostrarBotonSolicitar && datosServicio[0]?.disponibilidad=='disponible'"
+                shape="round" class="button-solicitar-servicio custom-buttonx"
+                (click)="navigateToSolicitud()">Solicitar</ion-button> <br>
+              <!-- <ion-button *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0" shape="round"
+                class="button-solicitar-servicio custom-buttonx" (click)="agregarServicio()">Agregar
+                Servicio</ion-button> -->
+             
             </div>
-            <p style="text-align: center;">{{ datos.des_serv }}</p>
-            <div style="text-align: center;">
-              <!-- Utilizamos Angular RouterLink para la navegación -->
-              <a [routerLink]="'/modificar-servicio/' + datos.id_des_serv">
-                <ion-button shape="round" *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0"
-                  class="button-solicitar-servicio custom-buttonx" color="tertiary">
-                  <ion-icon name="create-outline"></ion-icon>
-                </ion-button>
-              </a>
-              <ion-button shape="round" *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0"
-                class="button-solicitar-servicio custom-buttonx" color="danger"
-                (click)="confirmarEliminarServicio(datos.id_des_serv)">
-                <ion-icon name="trash-outline"></ion-icon>
-              </ion-button>
-            </div>
+            
           </ion-card>
+          <br><br>
+          
+
+          
 
           <div *ngIf="datosServicio.length === 0">
             <h2 style="color: white; text-align: center;">NO POSEE SERVICIOS</h2>
           </div>
 
-        </div>
+        </div> <!-- fin switch 1-->
 
 
         <div *ngSwitchCase="'tab2'">
@@ -182,13 +165,15 @@
             <div class="div-tarjeta-servicio">
               <div class="div-tarjeta-servicio-for">
                 <div>
-                  
+
                   <img [src]="datos.img_galeria_base64" style="padding-top: 1%;" class="img-serv">
                   <p style="text-align: center;">{{ datos.descripcion }}</p>
-                  
+
                   <div style="text-align: center;">
                     <!-- Utilizamos Angular RouterLink para la navegación -->
-                    <ion-button shape="round" *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0" class="button-solicitar-servicio custom-buttonx" color="danger" (click)="confirmarEliminarGaleria(datos.id_foto)">
+                    <ion-button shape="round" *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0"
+                      class="button-solicitar-servicio custom-buttonx" color="danger"
+                      (click)="confirmarEliminarGaleria(datos.id_foto)">
                       <ion-icon name="trash-outline"></ion-icon>
                     </ion-button>
                   </div>
@@ -202,16 +187,16 @@
           </div>
 
 
-        </div>
+        </div> <!-- fin switch 2-->
 
-        </div>
       </div>
-      
-    
+    </div>
 
 
 
-    
+
+
+
 
 
 
