@@ -69,7 +69,7 @@ const routes: Routes = [
   },
   {
 
-    path: 'agregar-resena/:id_solicitud',
+    path: 'perfil/:correoElectronico/agregar-resena/:id_solicitud',
     loadChildren: () => import('./agregar-resena/agregar-resena.module').then( m => m.AgregarResenaPageModule),
     canActivate: [AuthGuard],
   },
@@ -93,6 +93,36 @@ const routes: Routes = [
     loadChildren: () => import('./subida-galeria/subida-galeria.module').then( m => m.SubidaGaleriaPageModule),
     canActivate: [AuthGuard],
   },
+  {
+
+    path: 'trabajador/:correoElectronico/historial-trabajador',
+    loadChildren: () => import('./historial-trabajador/historial-trabajador.module').then( m => m.HistorialTrabajadorPageModule),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'trabajador/:correoElectronico/historial-trabajador/resena-info/:correoElectronicoo/:solicitudId',
+    loadChildren: () => import('./resena-info/resena-info.module').then( m => m.ResenaInfoPageModule),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'trabajador/:correoElectronico/gestionar-resenas',
+    loadChildren: () => import('./gestionar-resenas/gestionar-resenas.module').then( m => m.GestionarResenasPageModule),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'agendar-visita-servicio/:id_solicitud',
+    loadChildren: () => import('./agendar-visita-servicio/agendar-visita-servicio.module').then( m => m.AgendarVisitaServicioPageModule),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'agenda',
+    loadChildren: () => import('./agenda/agenda.module').then( m => m.AgendaPageModule),
+    canActivate: [AuthGuard],
+  },
+
+
+
+
 
 
 

@@ -1,0 +1,29 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>gestionar-resenas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">gestionar-resenas</ion-title>
+    </ion-toolbar>
+  </ion-header>
+<div class="row" *ngFor="let resena of resenaData">
+  <div *ngIf="resena.estado != 'reportado'">
+    <div class="column" style="margin-top:10%">
+      <h1>Comentario del cliente:</h1>
+      <p>{{ resena.descripcion }}</p>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="star-container" style="text-align: center; flex: 1;">
+          <ion-icon *ngFor="let i of getStarArray()" [name]="getStarIcon(i, resena.calificacion)" class="star-filled"></ion-icon>
+        </div>
+        <ion-button (click)="emitirReporte(resena.id_resena)">Emitir reporte</ion-button>
+      </div>
+
+    </div>
+</div>
+</div>
+ 
+</ion-content>

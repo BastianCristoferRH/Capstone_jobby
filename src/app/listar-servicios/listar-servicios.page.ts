@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
@@ -13,7 +12,6 @@ export class ListarServiciosPage implements OnInit {
   listaServicios: any[] = [];
   terminoBusqueda: string = '';
   constructor(
-    private http: HttpClient,
     private authService: AuthService,
     private router: Router,
     private sanitizer: DomSanitizer
@@ -53,6 +51,7 @@ export class ListarServiciosPage implements OnInit {
   }
  
 
+
   // Función para filtrar la lista de servicios
   filtrarServicios() {
     const terminoBusquedaLowerCase = this.terminoBusqueda.toLowerCase().split(' ');
@@ -88,5 +87,14 @@ export class ListarServiciosPage implements OnInit {
     }
     
   }
+  // doRefresh(event) {
+  //   console.log('Begin async operation');
+
+  //   setTimeout(() => {
+  //     console.log('Async operation has ended');
+  //     event.target.complete();
+  //   }, 500);
+  // }
+
 }
 

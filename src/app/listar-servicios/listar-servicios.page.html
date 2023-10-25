@@ -7,12 +7,13 @@
       <ion-buttons slot="end">
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
-      
+
     </ion-toolbar>
 
   </ion-header>
   <ion-content [fullscreen]="true">
-    <ion-searchbar [(ngModel)]="terminoBusqueda" (ionChange)="filtrarServicios()"(ionClear)="limpiarFiltro()"  placeholder="Buscar"></ion-searchbar>
+    <ion-searchbar [(ngModel)]="terminoBusqueda" (ionChange)="filtrarServicios()" (ionClear)="limpiarFiltro()"
+      placeholder="Buscar"></ion-searchbar>
     <button class="btn-busqueda" (click)="buscarServicios()">Buscar</button>
     <ion-header collapse="condense">
     </ion-header>
@@ -34,3 +35,9 @@
 
 
 </div>
+
+<!-- <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+  <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Pull to refresh"
+    refreshingSpinner="circles" refreshingText="Refreshing...">
+  </ion-refresher-content>
+</ion-refresher> -->

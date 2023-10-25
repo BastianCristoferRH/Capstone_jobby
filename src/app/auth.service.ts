@@ -209,6 +209,17 @@ export class AuthService {
     const url = `${this.apiUrl}/agregar-resena`;
     return this.http.post(url, reseñaData);
   }
+
+  obtenerResenas(correoElectronico:string): Observable<any>{
+    return this.http.get(`${this.apiUrl}/obtener-resenas/${correoElectronico}`);
+  }
+
+
+
+  obtenerResena(correoElectronico: string, solicitudId:string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/listar-resena/${correoElectronico}/${solicitudId}`);   
+    ///listar-resena/:resenaId/:solicitudId
+  }
   agregarDocumentacionTrabajador(documentData:any):Observable<any>{
     const url =  `${this.apiUrl}/agregar-documentacion`;
     return this.http.post(url,documentData);
@@ -216,7 +227,7 @@ export class AuthService {
 
 
 
-  getPromedioCalificacionesServicio(idServicio:string, trabajadorId:string): Observable<any> {
+  getPromedioCalificacionesServicio(idServicio:number, trabajadorId:number): Observable<any> {
     return this.http.get(`${this.apiUrl}/promedio-calificacion-servicio/${idServicio}/${trabajadorId}`);
   }
 
@@ -224,6 +235,37 @@ export class AuthService {
   getPromedioCalificacionesTrabajador(correoElectronico:string): Observable<any> {
     return this.http.get(`${this.apiUrl}/promedio-calificaciones-trabajador/${correoElectronico}`);
   }
+  actualizarDisponibilidad(correo_electronico: string, disponibilidad: string): Observable<any> {
+    const url = `${this.apiUrl}/actualizar-disponibilidad`;
+    const data = { correo_electronico, disponibilidad };
+    console.log(correo_electronico,disponibilidad);
+    return this.http.put(url, data);
+  }
+
+  actualizarEstadoResena(resenaId: number, nuevoEstado: string): Observable<any>{
+    const data = { estado:nuevoEstado };
+    return this.http.put(`${this.apiUrl}/emitir-reporte/${resenaId}`, data);
+  }
+  modificarServicio(id_des_serv: string, serviceData: any): Observable<any> {
+    const url = `${this.apiUrl}/modificar_servicio/${id_des_serv}`;
+    return this.http.put(url, serviceData);
+  }
+
+  agregarVisitaConSolicitud(visitaData: any): Observable<any> {
+    const url = `${this.apiUrl}/agregar-visita`;
+    return this.http.post(url, visitaData);
+  }
+
+  getVisitasAgendadas(correoElectronico:string): Observable<any> {
+   
+    return this.http.post(`${this.apiUrl}/visitas-agendadas`, { correoTrabajador: correoElectronico });
+  }
+
+  visitasARecibir(correoElectronico:string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/visitas-agendadas-cliente`,{ correoCliente: correoElectronico });
+  }
+
+  
 }
 
 

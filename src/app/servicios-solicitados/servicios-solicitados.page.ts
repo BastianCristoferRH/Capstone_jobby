@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
-import { Router, ActivatedRoute } from '@angular/router'; 
+import { Router, ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-servicios-solicitados',
   templateUrl: './servicios-solicitados.page.html',
@@ -14,7 +14,7 @@ export class ServiciosSolicitadosPage implements OnInit {
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -110,4 +110,13 @@ export class ServiciosSolicitadosPage implements OnInit {
       }
     );
   }
+
+  agendarVisita(id_solicitud: number) {
+    this.navigateTo('/agendar-visita-servicio/' + id_solicitud);
+  }
+  private navigateTo(url: string) {
+
+    window.location.href = url;
+  }
 }
+

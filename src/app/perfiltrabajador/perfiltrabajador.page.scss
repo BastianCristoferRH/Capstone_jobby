@@ -122,3 +122,27 @@ ion-icon {
 .unfilled {
   color: gray; /* Color de las estrellas vacías */
 }
+
+.btn-historial-servicios{
+ 
+  text-align: center;
+  --background: orange;
+  color: red;
+  
+  margin-bottom: 2%;
+}
+
+.contenedor-btn-historial-serv{
+  display: flex;
+  justify-content: center;
+}
+
+.btn-estado-ocupado{
+  --background: red;
+  color: white;
+
+}
+.btn-estado-disponible{
+  --background: orange;
+  color: red;
+}

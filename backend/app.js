@@ -2,9 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { listarFavoritos,verificarFavorito,eliminarGaleria,eliminarServicio,agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio,agregarGaleria, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador,obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador,agregarDocumentacionTrabajador,calcularPromedioCalificacionServicio,calcularPromedioCalificacionTrabajador } = require('./controller');
+const { visitasAgendadas, horasAgendadasParaCliente, eliminarGaleria,agregarGaleria, agregarVisitaConSolicitud, actualizarDisponibilidad, listarFavoritos, verificarFavorito, eliminarServicio, agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador, agregarDocumentacionTrabajador, calcularPromedioCalificacionServicio, calcularPromedioCalificacionTrabajador,listarReseñaPorTrabajador, listarReseña, obtenerResenas } = require('./controller');
 const { ifError } = require('assert');
-
+const controller = require('./controller.js');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 
 
@@ -31,6 +33,36 @@ app.post('/registro', (req, res) => {
   });
 });
 
+//registro admin
+app.post('/registro-admin', (req, res) => {
+  const datosAdmin = req.body;
+
+  registroAdmin(datosAdmin, (error, resultado) => {
+    if (error) {
+      console.log("error json registro", error);
+      res.status(500).json({ error: 'error al registar usuario', error });
+    } else {
+      console.log("exito al ingresar los datos");
+      res.status(201).json({ mensaje: "Usuario registrado con exito" });
+    }
+  });
+});
+
+
+app.post('/login-admin', (req, res) => {
+  const datosAdmin = req.body;
+
+  loginAdmin(datosAdmin, (error, resultado) => {
+    if (error) {
+      console.log("Error en el inicio de sesión: ", error);
+      res.status(401).json(error);
+    } else {
+      console.log("Inicio de sesión exitoso");
+      res.status(200).json(resultado);
+    }
+  });
+});
+
 app.post('/login', (req, res) => {
   const datosUsuario = req.body;
 
@@ -44,6 +76,8 @@ app.post('/login', (req, res) => {
     }
   });
 });
+
+
 
 app.post('/agregar_servicio', (req, res) => {
   const serviceData = req.body;
@@ -120,9 +154,6 @@ app.delete('/eliminar_servicio/:id_des_serv', (req, res) => {
     }
   });
 });
-
-
-
 
 
 app.get('/usuario/:correo', (req, res) => {
@@ -291,14 +322,14 @@ app.put('/actualizar-solicitud/:id', (req, res) => {
 
 app.post('/agregar-resena', (req, res) => {
   const reseñaData = req.body;
-  
+
   agregarReseña(reseñaData, (error, result) => {
     if (error) {
       return res.status(500).json({ error: 'Error al agregar reseña' });
-    }else{
+    } else {
       return res.status(200).json({ mensaje: 'Reseña agregada con éxito' });
     }
-    
+
   });
 });
 
@@ -359,7 +390,7 @@ app.post('/agregar-favorito', (req, res) => {
     return res.status(400).json({ error: 'Falta información requerida.' });
   }
 
-  agregarFavorito(req, res); 
+  agregarFavorito(req, res);
 });
 
 app.post('/quitar-favorito', (req, res) => {
@@ -386,19 +417,19 @@ app.post('/listar-favoritos', (req, res) => {
 
 
 
-app.post('/agregar-documentacion', (req, res)=>{
+app.post('/agregar-documentacion', (req, res) => {
   const trabajadorId = req.params.id_solicitud;
   const documentData = req.body;
 
-  agregarDocumentacionTrabajador(documentData,(error,result)=>{
-      if (error) {
-        console.log("Error al agregar documentacion", error);
-        res.status(500).json({error:"Error interno al agregar documentacion"});
-      }else{
-        console.log("Documentacion agregada con exito", result);
-        res.status(200).json({message:"Documentacion agregada con exito"});
-      }
+  agregarDocumentacionTrabajador(documentData, (error, result) => {
+    if (error) {
+      console.log("Error al agregar documentacion", error);
+      res.status(500).json({ error: "Error interno al agregar documentacion" });
+    } else {
+      console.log("Documentacion agregada con exito", result);
+      res.status(200).json({ message: "Documentacion agregada con exito" });
     }
+  }
   );
 });
 
@@ -406,16 +437,16 @@ app.post('/agregar-documentacion', (req, res)=>{
 
 
 
-app.get('/promedio-calificacion-servicio/:id_des_serv/:id_trabajador', (req, res)=>{
+app.get('/promedio-calificacion-servicio/:id_des_serv/:id_trabajador', (req, res) => {
   const idServicio = req.params.id_des_serv;
   const trabajadorId = req.params.id_trabajador;
-  calcularPromedioCalificacionServicio(idServicio,trabajadorId, (error, result)=>{
+  calcularPromedioCalificacionServicio(idServicio, trabajadorId, (error, result) => {
     if (error) {
-      console.log("Error al obtener el promedio de calificaciones por servicio",error);
-      return res.status(500).json({error:"Error interno al obtener promedio de calificaciones"});
-      
-    }else{
-      console.log("Promedio de calificaciones por servicio obtenido con éxito",result);
+      console.log("Error al obtener el promedio de calificaciones por servicio", error);
+      return res.status(500).json({ error: "Error interno al obtener promedio de calificaciones" });
+
+    } else {
+      console.log("Promedio de calificaciones por servicio obtenido con éxito", result);
       return res.status(200).json(result);
     }
   });
@@ -424,27 +455,132 @@ app.get('/promedio-calificacion-servicio/:id_des_serv/:id_trabajador', (req, res
 
 
 
-app.get('/promedio-calificaciones-trabajador/:correoElectronico',(req,res)=>{
+app.get('/promedio-calificaciones-trabajador/:correoElectronico', (req, res) => {
   const correoElectronico = req.params.correoElectronico;
-  calcularPromedioCalificacionTrabajador(correoElectronico, (error, result)=>{
+  calcularPromedioCalificacionTrabajador(correoElectronico, (error, result) => {
     if (error) {
       console.log("Error al obtener el promedio de calificaciones por trabajador", error);
-      return res.status(500).json({error:"Error interno al obtener promedio de calificaciones por trabajador"});
+      return res.status(500).json({ error: "Error interno al obtener promedio de calificaciones por trabajador" });
 
-      
-    }else{
+
+    } else {
       console.log("Promedio de calificaciones por trabajador obtenido con éxito", result);
       return res.status(200).json(result);
     }
   })
 });
 
+app.put('/actualizar-disponibilidad', (req, res) => {
+  const { correo_electronico, disponibilidad } = req.body;
+
+  actualizarDisponibilidad(correo_electronico, disponibilidad, (error, results) => {
+    if (error) {
+      res.status(500).json({ error: 'Error al actualizar la disponibilidad' });
+    } else {
+      res.status(200).json({ message: 'Disponibilidad actualizada con éxitoo' });
+    }
+  });
+});
+
+app.put('/emitir-reporte/:id_resena', (req, res) => {
+  const nuevoEstado  = req.body.estado;
+  const resenaId = req.params.id_resena;
+  emitirReporteResena(resenaId, nuevoEstado,  (error, results) => {
+    if (error) {
+      console.log("Error al emitir el reporte");
+      res.status(500).json(error);
+    }else{
+      console.log("reporte emitido correctamente", nuevoEstado);
+      res.status(200).json(results);
+    }
+  })
+})
+
+app.get('/obtener-resenas-admin', (req, res) => {
+  getReseñasAdmin((error, result)=>{
+    if (error) {
+      console.log("Error al obtener las reseñas reportadas");
+      res.status(500).json(error);
+    }else{
+      console.log("Reseñas reportadas obtenidas con exito");
+      res.status(200).json(result);
+    }
+  })
+}
+)
+
+
+app.put('/modificar-resena/:id_resena', (req, res) => {
+  const resenaId = req.params.id_resena;
+  const resenaData = req.body;
+  modificarResena(resenaId, resenaData, (error, resultado) => {
+    if (error) {
+      console.error('Error al modificar la reseña:', error);
+      res.status(500).json(error);
+    } else {
+      console.log('Reseña modificada con éxito');
+      res.status(200).json(resultado);
+    }
+});
+});
+app.post('/agregar-visita', (req, res) => {
+  const visitaData = req.body;
+
+  agregarVisitaConSolicitud(visitaData, (error, result) => {
+    if (error) {
+      console.log("Error al agregar la visita", error);
+      res.status(500).json({ error: "Error interno al agregar la visita" });
+    } else {
+      console.log("Visita agregada con éxito con ID de solicitud", result);
+      res.status(200).json({ message: "Visita agregada con éxito" });
+    }
+  });
+});
+
+app.post('/visitas-agendadas', (req, res) => {
+
+  const correoTrabajador = req.body.correoTrabajador;
+
+  if (!correoTrabajador) {
+    return res.status(400).json({ error: 'El correo del trabajador es requerido' });
+  }
+
+  visitasAgendadas(correoTrabajador, (err, result) => {
+    if (err) {
+      return res.status(500).json(err);
+    }
+    res.json(result);
+  });
+});
+
+app.post('/visitas-agendadas-cliente', (req, res) => {
+
+  const correoCliente = req.body.correoCliente;
+
+  if (!correoCliente) {
+    return res.status(400).json({ error: 'El correo del cliente es requerido' });
+  }
+
+  horasAgendadasParaCliente(correoCliente, (err, result) => {
+    if (err) {
+      return res.status(500).json(err);
+    }
+    res.json(result);
+  });
+});
+
+
+
+
+
+
+
 const puerto = 4001;
 
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:8100'); // Permite solicitudes desde localhost:8100
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  res.header('Access-Control-Allow-Methods', 'POST'); // Puedes ajustar los métodos permitidos según tus necesidades
+  res.header('Access-Control-Allow-Origin', '*'); // Permite solicitudes desde localhost:8100
+  res.header('Access-Control-Allow-Headers', '*');
+  res.header('Access-Control-Allow-Methods', '*'); // Puedes ajustar los métodos permitidos según tus necesidades
   next();
 });
 
