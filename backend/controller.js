@@ -326,16 +326,18 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) {
   });
 }
 
+
 function agregarServicio(serviceData, callback) {
 
-  const query = 'INSERT INTO descrip_servicio (des_serv, presencial, id_trabajador, id_serv, id_comuna, id_region) VALUES (?, ?, ?, ?, ?, ?)';
+  const query ='INSERT INTO descrip_servicio (des_serv, presencial, id_trabajador, id_serv, id_comuna, id_region, img_portada) VALUES (?, ?, ?, ?, ?, ?, ?)';
   const valores = [
     serviceData.des_serv,
     serviceData.presencial,
     serviceData.id_trabajador,
     serviceData.id_serv,
     serviceData.id_comuna,
-    serviceData.id_region
+    serviceData.id_region,
+    serviceData.img_portada
   ];
 
   db.query(query, valores, (err, result) => {
@@ -350,6 +352,49 @@ function agregarServicio(serviceData, callback) {
   })
 
 };
+
+
+
+//Funcion Agregar imagen a Galeria
+function agregarGaleria(galleryData, callback) {
+
+  const query ='INSERT INTO `foto_servicio`(`foto`, `id_trabajador`, `descripcion`) VALUES ( ?, ?, ?)';
+  const valores = [
+    galleryData.foto,
+    galleryData.id_trabajador,
+    galleryData.descripcion
+  ];
+
+  db.query(query, valores, (err, result)=>{
+    if (err) {
+      console.error('Error al agregar a galeria:', err);
+      callback({ error: 'Error interno al agregar a galeria', details: err.message }, null);
+    } else {
+      console.log('Foto agregada con éxito a galeria');
+      callback(null, { message: 'Foto agregada con éxito a galeria' },result);
+    }
+
+  })
+    
+};
+
+
+function eliminarGaleria(id_foto, callback) {
+  const sqlEliminarGaleria = 'DELETE FROM foto_servicio WHERE id_foto = ?';
+  const valores = [id_foto];
+
+  db.query(sqlEliminarGaleria, valores, (err, resultado) => {
+    if (err) {
+      console.error('Error al eliminar la galería:', err);
+      callback({ error: 'Error interno al eliminar la galería', details: err.message });
+    } else {
+      console.log('Galería eliminada con éxito');
+      callback(null, { mensaje: 'Galería eliminada con éxito' });
+    }
+  });
+}
+
+//Fin de funcion Agregar imagen a Galeria
 
 function obtenerServiciosSolicitadosPorTrabajador(correoElectronico, callback) {
   const sql = `
@@ -514,8 +559,8 @@ function obtenerServicios(callback) {
 
 }
 
-function listarServicios(callback) {
-  const query = `SELECT ds.des_serv, ds.presencial, t.correo_electronico, t.disponibilidad, name_serv, name_comuna, name_region 
+function listarServicios(callback){
+  const query = `SELECT ds.des_serv, ds.presencial, TO_BASE64(UNHEX(img_portada)) AS img_portada_base64, t.correo_electronico, t.disponibilidad, name_serv, name_comuna, name_region 
   FROM descrip_servicio ds JOIN trabajador t ON(ds.id_trabajador = t.id_trabajador) 
   JOIN servicio s ON(ds.id_serv = s.id_serv) 
   JOIN region r ON(ds.id_region = r.id_region)
@@ -937,8 +982,8 @@ function emitirReporteResena(resenaId, nuevoEstado, callback){
 }
 
 function modificarResena(resenaId, resenaData, callback){
-  db.query('UPDATE reseña SET descripcion = ?, estado = ? WHERE id_reseña = ?',
-    [resenaData.descripcion, resenaData.estado,resenaId], 
+  db.query('UPDATE reseña SET id_reseña = ?, descripcion = ?, calificacion = ?, estado = ?, id_solicitud = ?, created_at = ?, updated_at = ? WHERE id_reseña = ?',
+    [resenaData.id_reseña,resenaData.descripcion,resenaData.calificacion, resenaData.estado, resenaData.id_solicitud, resenaData.created_at,resenaData.updated_at, resenaId], 
     (err, result) => {
       if (err) {
         console.error('Error al modificar la reseña:', err);
@@ -954,6 +999,11 @@ function modificarResena(resenaId, resenaData, callback){
       }
     }
   );
+
+
+
+
+
 }
 
 
@@ -961,6 +1011,7 @@ module.exports = {
   registroUsuario,
   iniciarSesion,
   agregarServicio,
+  agregarGaleria,
   modificarServicio,
   obtenerDatosUsuarioPorCorreo,
   enviarSolicitud,
@@ -985,6 +1036,7 @@ module.exports = {
   listarFavoritos,
   calcularPromedioCalificacionServicio,
   calcularPromedioCalificacionTrabajador,
+  eliminarGaleria,
   actualizarDisponibilidad,
   listarReseñaPorTrabajador,
   listarReseña,
@@ -996,6 +1048,7 @@ module.exports = {
   modificarResena,
   agregarVisitaConSolicitud,
   visitasAgendadas,
-  horasAgendadasParaCliente
+  horasAgendadasParaCliente,
+  obtenerResenaEspecifica
 
 };

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../auth.service';
-
+import { AlertController } from '@ionic/angular';
 @Component({
   selector: 'app-gestionar-resenas',
   templateUrl: './gestionar-resenas.page.html',
@@ -14,12 +14,13 @@ export class GestionarResenasPage implements OnInit {
   resenaData: any[]=[];
   correoElectronico: string = '';
   constructor(private route: ActivatedRoute,
-    private authService: AuthService) { }
+    private authService: AuthService,
+    private alertController: AlertController) { }
 
 
   getStarData(calificacion: number): { enteras: number, fraccion: number } {
-    const enteras = Math.floor(calificacion); // Parte entera
-    const fraccion = calificacion - enteras; // Parte fraccionaria
+    const enteras = Math.floor(calificacion);
+    const fraccion = calificacion - enteras;
     return { enteras, fraccion };
     
   }
@@ -36,29 +37,50 @@ export class GestionarResenasPage implements OnInit {
     });
   }
 
-  emitirReporte(resenaId: number) {
-    this.authService.actualizarEstadoResena(resenaId,'reportado').subscribe(
-      (data: any) => {
-        console.log(resenaId);
-        console.log('Reporte emitido con exito');
-        location.reload();
-      (error: any) => {
-        console.error('Error al emitir el reporte:', error);
-      }}
-    );
-  }
+
+    async emitirReporte(resenaId: number) {
+      const alert = await this.alertController.create({
+        header: 'Estás seguro que deseas reportar esta reseña?',
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancelado');
+            }
+          },
+          {
+            text: 'Sí',
+            handler: () => {
+              console.log('Reporte emitido con éxito');
+              this.authService.actualizarEstadoResena(resenaId, 'reportado').subscribe(
+                (data: any) => {
+                  location.reload();
+                },
+                (error: any) => {
+                  console.error('Error al emitir el reporte:', error);
+                }
+              );
+            }
+          }
+        ]
+      });
+    
+      await alert.present();
+    }
+    
+  
 
   getStarArray(): number[] {
     return [1, 2, 3, 4, 5];
   }
   getStarIcon(index: number, calificacion: number): string {
-    // Determina el nombre del ícono de estrella (star, star-half o star-outline) en función de 'index' y 'promedio'
     if (index <= Math.floor(calificacion)) {
-      return 'star'; // Estrella completa
+      return 'star';
     } else if (index === Math.ceil(calificacion)) {
-      return 'star-half'; // Media estrella si el índice es igual al valor entero más cercano del promedio
+      return 'star-half'; 
     } else {
-      return 'star-outline'; // Estrella vacía
+      return 'star-outline';
     }
   }
 

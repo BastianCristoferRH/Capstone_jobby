@@ -128,10 +128,21 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/agregar_servicio`, serviceData);
   }
 
+  agregarGaleria(galleryData: any): Observable<any> {
+
+    return this.http.post(`${this.apiUrl}/agregar_a_galeria`, galleryData);
+  }
+  
   // Eliminar servicios
   eliminarServicio(id_des_serv: number): Observable<any> {
 
     return this.http.delete(`${this.apiUrl}/eliminar_servicio/${id_des_serv}`);
+  }
+
+  // Eliminar Galeria
+  eliminarGaleria(id_foto: number): Observable<any> {
+
+    return this.http.delete(`${this.apiUrl}/eliminar_galeria/${id_foto}`);
   }
 
 

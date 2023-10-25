@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-listar-servicios',
@@ -12,11 +13,16 @@ export class ListarServiciosPage implements OnInit {
   terminoBusqueda: string = '';
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private sanitizer: DomSanitizer
   ) { }
+
+
+
 
   ngOnInit() {
     this.cargarListadoServicios();
+
   }
 
   perfil_trabajador(correoElectronico: string) {
@@ -27,13 +33,23 @@ export class ListarServiciosPage implements OnInit {
   cargarListadoServicios() {
     this.authService.cargarListadoServicios().subscribe((data: any) => {
       this.listaServicios = data;
+
+      // Luego, itera a través de los servicios y convierte las imágenes base64 en URLs seguras
+      this.listaServicios.forEach((element) => {
+        if (element.img_portada_base64 !== null) {
+          element.img_portada_base64 = this.sanitizer.bypassSecurityTrustUrl('data:image/jpeg;base64,' + element.img_portada_base64);
+        }
+      });
+
       console.log(this.listaServicios);
     });
   }
+  
   navegarAPerfilTrabajador(correoElectronico: string) {
     const perfilTrabajadorUrl = `/trabajador/${correoElectronico}`;
     this.router.navigate([perfilTrabajadorUrl]);
   }
+ 
 
 
   // Función para filtrar la lista de servicios

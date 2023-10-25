@@ -19,6 +19,8 @@ ion-button.custom-button {
   margin-top: 2%;
 }
 
+
+
 .user-avatar {
   max-width: 250px;
   height: 250px;
@@ -26,6 +28,10 @@ ion-button.custom-button {
   filter: drop-shadow(3px 4px 4px #444);
   margin: 0 auto;
   border-radius: 50%;
+}
+
+.img-serv {
+  border-radius: 5px;
 }
 
 
@@ -36,8 +42,8 @@ ion-button.custom-button {
 
 .user-card {
 
-  width: 80%;
-  max-width: 80%;
+  width: 90%;
+  max-width: 90%;
   margin: 0 auto;
   margin-top: 5%;
   background-color: rgba(255, 255, 255, 0.7);
@@ -49,7 +55,6 @@ ion-button.custom-button {
 .custom-buttonx {
   --background: orange;
   color: red; 
-  width: 40%;
 }
 
 
@@ -58,6 +63,7 @@ ion-button.custom-button {
   max-width: 90%;
   margin: 0 auto;
   margin-top: 2%;
+  margin-bottom: 1%;
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
@@ -75,6 +81,13 @@ ion-button.custom-button {
 
 }
 
+.bartab{
+  text-align: center;
+  color: rgb(0, 0, 0);
+
+
+}
+
 
 
 .div-tarjeta-servicio{
@@ -82,6 +95,8 @@ ion-button.custom-button {
   color:black;
   border: solid 1px red;
 }
+
+
 
 .tipo_servicio_h2{
   text-align: center;
