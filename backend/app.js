@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { loginAdmin,visitasAgendadas, horasAgendadasParaCliente, agregarVisitaConSolicitud, actualizarDisponibilidad, listarFavoritos, verificarFavorito, eliminarServicio, agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador, agregarDocumentacionTrabajador, calcularPromedioCalificacionServicio, calcularPromedioCalificacionTrabajador,listarReseñaPorTrabajador, listarReseña, obtenerResenas, getReseñasAdmin, obtenerResenaEspecifica,modificarResena,emitirReporteResena } = require('./controller');
+const { loginAdmin,visitasAgendadas, horasAgendadasParaCliente, eliminarGaleria,agregarGaleria, agregarVisitaConSolicitud, actualizarDisponibilidad, listarFavoritos, verificarFavorito, eliminarServicio, agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador, agregarDocumentacionTrabajador, calcularPromedioCalificacionServicio, calcularPromedioCalificacionTrabajador,listarReseñaPorTrabajador, listarReseña, obtenerResenas,getReseñasAdmin, obtenerResenaEspecifica,modificarResena,emitirReporteResena } = require('./controller');
 const { ifError } = require('assert');
 const controller = require('./controller.js');
 const jwt = require('jsonwebtoken');
@@ -87,6 +87,35 @@ app.post('/agregar_servicio', (req, res) => {
       res.status(500).json(error);
     } else {
       console.log('Servicio agregado con éxito');
+      res.status(200).json(resultado);
+    }
+  });
+});
+
+app.post('/agregar_a_galeria', (req, res) => {
+  const galleryeData = req.body;
+  agregarGaleria(galleryeData, (error, resultado) => {
+    if (error) {
+      console.error('Error al agregar foto en galeria:', error);
+      res.status(500).json(error);
+    } else {
+      console.log('Foto agregada con éxito a la galeria');
+      res.status(200).json(resultado);
+    }
+  });
+});
+
+//Eliminar Galeria
+app.delete('/eliminar_galeria/:id_foto', (req, res) => {
+  const id_foto = req.params.id_foto;
+
+  // Llamar a la función eliminarGaleria con el id_foto 
+  eliminarGaleria(id_foto, (error, resultado) => {
+    if (error) {
+      console.error('Error al eliminar foto de galeria:', error);
+      res.status(500).json(error);
+    } else {
+      console.log('Foto eliminado con éxito');
       res.status(200).json(resultado);
     }
   });

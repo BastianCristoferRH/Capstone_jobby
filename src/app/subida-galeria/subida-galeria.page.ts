@@ -5,32 +5,19 @@ import { AlertController } from '@ionic/angular';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NgxImageCompressService } from 'ngx-image-compress';
 
-
 @Component({
-  selector: 'app-agregar-servicio',
-  templateUrl: './agregar-servicio.page.html',
-  styleUrls: ['./agregar-servicio.page.scss'],
+  selector: 'app-subida-galeria',
+  templateUrl: './subida-galeria.page.html',
+  styleUrls: ['./subida-galeria.page.scss'],
 })
-export class AgregarServicioPage implements OnInit {
-  servicioo: any = {
-    des_serv: '',
+export class SubidaGaleriaPage implements OnInit {
+  validacion: any = {};
+  galleryData: any = {
+    descripcion: '',
+    foto: '',
   };
-  regiones: any[] = [];
-  comunas: any[] = [];
-  servicios: any[] = [];
-  servicio: any = {
-    des_serv: '',
-    presencial: false,
-    id_trabajador: '',
-    id_serv: '',
-    id_comuna: '',
-    id_region: '',
-    img_portada: '',
-  };
-  trabajadorInfo: any = {};
   trabajadorId: any = {};
   imagenPreview: any; 
-  desServError: boolean = false;
   imagenError: boolean = false; 
 
   
@@ -39,8 +26,7 @@ export class AgregarServicioPage implements OnInit {
     private authService: AuthService,
     private router: Router,
     private alertController: AlertController,
-    private sanitizer: DomSanitizer,
-    private imageCompress: NgxImageCompressService
+    private sanitizer: DomSanitizer
     ) { }
 
   ngOnInit() {
@@ -57,29 +43,15 @@ export class AgregarServicioPage implements OnInit {
       );
     } else {
       console.error('El correo electrónico es nulo o no está disponible.');
-    }
-
-    
-
-    // Llama a las funciones del servicio para cargar regiones, comunas y servicios
-    this.authService.cargarRegiones().subscribe((data: any) => {
-      this.regiones = data;
-    });
-
-    this.authService.cargarComunas().subscribe((data: any) => {
-      this.comunas = data;
-    });
-
-    this.authService.cargarServicios().subscribe((data: any) => {
-      this.servicios = data;
-    });
-
-    
+    } 
   }
 
-  private navigateToServiceList() {
-    this.router.navigate(['/listar-servicios']);
+  
+
+  private perfil_trabajador() {
+    this.router.navigate(['/trabajador', this.authService.getCorreoElectronico()]);
   }
+
 
   
    // Selector de imagenes
@@ -109,10 +81,10 @@ export class AgregarServicioPage implements OnInit {
       // Llama a blobToHexString para obtener la cadena hexadecimal
       this.blobToHexString(blob).then((hexString) => {
         // Asigna la cadena hexadecimal a this.servicio.img_portada
-        this.servicio.img_portada = hexString;
+        this.galleryData.foto = hexString;
         
         // Registrar datos del formulario
-        console.log("Datos del formulario al cargar la imagen:", this.servicio);
+        console.log("Datos del formulario al cargar la imagen:", this.galleryData);
   
         // Mostrar vista previa de la imagen
       const reader = new FileReader();
@@ -147,40 +119,18 @@ export class AgregarServicioPage implements OnInit {
     });
   }
   // FIN de Selector de imagenes
-  
-  
-  
-  
+ 
 
-  
-
-
-  addService() {
+  addGallery() {
     const correoElectronico = this.authService.getCorreoElectronico();
-    this.servicio.des_serv = this.servicioo.des_serv;
-    this.servicio.presencial = this.servicioo.presencial;
+    this.galleryData.descripcion = this.validacion.descripcion;
 
     if (this.trabajadorId.length > 0) {
-      this.servicio.id_trabajador = this.trabajadorId[0].id_trabajador;
+      this.galleryData.id_trabajador = this.trabajadorId[0].id_trabajador;
     } else {
       console.error('No se encontró información del trabajador.');
     }
 
-    this.servicio.id_serv = this.servicioo.id_serv;
-    this.servicio.id_comuna = this.servicioo.id_comuna;
-    this.servicio.id_region = this.servicioo.id_region;
-
-    if (this.servicioo.des_serv.length < 20) {
-      this.desServError = true;
-      console.log('Descripcion de servicio muy corta');
-      this.presentAlert1('Debe completar los campos del formulario correctamente para agregar servicio.'); 
-      // Establecer la variable de error en verdadero
-      return; // Detener la función si la validación falla
-    } else {
-      this.desServError = false;
-      
-       // Restablecer la variable de error si se cumple la validación
-    }
 
     if (!this.imagenPreview) {
       this.imagenError = true;
@@ -193,20 +143,21 @@ export class AgregarServicioPage implements OnInit {
     }
 
 
-    this.authService.agregarServicio(this.servicio).subscribe(
+    this.authService.agregarGaleria(this.galleryData).subscribe(
       (response) => {
         console.log('Servicio agregado con éxito', response);
-        console.log("Datos del servicio agregado: ", this.servicio);
-        this.navigateToServiceList();
+        console.log("Datos del servicio agregado: ", this.galleryData);
+        this.perfil_trabajador();
       },
       (error) => {
         console.error('Error al agregar el servicio:', error);
-        console.log("Datos del formulario rechazado: ",  this.servicio);
+        console.log("Datos del formulario rechazado: ",  this.galleryData);
         this.presentAlert1('Debe completar los campos del formulario correctamente para agregar servicio.');
       }
     );
   }
 
+  //ALERTAS
   async presentAlert1(mensaje: string) {
     const alert = await this.alertController.create({
       cssClass: 'personalizada',

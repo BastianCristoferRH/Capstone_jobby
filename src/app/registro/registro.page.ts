@@ -3,6 +3,7 @@ import { AuthService } from '../auth.service';
 import { AlertController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import { NgxImageCompressService } from 'ngx-image-compress';
 import { Router } from '@angular/router';
 
 @Component({
@@ -14,13 +15,15 @@ import { Router } from '@angular/router';
 export class RegistroPage implements OnInit {
   registroForm!: FormGroup; // Inicializar la propiedad con "!"
   imagenPreview: any; 
+  imagenError: boolean = false; 
 
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private alertController: AlertController,
     private router: Router,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private imageCompress: NgxImageCompressService
   ) {}
   
 
@@ -80,6 +83,16 @@ export class RegistroPage implements OnInit {
       this.presentAlert1('Debes llenar los campos obligatorios del registro');
       return;
     }
+
+    if (!this.imagenPreview) {
+      this.imagenError = true;
+      console.log('Falta Imagen');
+      this.presentAlert1('Debe añadir una imagen de perfil');
+      return; // Detener la función si no se ha seleccionado una imagen
+    } else {
+      this.imagenError = false;
+       // Restablecer la variable de error si se selecciona una imagen
+    }
   
     if (contrasena !== confirmarContrasena) {
       console.log("Las contraseñas no coinciden");
@@ -137,26 +150,46 @@ export class RegistroPage implements OnInit {
   
   
 
+  
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
+    const maxSizeInBytes = 5 * 1024 * 1024;
+  
     if (file) {
-      // Crear un nuevo objeto Blob con el archivo seleccionado
-      const blob = new Blob([file], { type: file.type });
-      this.registroForm.get('imagen')?.setValue(blob);
-      // Registrar datos del formulario
-      console.log("Datos del formulario al cargar la imagen:", this.registroForm.value);
+      if (file.size > maxSizeInBytes) {
+        // Muestra una alerta al usuario
+        this.presentAlert4('La imagen cargada es demasiado grande, por favor selecciona otra con un tamaño menor a 5 MB.');
+        
+        // Limpia el campo de imagen en el formulario
+        this.registroForm.get('imagen')?.setValue(new Blob());
   
-      // Actualizar el valor del campo imagen en el formulario con el Blob
-      
-  
-      // Mostrar vista previa de la imagen
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.imagenPreview = this.sanitizer.bypassSecurityTrustUrl(e.target.result);
-      };
-      reader.readAsDataURL(blob);
+        // Cambia el texto del botón a "Seleccionar Imagen" ya que no se ha seleccionado ninguna imagen
+        
+      } else {
+        // Mostrar vista previa de la imagen
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.imagenPreview = this.sanitizer.bypassSecurityTrustUrl(e.target.result);
+    
+          // Actualizar el valor del campo imagen en el formulario
+          this.registroForm.get('imagen')?.setValue(file);
+        };
+        reader.readAsDataURL(file);
+    
+        // Registrar datos del formulario
+        console.log("Datos del formulario al cargar la imagen:", this.registroForm.value);
+      }
+    }
+
+    if (!file) {
+      this.imagenError = true;
+      this.presentAlert4('Debe subir una imagen principal del servicio ofrecido.'); // Establecer la variable de error en verdadero si no se selecciona una imagen
+      return; // Detener la función si no se selecciona una imagen
+    } else {
+      this.imagenError = false; // Restablecer la variable de error si se selecciona una imagen
     }
   }
+  
   
   
   
@@ -200,6 +233,25 @@ export class RegistroPage implements OnInit {
       header: 'Correo registrado',
       message: mensaje,
       buttons: [{ text: 'OK'}]
+    });
+
+    await alert.present();
+  }
+
+  async presentAlert4(mensaje: string) {
+    const alert = await this.alertController.create({
+      cssClass: 'personalizada',
+      header: 'Error al cargar la imagen',
+      message: mensaje,
+      buttons: [
+        {
+          text: 'OK',
+          handler: () => {
+            // Limpia el campo de imagen en el formulario
+            this.registroForm.get('imagen')?.setValue('');
+          }
+        }
+      ]
     });
 
     await alert.present();

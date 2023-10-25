@@ -89,6 +89,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'subida-galeria/:correoElectronico',
+    loadChildren: () => import('./subida-galeria/subida-galeria.module').then( m => m.SubidaGaleriaPageModule),
+    canActivate: [AuthGuard],
+  },
+  {
+
     path: 'trabajador/:correoElectronico/historial-trabajador',
     loadChildren: () => import('./historial-trabajador/historial-trabajador.module').then( m => m.HistorialTrabajadorPageModule),
     canActivate: [AuthGuard],
