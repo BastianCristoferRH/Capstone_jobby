@@ -182,6 +182,7 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) {
     servicio.name_serv,
     descrip_servicio.des_serv,
     usuario.correo_electronico,
+    TO_BASE64(UNHEX(img_portada)) AS img_portada_base64,
     comuna.name_comuna,
     region.name_region
     FROM trabajador
@@ -208,6 +209,17 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) {
   WHERE trabajador.correo_electronico = ?
   `;
 
+  // Consulta para los datos de la galería
+  const sqlGaleria = `
+    SELECT
+    id_foto,
+    TO_BASE64(UNHEX(foto)) AS img_galeria_base64,
+    descripcion
+    FROM foto_servicio
+    JOIN trabajador ON trabajador.id_trabajador = foto_servicio.id_trabajador
+    WHERE trabajador.correo_electronico = ?
+  `;
+
   const valores = [correoElectronico];
 
   db.query(sqlServicio, valores, (errServicio, datosServicio) => {
@@ -221,29 +233,40 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) {
           console.error('Error al obtener los datos del trabajador:', errTrabajador);
           callback({ error: 'Error interno al obtener los datos del trabajador', details: errTrabajador.message }, null);
         } else {
-          console.log('Datos de servicio y trabajador obtenidos con éxito');
-          // Aquí puedes combinar los datos de servicio y trabajador como desees
-          const resultadoFinal = {
-            datosServicio: datosServicio,
-            datosTrabajador: datosTrabajador
-          };
-          callback(null, resultadoFinal);
+          // Después de obtener los datos del trabajador, realizamos la consulta para los datos de la galería
+          db.query(sqlGaleria, valores, (errGaleria, datosGaleria) => {
+            if (errGaleria) {
+              console.error('Error al obtener los datos de la galería:', errGaleria);
+              callback({ error: 'Error interno al obtener los datos de la galería', details: errGaleria.message }, null);
+            } else {
+              console.log('Datos de servicio, trabajador y galería obtenidos con éxito');
+              // Aquí puedes combinar los datos de servicio, trabajador y galería como desees
+              const resultadoFinal = {
+                datosServicio: datosServicio,
+                datosTrabajador: datosTrabajador,
+                datosGaleria: datosGaleria
+              };
+              callback(null, resultadoFinal);
+            }
+          });
         }
       });
     }
   });
-} 
+}
+
 
 function agregarServicio(serviceData, callback) {
 
-  const query ='INSERT INTO descrip_servicio (des_serv, presencial, id_trabajador, id_serv, id_comuna, id_region) VALUES (?, ?, ?, ?, ?, ?)';
+  const query ='INSERT INTO descrip_servicio (des_serv, presencial, id_trabajador, id_serv, id_comuna, id_region, img_portada) VALUES (?, ?, ?, ?, ?, ?, ?)';
   const valores = [
     serviceData.des_serv,
     serviceData.presencial,
     serviceData.id_trabajador,
     serviceData.id_serv,
     serviceData.id_comuna,
-    serviceData.id_region
+    serviceData.id_region,
+    serviceData.img_portada
   ];
 
   db.query(query, valores, (err, result)=>{
@@ -258,6 +281,49 @@ function agregarServicio(serviceData, callback) {
   })
     
 };
+
+
+
+//Funcion Agregar imagen a Galeria
+function agregarGaleria(galleryData, callback) {
+
+  const query ='INSERT INTO `foto_servicio`(`foto`, `id_trabajador`, `descripcion`) VALUES ( ?, ?, ?)';
+  const valores = [
+    galleryData.foto,
+    galleryData.id_trabajador,
+    galleryData.descripcion
+  ];
+
+  db.query(query, valores, (err, result)=>{
+    if (err) {
+      console.error('Error al agregar a galeria:', err);
+      callback({ error: 'Error interno al agregar a galeria', details: err.message }, null);
+    } else {
+      console.log('Foto agregada con éxito a galeria');
+      callback(null, { message: 'Foto agregada con éxito a galeria' },result);
+    }
+
+  })
+    
+};
+
+
+function eliminarGaleria(id_foto, callback) {
+  const sqlEliminarGaleria = 'DELETE FROM foto_servicio WHERE id_foto = ?';
+  const valores = [id_foto];
+
+  db.query(sqlEliminarGaleria, valores, (err, resultado) => {
+    if (err) {
+      console.error('Error al eliminar la galería:', err);
+      callback({ error: 'Error interno al eliminar la galería', details: err.message });
+    } else {
+      console.log('Galería eliminada con éxito');
+      callback(null, { mensaje: 'Galería eliminada con éxito' });
+    }
+  });
+}
+
+//Fin de funcion Agregar imagen a Galeria
 
 function obtenerServiciosSolicitadosPorTrabajador(correoElectronico, callback) {
   const sql = `
@@ -423,7 +489,7 @@ function obtenerServicios(callback) {
 }
 
 function listarServicios(callback){
-  const query = `SELECT ds.des_serv, ds.presencial, t.correo_electronico, t.disponibilidad, name_serv, name_comuna, name_region 
+  const query = `SELECT ds.des_serv, ds.presencial, TO_BASE64(UNHEX(img_portada)) AS img_portada_base64, t.correo_electronico, t.disponibilidad, name_serv, name_comuna, name_region 
   FROM descrip_servicio ds JOIN trabajador t ON(ds.id_trabajador = t.id_trabajador) 
   JOIN servicio s ON(ds.id_serv = s.id_serv) 
   JOIN region r ON(ds.id_region = r.id_region)
@@ -655,6 +721,7 @@ module.exports = {
   registroUsuario,
   iniciarSesion,
   agregarServicio,
+  agregarGaleria,
   modificarServicio,
   obtenerDatosUsuarioPorCorreo,
   enviarSolicitud,
@@ -679,5 +746,6 @@ module.exports = {
   listarFavoritos,
   calcularPromedioCalificacionServicio,
   calcularPromedioCalificacionTrabajador,
+  eliminarGaleria,
 
 };

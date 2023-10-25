@@ -1,0 +1,33 @@
+<div class="ion-page" id="ion-content">
+<ion-header>
+  <ion-toolbar>
+    <ion-title size="large">JOBBY</ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button autoHide="false" menuId="main-menu"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true" class="gradiante">
+<br><br>
+  <form (submit)="addGallery()" class="service-form" enctype="multipart/form-data">
+
+    <h2 style="text-align: center;">Agregar Foto a galeria</h2>
+
+    <div class="form-group">
+      <label for="imagen">Seleccionar Imagen:</label>
+      <input type="file" id="imagen" name="imagen" (change)="onFileSelected($event)" accept="image/*" required>
+      <img *ngIf="imagenPreview" [src]="imagenPreview" alt="Imagen seleccionada" class="preview-image">
+      <div *ngIf="!imagenPreview" class="error-message">Debes seleccionar una imagen.</div>
+    </div>
+  
+    <div class="form-group">
+      <label for="descripcion">Descripción de la imagen:</label>
+      <textarea id="descripcion" name="descripcion" [(ngModel)]="validacion.descripcion" required></textarea>
+    </div>
+  
+  
+    <button type="submit" class="submit-button" >Agregar Foto</button>
+  </form>
+
+</ion-content>
+</div>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-
+import { NavController } from '@ionic/angular';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 import { forkJoin } from 'rxjs';
@@ -20,9 +20,11 @@ export class PerfiltrabajadorPage implements OnInit {
   //datosTrabajador: any = []; // Ahora inicializado como un arreglo
   id_trabajador: number = 0;
   datosTrabajador: any[] = [];
+  selectedTab: string = 'tab1';
 
   //promedio_trabajador: any[]=[];
   datosServicio: any[] = [];
+  datosGaleria: any[] = [];
   esFavorito: boolean = false;
   promedioTrabajador: number = 0;
   promedioServicio: number = 4;
@@ -37,7 +39,8 @@ export class PerfiltrabajadorPage implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private alertController: AlertController,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private navCtrl: NavController
   ) { }
 
   getStarDataAverageWorker(promedioTrabajador: number): { enteras: number, fraccion: number } {
@@ -74,33 +77,38 @@ export class PerfiltrabajadorPage implements OnInit {
             }
           }
           
-          
-
-          const promesas = [];
-
+        
           for (let i = 0; i < data.datosServicio.length; i++) {
             const element = data.datosServicio[i];
-            const promesa = this.authService.getPromedioCalificacionesServicio(data.datosServicio[i].id_des_serv, data.datosServicio[i].id_trabajador);
-            promesas.push(promesa);
+            if (element.img_portada_base64 !== null) {
+              // Crear una URL segura a partir de los datos base64
+              console.log('Pasadas por buble conversor de imagenes');
+              element.img_portada_base64 = this.sanitizer.bypassSecurityTrustUrl('data:image/jpeg;base64,' + element.img_portada_base64);
+            }
+            
           }
 
-          forkJoin(promesas).subscribe((promedios: any[]) => {
-            // Aquí, 'promedios' es un array de promedios de servicios
-            const promedioServicios = promedios.map(data2 => data2[0].promedio_servicio);
-            console.log('Promedios de servicio:', promedioServicios);
-            this.promedioServicio = promedioServicios[0]
-            //console.log(this.promedioServicio);
-
+          for (let i = 0; i < data.datosGaleria.length; i++) {
+            const element = data.datosGaleria[i];
+            if (element.img_galeria_base64 !== null) {
+              // Crear una URL segura a partir de los datos base64
+              console.log('Pasadas por buble conversor de imagenes');
+              element.img_galeria_base64 = this.sanitizer.bypassSecurityTrustUrl('data:image/jpeg;base64,' + element.img_galeria_base64);
+            }
             
-          });
+          }
+
+          
           
           this.datosTrabajador = data.datosTrabajador;
 
           
           this.datosServicio = data.datosServicio;
+          this.datosGaleria = data.datosGaleria;
           console.log('promedio',this.promedioTrabajador);
           console.log('Datos Trabajador obtenidos', this.datosTrabajador);
           console.log('Datos servicios obtenidos', this.datosServicio);
+          console.log('Datos de galeria obtenidos', this.datosGaleria);
           console.log('Promedios servicio:',this.promedioServicio);
 
         // Verificar si el correo del trabajador coincide con el usuario autenticado
@@ -119,12 +127,7 @@ export class PerfiltrabajadorPage implements OnInit {
     );
 
 
-    this.authService.getPromedioCalificacionesTrabajador(this.correoElectronico).subscribe((data:any)=>{
-      //console.log(data);
-      this.promedioTrabajador = data[0].promedio_calificacion;
-      console.log(this.promedioTrabajador);
-
-    })
+    
   });
 
 
@@ -154,7 +157,7 @@ getStarIconAvgService(index: number, promedioServicio: number): string {
   }
 }
 
-
+  
 
   goToFormularioDocumentacion(){
     const correoElectronico = this.authService.getCorreoElectronico();
@@ -201,12 +204,37 @@ getStarIconAvgService(index: number, promedioServicio: number): string {
     await alert.present();
   }
 
+  async confirmarEliminarGaleria(id_foto: number) {
+    const alert = await this.alertController.create({
+      header: 'Confirmar eliminación',
+      message: '¿Estás seguro de que deseas eliminar esta foto?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Eliminación cancelada');
+          }
+        },
+        {
+          text: 'Aceptar',
+          handler: () => {
+            // Llama directamente a la función eliminarServicio
+            this.eliminarGaleria(id_foto);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
   perfil_trabajador() {
     this.router.navigate(['/trabajador', this.correoElectronico]);
   }
 
   
-  eliminarServicio(id_des_serv: number) {
+   eliminarServicio(id_des_serv: number) {
     this.authService.eliminarServicio(id_des_serv).subscribe(
       (response: any) => {
         console.log('Servicio eliminado con éxito', response);
@@ -215,7 +243,17 @@ getStarIconAvgService(index: number, promedioServicio: number): string {
         // Llama a la función loadTrabajadorData después de eliminar el servicio
         this.authService.loadTrabajadorData(this.correoElectronico).subscribe(
           (data: any) => {
+
             this.datosServicio = data.datosServicio;
+            for (let i = 0; i < data.datosServicio.length; i++) {
+              const element = data.datosServicio[i];
+              if (element.img_portada_base64 !== null) {
+                // Crear una URL segura a partir de los datos base64
+                console.log('Pasadas por buble conversor de imagenes');
+                element.img_portada_base64 = this.sanitizer.bypassSecurityTrustUrl('data:image/jpeg;base64,' + element.img_portada_base64);
+              }
+              
+            }
             // Resto del código para manejar los datos actualizados.
           },
           (error: any) => {
@@ -225,6 +263,39 @@ getStarIconAvgService(index: number, promedioServicio: number): string {
       },
       (error: any) => {
         console.error('Error al eliminar el servicio', error);
+        // Maneja el error de acuerdo a tus necesidades
+      }
+    );
+  }
+
+  eliminarGaleria(id_foto: number) {
+    this.authService.eliminarGaleria(id_foto).subscribe(
+      (response: any) => {
+        console.log('Foto eliminada con exito de galeria', response);
+        this.perfil_trabajador();
+
+        this.authService.loadTrabajadorData(this.correoElectronico).subscribe(
+          (data: any) => {
+
+            this.datosGaleria = data.datosGaleria;
+            for (let i = 0; i < data.datosGaleria.length; i++) {
+              const element = data.datosGaleria[i];
+              if (element.img_galeria_base64 !== null) {
+                // Crear una URL segura a partir de los datos base64
+                console.log('Pasadas por buble conversor de imagenes');
+                element.img_galeria_base64 = this.sanitizer.bypassSecurityTrustUrl('data:image/jpeg;base64,' + element.img_galeria_base64);
+              }
+              
+            }
+            // Resto del código para manejar los datos actualizados.
+          },
+          (error: any) => {
+            console.error('Error al recibir los datos del trabajador', error);
+          }
+        ); 
+      },
+      (error: any) => {
+        console.error('Error al eliminar la  foto de galeria', error);
         // Maneja el error de acuerdo a tus necesidades
       }
     );
@@ -267,6 +338,11 @@ getStarIconAvgService(index: number, promedioServicio: number): string {
 
   agregarServicio() {
     this.router.navigate(['/agregar-servicio', this.authService.getCorreoElectronico()]);
+    console.log("click");
+  }
+
+  agregarGaleria() {
+    this.router.navigate(['/subida-galeria', this.authService.getCorreoElectronico()]);
     console.log("click");
   }
 

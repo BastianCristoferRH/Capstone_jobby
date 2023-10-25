@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../auth.service';
+import { AlertController } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -33,6 +34,7 @@ export class ModificarServicioPage implements OnInit {
   constructor(
     private http: HttpClient,
     private activatedRoute: ActivatedRoute,
+    private alertController: AlertController,
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
@@ -130,7 +132,7 @@ export class ModificarServicioPage implements OnInit {
 
     if (!comunaSeleccionada || !regionSeleccionada || comunaSeleccionada.id_region !== regionSeleccionada.id_region) {
       // Mostrar una alerta o mensaje de error aquí
-      alert('La comuna seleccionada no coincide con la región.');
+      this.presentAlert4('La comuna seleccionada no coincide con la región.');
       return false;
     }
 
@@ -153,5 +155,16 @@ export class ModificarServicioPage implements OnInit {
   obtenerIdRegion(nombreRegion: string): string {
     const regionSeleccionada = this.regiones.find((region) => region.name_region === nombreRegion);
     return regionSeleccionada ? regionSeleccionada.id_region : '';
+  }
+
+  async presentAlert4(mensaje: string) {
+    const alert = await this.alertController.create({
+      cssClass: 'personalizada',
+      header: 'Error en comuna o region',
+      message: mensaje,
+      buttons: [{ text: 'OK'}]
+    });
+
+    await alert.present();
   }
 }

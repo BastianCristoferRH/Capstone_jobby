@@ -88,6 +88,12 @@ const routes: Routes = [
     loadChildren: () => import('./listar-favorito/listar-favorito.module').then( m => m.ListarFavoritoPageModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'subida-galeria/:correoElectronico',
+    loadChildren: () => import('./subida-galeria/subida-galeria.module').then( m => m.SubidaGaleriaPageModule),
+    canActivate: [AuthGuard],
+  },
+
 
 
 

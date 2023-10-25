@@ -27,6 +27,12 @@ label{
     font-weight: bold;
   }
   
+  .error-message {
+    color: rgb(255, 255, 255);
+    font-size: 12px;
+    margin-top: 5px;
+  }
+
   textarea, input[type="text"], select {
     width: 100%;
     padding: 10px;
