@@ -2,10 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { visitasAgendadas, horasAgendadasParaCliente, agregarVisitaConSolicitud, actualizarDisponibilidad, listarFavoritos, verificarFavorito, eliminarServicio, agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador, agregarDocumentacionTrabajador, calcularPromedioCalificacionServicio, calcularPromedioCalificacionTrabajador,listarReseñaPorTrabajador, listarReseña, obtenerResenas } = require('./controller');
+const { loginAdmin,visitasAgendadas, horasAgendadasParaCliente, agregarVisitaConSolicitud, actualizarDisponibilidad, listarFavoritos, verificarFavorito, eliminarServicio, agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador, agregarDocumentacionTrabajador, calcularPromedioCalificacionServicio, calcularPromedioCalificacionTrabajador,listarReseñaPorTrabajador, listarReseña, obtenerResenas, getReseñasAdmin, obtenerResenaEspecifica,modificarResena,emitirReporteResena } = require('./controller');
 const { ifError } = require('assert');
 const controller = require('./controller.js');
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 
@@ -18,6 +17,7 @@ app.use(cors());
 
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
 
 app.post('/registro', (req, res) => {
   const datosUsuario = req.body;
@@ -538,6 +538,66 @@ app.post('/visitas-agendadas-cliente', (req, res) => {
     }
     res.json(result);
   });
+});
+app.get('/listar-resena-trabajador/:trabajadorId',(req,res)=>{
+  const trabajadorId = req.params.trabajadorId;
+
+  listarReseñaPorTrabajador(trabajadorId,(error, result)=>{
+    if (error) {
+      console.log("Error al obtener el listado de reseñas por trabajador", error);
+      return res.status(500).json(error);
+
+    }else{
+      console.log("Listado de reseñas por trabajador obtenido con exito");
+      return res.status(200).json(result);
+    }
+  })
+});
+//Esta es para un historial de reseñas por trabajador, botón que irá en el menú
+
+
+
+app.get('/listar-resena/:correoElectronicoo/:solicitudId',(req, res)=> {
+  const correoElectronicoo = req.params.correoElectronicoo;
+  const solicitudId = req.params.solicitudId;
+  listarReseña(correoElectronicoo,solicitudId, (error, result)=>{
+    if (error) {
+      console.log("Error al obtener la reseña", error);
+      return res.status(500).json(error);
+
+    }else{
+      console.log("Reseña obtenida exitosamente");
+      return res.status(200).json(result);
+    }
+  });
+});
+//Esta es para listar las reseñas de cada solicitud con estado "Finalizado"
+
+app.get('/obtener-resenas/:correoElectronico', (req, res)=>{
+  const correoElectronico = req.params.correoElectronico;
+  obtenerResenas(correoElectronico, (error,result)=>{
+    if (error) {
+      console.log("Error al obtener las reseñas", error);
+      return res.status(500).json(error);
+
+    }else{
+      console.log("Reseñas obtenidas correctamente");
+      return res.status(200).json(result);
+    }
+  });
+});
+
+app.get('/listar-resena-especifica/:id_resena', (req,res)=>{
+  const resenaId = req.params.id_resena;
+  obtenerResenaEspecifica(resenaId, (error, result)=> {
+    if (error) {
+      console.log("Error al obtener la resena especifica", error);
+      return res.status(500).json(error)
+    }else{
+      console.log("Resena especifica obtenida con exito");
+      res.status(200).json(result);
+    }
+});
 });
 
 

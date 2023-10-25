@@ -1,5 +1,4 @@
 const db = require('./db');
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 
@@ -906,10 +905,22 @@ function emitirReporteResena(resenaId, nuevoEstado, callback){
     }
   });
 }
+function obtenerResenaEspecifica(resenaId, callback){
+  const sql = 'SELECT id_reseña as id_resena, descripcion, calificacion, estado, id_solicitud, created_at, updated_at FROM reseña WHERE id_reseña = ?';
+  db.query(sql, [resenaId], (error, result) => {
+    if (error) {
+      console.log("Error al obtener la reseña especifica");
+      callback(error,null);
+    }else{
+      console.log("Reseña espeficifa obtenida con exito");
+      callback(null,result)
+    }
+  });
+}
 
 function modificarResena(resenaId, resenaData, callback){
-  db.query('UPDATE reseña SET descripcion = ?, estado = ? WHERE id_reseña = ?',
-    [resenaData.descripcion, resenaData.estado,resenaId], 
+  db.query('UPDATE reseña SET id_reseña = ?, descripcion = ?, calificacion = ?, estado = ?, id_solicitud = ?, created_at = ?, updated_at = ? WHERE id_reseña = ?',
+    [resenaData.id_reseña,resenaData.descripcion,resenaData.calificacion, resenaData.estado, resenaData.id_solicitud, resenaData.created_at,resenaData.updated_at, resenaId], 
     (err, result) => {
       if (err) {
         console.error('Error al modificar la reseña:', err);
@@ -925,6 +936,11 @@ function modificarResena(resenaId, resenaData, callback){
       }
     }
   );
+
+
+
+
+
 }
 
 
@@ -967,6 +983,7 @@ module.exports = {
   modificarResena,
   agregarVisitaConSolicitud,
   visitasAgendadas,
-  horasAgendadasParaCliente
+  horasAgendadasParaCliente,
+  obtenerResenaEspecifica
 
 };

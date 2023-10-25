@@ -84,14 +84,6 @@ export class PerfiltrabajadorPage implements OnInit {
             }
           }
 
-          
-
-
-
-         
-          
-
-
           console.log('promedio servicioreklxD', this.promedioServicio);
           this.datosTrabajador = data.datosTrabajador;
 
