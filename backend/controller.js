@@ -306,6 +306,20 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) {
             datosTrabajador: datosTrabajador
           };
           callback(null, resultadoFinal);
+          let mailOptions = {
+            from: 'jobbyjobcompany@gmail.com',
+            to: correoElectronico,
+            subject: '¡Recientemente han visualizado tu perfil!',
+            text: 'Estas siendo visualizado!'
+          };
+    
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              console.log('Error al enviar correo:', error);
+            } else {
+              console.log('Correo enviado:', info.response);
+            }
+          });
         }
       });
     }
@@ -634,7 +648,22 @@ const registrarTrabajador = (disponibilidad, des_perfil, correo_electronico, cal
       return callback(error, null);
     }
     callback(null, result);
+    let mailOptions = {
+      from: 'jobbyjobcompany@gmail.com',
+      to: usuario.correo_electronico,
+      subject: '¡Felicidades ahora eres trabajador!',
+      text: 'Esperamos que tu viaje con nosotros para poder mostrar tus habilidades sea inigualable'
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log('Error al enviar correo:', error);
+      } else {
+        console.log('Correo enviado:', info.response);
+      }
+    });
   });
+  
 };
 
 
