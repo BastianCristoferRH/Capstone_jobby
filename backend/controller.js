@@ -102,7 +102,6 @@ function loginAdmin(datosAdmin, callback) {
 function iniciarSesion(datosUsuario, callback) {
   const sql = `SELECT * FROM usuario WHERE correo_electronico = ?`;
   const valores = [datosUsuario.correo_electronico];
-
   db.query(sql, valores, (err, resultados) => {
     if (err) {
       console.log("Error al consultar la base de datos: ", err);
@@ -112,9 +111,9 @@ function iniciarSesion(datosUsuario, callback) {
         callback({ mensaje: "Correo electrónico o contraseña incorrectos" }, null);
       } else {
         const usuario = resultados[0];
+        
 
-
-        if (datosUsuario.contrasena === usuario.password) {
+        if (datosUsuario.password == usuario.contrasena) {
           const token = jwt.sign({ usuarioId: usuario.correo_electronico }, 'tu_secreto', { expiresIn: '1h' }); //cambie el usuario id
           callback(null, { mensaje: "Inicio de sesión exitoso", token });
         } else {
