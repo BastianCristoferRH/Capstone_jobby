@@ -1,5 +1,4 @@
 const db = require('./db');
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 
@@ -259,6 +258,7 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) {
     servicio.name_serv,
     descrip_servicio.des_serv,
     usuario.correo_electronico,
+    TO_BASE64(UNHEX(img_portada)) AS img_portada_base64,
     comuna.name_comuna,
     region.name_region,
     trabajador.disponibilidad
@@ -286,6 +286,17 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) {
   WHERE trabajador.correo_electronico = ?
   `;
 
+  // Consulta para los datos de la galería
+  const sqlGaleria = `
+    SELECT
+    id_foto,
+    TO_BASE64(UNHEX(foto)) AS img_galeria_base64,
+    descripcion
+    FROM foto_servicio
+    JOIN trabajador ON trabajador.id_trabajador = foto_servicio.id_trabajador
+    WHERE trabajador.correo_electronico = ?
+  `;
+
   const valores = [correoElectronico];
 
   db.query(sqlServicio, valores, (errServicio, datosServicio) => {
@@ -299,25 +310,20 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) {
           console.error('Error al obtener los datos del trabajador:', errTrabajador);
           callback({ error: 'Error interno al obtener los datos del trabajador', details: errTrabajador.message }, null);
         } else {
-          console.log('Datos de servicio y trabajador obtenidos con éxito');
-          // Aquí puedes combinar los datos de servicio y trabajador como desees
-          const resultadoFinal = {
-            datosServicio: datosServicio,
-            datosTrabajador: datosTrabajador
-          };
-          callback(null, resultadoFinal);
-          let mailOptions = {
-            from: 'jobbyjobcompany@gmail.com',
-            to: correoElectronico,
-            subject: '¡Recientemente han visualizado tu perfil!',
-            text: 'Estas siendo visualizado!'
-          };
-    
-          transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-              console.log('Error al enviar correo:', error);
+          // Después de obtener los datos del trabajador, realizamos la consulta para los datos de la galería
+          db.query(sqlGaleria, valores, (errGaleria, datosGaleria) => {
+            if (errGaleria) {
+              console.error('Error al obtener los datos de la galería:', errGaleria);
+              callback({ error: 'Error interno al obtener los datos de la galería', details: errGaleria.message }, null);
             } else {
-              console.log('Correo enviado:', info.response);
+              console.log('Datos de servicio, trabajador y galería obtenidos con éxito');
+              // Aquí puedes combinar los datos de servicio, trabajador y galería como desees
+              const resultadoFinal = {
+                datosServicio: datosServicio,
+                datosTrabajador: datosTrabajador,
+                datosGaleria: datosGaleria
+              };
+              callback(null, resultadoFinal);
             }
           });
         }
@@ -693,22 +699,7 @@ const registrarTrabajador = (disponibilidad, des_perfil, correo_electronico, cal
       return callback(error, null);
     }
     callback(null, result);
-    let mailOptions = {
-      from: 'jobbyjobcompany@gmail.com',
-      to: usuario.correo_electronico,
-      subject: '¡Felicidades ahora eres trabajador!',
-      text: 'Esperamos que tu viaje con nosotros para poder mostrar tus habilidades sea inigualable'
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log('Error al enviar correo:', error);
-      } else {
-        console.log('Correo enviado:', info.response);
-      }
-    });
   });
-  
 };
 
 
@@ -977,6 +968,18 @@ function emitirReporteResena(resenaId, nuevoEstado, callback){
     }else{
       console.log("Estado de resena actualizado con exito",resenaId, nuevoEstado );
       callback(null,result);
+    }
+  });
+}
+function obtenerResenaEspecifica(resenaId, callback){
+  const sql = 'SELECT id_reseña as id_resena, descripcion, calificacion, estado, id_solicitud, created_at, updated_at FROM reseña WHERE id_reseña = ?';
+  db.query(sql, [resenaId], (error, result) => {
+    if (error) {
+      console.log("Error al obtener la reseña especifica");
+      callback(error,null);
+    }else{
+      console.log("Reseña espeficifa obtenida con exito");
+      callback(null,result)
     }
   });
 }
