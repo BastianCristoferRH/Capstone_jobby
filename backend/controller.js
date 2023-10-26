@@ -1,11 +1,11 @@
 const db = require('./db');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
-
+const crypto = require('crypto');
 let transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465,
-  secure: true, 
+  secure: true,
   auth: {
     user: 'jobbyjobcompany@gmail.com',
     pass: 'pgjy neox thrb cisl'
@@ -56,7 +56,7 @@ function registroAdmin(userAdmin, callback) {
   const valores = [
     userAdmin.username,
     userAdmin.password,
-    
+
   ];
 
   db.query(sql, valores, (err, resultado) => {
@@ -111,9 +111,9 @@ function iniciarSesion(datosUsuario, callback) {
         callback({ mensaje: "Correo electrónico o contraseña incorrectos" }, null);
       } else {
         const usuario = resultados[0];
-        
-
-        if (datosUsuario.password == usuario.contrasena) {
+        const hash = crypto.createHash('sha256').update(datosUsuario.password).digest('hex');
+        console.log(hash);
+        if (hash == usuario.contrasena) {
           const token = jwt.sign({ usuarioId: usuario.correo_electronico }, 'tu_secreto', { expiresIn: '1h' }); //cambie el usuario id
           callback(null, { mensaje: "Inicio de sesión exitoso", token });
         } else {
@@ -334,7 +334,7 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) {
 
 function agregarServicio(serviceData, callback) {
 
-  const query ='INSERT INTO descrip_servicio (des_serv, presencial, id_trabajador, id_serv, id_comuna, id_region, img_portada) VALUES (?, ?, ?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO descrip_servicio (des_serv, presencial, id_trabajador, id_serv, id_comuna, id_region, img_portada) VALUES (?, ?, ?, ?, ?, ?, ?)';
   const valores = [
     serviceData.des_serv,
     serviceData.presencial,
@@ -363,24 +363,24 @@ function agregarServicio(serviceData, callback) {
 //Funcion Agregar imagen a Galeria
 function agregarGaleria(galleryData, callback) {
 
-  const query ='INSERT INTO `foto_servicio`(`foto`, `id_trabajador`, `descripcion`) VALUES ( ?, ?, ?)';
+  const query = 'INSERT INTO `foto_servicio`(`foto`, `id_trabajador`, `descripcion`) VALUES ( ?, ?, ?)';
   const valores = [
     galleryData.foto,
     galleryData.id_trabajador,
     galleryData.descripcion
   ];
 
-  db.query(query, valores, (err, result)=>{
+  db.query(query, valores, (err, result) => {
     if (err) {
       console.error('Error al agregar a galeria:', err);
       callback({ error: 'Error interno al agregar a galeria', details: err.message }, null);
     } else {
       console.log('Foto agregada con éxito a galeria');
-      callback(null, { message: 'Foto agregada con éxito a galeria' },result);
+      callback(null, { message: 'Foto agregada con éxito a galeria' }, result);
     }
 
   })
-    
+
 };
 
 
@@ -564,7 +564,7 @@ function obtenerServicios(callback) {
 
 }
 
-function listarServicios(callback){
+function listarServicios(callback) {
   const query = `SELECT ds.des_serv, ds.presencial, TO_BASE64(UNHEX(img_portada)) AS img_portada_base64, t.correo_electronico, t.disponibilidad, name_serv, name_comuna, name_region 
   FROM descrip_servicio ds JOIN trabajador t ON(ds.id_trabajador = t.id_trabajador) 
   JOIN servicio s ON(ds.id_serv = s.id_serv) 
@@ -618,7 +618,7 @@ function listarReseñaPorTrabajador(trabajadorId, callback) {
 }
 
 
-function listarReseña(correoElectronicoo, solicitudId, callback){
+function listarReseña(correoElectronicoo, solicitudId, callback) {
   const query = `SELECT id_reseña AS id_resena, descripcion, calificacion,r.estado,r.id_solicitud, t.correo_electronico
   from reseña r 
   JOIN solicitud s ON (r.id_solicitud = s.id_solicitud)
@@ -636,22 +636,22 @@ function listarReseña(correoElectronicoo, solicitudId, callback){
     }
   });
 }
-function getReseñasAdmin(callback){
+function getReseñasAdmin(callback) {
   const query = `SELECT id_reseña as id_resena, descripcion, calificacion, estado, created_at, updated_at
   FROM reseña WHERE estado = 'reportado'`;
   db.query(query, (error, result) => {
     if (error) {
       console.log("Error al obtener las resenas reportadas");
-      callback(error,null)
-    }else{
+      callback(error, null)
+    } else {
       console.log("reseñas reportadas obtenidas con exito");
-      callback(null,result);
+      callback(null, result);
     }
   });
 }
-  
 
-function obtenerResenas(correoElectronico,callback){
+
+function obtenerResenas(correoElectronico, callback) {
   const query = `SELECT r.id_reseña AS id_resena, r.descripcion, r.calificacion,r.estado, r.id_solicitud
   from reseña r JOIN solicitud s ON (r.id_solicitud = s.id_solicitud) 
   JOIN trabajador t ON (s.id_trabajador = t.id_trabajador)
@@ -957,35 +957,35 @@ function horasAgendadasParaCliente(correoCliente, callback) {
 
 
 
-function emitirReporteResena(resenaId, nuevoEstado, callback){
+function emitirReporteResena(resenaId, nuevoEstado, callback) {
   const sql = `UPDATE reseña SET estado = ? WHERE id_reseña = ?`;
 
   db.query(sql, [nuevoEstado, resenaId], (error, result) => {
     if (error) {
       console.log("Error al actualizar el estado de la resena");
-      callback(error,null);
-    }else{
-      console.log("Estado de resena actualizado con exito",resenaId, nuevoEstado );
-      callback(null,result);
+      callback(error, null);
+    } else {
+      console.log("Estado de resena actualizado con exito", resenaId, nuevoEstado);
+      callback(null, result);
     }
   });
 }
-function obtenerResenaEspecifica(resenaId, callback){
+function obtenerResenaEspecifica(resenaId, callback) {
   const sql = 'SELECT id_reseña as id_resena, descripcion, calificacion, estado, id_solicitud, created_at, updated_at FROM reseña WHERE id_reseña = ?';
   db.query(sql, [resenaId], (error, result) => {
     if (error) {
       console.log("Error al obtener la reseña especifica");
-      callback(error,null);
-    }else{
+      callback(error, null);
+    } else {
       console.log("Reseña espeficifa obtenida con exito");
-      callback(null,result)
+      callback(null, result)
     }
   });
 }
 
-function modificarResena(resenaId, resenaData, callback){
+function modificarResena(resenaId, resenaData, callback) {
   db.query('UPDATE reseña SET id_reseña = ?, descripcion = ?, calificacion = ?, estado = ?, id_solicitud = ?, created_at = ?, updated_at = ? WHERE id_reseña = ?',
-    [resenaData.id_reseña,resenaData.descripcion,resenaData.calificacion, resenaData.estado, resenaData.id_solicitud, resenaData.created_at,resenaData.updated_at, resenaId], 
+    [resenaData.id_reseña, resenaData.descripcion, resenaData.calificacion, resenaData.estado, resenaData.id_solicitud, resenaData.created_at, resenaData.updated_at, resenaId],
     (err, result) => {
       if (err) {
         console.error('Error al modificar la reseña:', err);
