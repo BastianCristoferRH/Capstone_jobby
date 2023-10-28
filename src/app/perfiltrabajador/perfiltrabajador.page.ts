@@ -167,7 +167,7 @@ export class PerfiltrabajadorPage implements OnInit {
   }
 
   gestionarResenas() {
-    this.router.navigate(['/trabajador', this.correoElectronico, 'gestionar-resenas'])
+    this.router.navigate(['/trabajador', btoa(this.correoElectronico), 'gestionar-resenas'])
   }
 
   getStarIconAvgService(index: number, promedioServicio: number): string {
@@ -254,7 +254,7 @@ export class PerfiltrabajadorPage implements OnInit {
   }
 
   perfil_trabajador() {
-    this.router.navigate(['/trabajador', this.correoElectronico]);
+    this.router.navigate(['/trabajador', btoa(this.correoElectronico)]);
   }
 
 

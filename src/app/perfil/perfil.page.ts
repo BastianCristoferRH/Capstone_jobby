@@ -38,7 +38,7 @@ export class PerfilPage implements OnInit {
     });
   }
   goToResena(solicitudId: number){
-    this.router.navigate(['/perfil',this.correoElectronico,'agregar-resena', solicitudId])
+    this.router.navigate(['/perfil',btoa(this.correoElectronico),'agregar-resena',solicitudId])
   }
   
 

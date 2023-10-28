@@ -28,7 +28,7 @@ export class GestionarResenasPage implements OnInit {
   ngOnInit() {
     this.starData1 = this.getStarData(this.calificacion);
     this.route.params.subscribe(params => {
-      this.correoElectronico = params['correoElectronico']
+      this.correoElectronico = atob(params['correoElectronico']);
       this.authService.obtenerResenas(this.correoElectronico).subscribe((data:any)=>{
         console.log(data);
         this.resenaData = data;
