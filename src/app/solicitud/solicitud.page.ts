@@ -36,13 +36,13 @@ export class SolicitudPage implements OnInit {
     this.router.navigateByUrl('/login');
   }
   private navigateToUserProfile(correoElectronico: string) {
-    this.router.navigate(['/perfil', correoElectronico]);
+    this.router.navigate(['/perfil', btoa(correoElectronico)]);
   }
   perfil_menu() {
     if (this.authService.isAuthenticated()) {
       const correoElectronico = this.authService.getCorreoElectronico();
       if (correoElectronico) {
-        this.navigateToUserProfile(correoElectronico);
+        this.navigateToUserProfile(btoa(correoElectronico));
       }
     } else {
       this.router.navigateByUrl('/login');
