@@ -31,17 +31,21 @@ export class MenuComponent {
   }
 
   perfil_trabajador() {
-    this.navigateTo('/trabajador/' + this.authService.getCorreoElectronico());
+    const correo =  this.authService.getCorreoElectronico();
+    if(correo != null){
+      this.navigateTo('/trabajador/' + btoa(correo));
+    }
+   
   }
 
   private navigateToUserProfile(correoElectronico: string) {
-    this.navigateTo('/perfil/' + correoElectronico);
+    this.navigateTo('/perfil/' + btoa(correoElectronico));
   }
 
   navegarAServicioSolicitado() {
     const correoElectronico = this.authService.getCorreoElectronico();
     if (correoElectronico) {
-      this.navigateTo('/servicio-solicitado/' + correoElectronico);
+      this.navigateTo('/servicio-solicitado/' + btoa(correoElectronico));
     } else {
       console.error('Correo electrónico no disponible.');
     }
@@ -50,7 +54,7 @@ export class MenuComponent {
   navegarAFavorito() {
     const correoElectronico = this.authService.getCorreoElectronico();
     if (correoElectronico) {
-      this.navigateTo('/listar-favorito/' + correoElectronico);
+      this.navigateTo('/listar-favorito/' + btoa(correoElectronico));
     } else {
       console.error('Correo electrónico no disponible.');
     }

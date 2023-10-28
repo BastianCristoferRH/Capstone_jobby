@@ -20,7 +20,7 @@ export class LoginPage implements OnInit {
       const correoElectronico = this.authService.getCorreoElectronico();
 
       if (correoElectronico) {
-        this.router.navigateByUrl(`/perfil/${correoElectronico}`);
+        this.router.navigateByUrl(`/perfil/${btoa(correoElectronico)}`);
       }
     }
   }
@@ -30,9 +30,8 @@ export class LoginPage implements OnInit {
       (response: any) => {
         if (response && response.mensaje) {
           console.log('Inicio de sesión exitoso:', response.mensaje);
-          this.authService.saveToken(response.token); // Almacena el token
-          
-          this.router.navigateByUrl(`/perfil/${this.correo_electronico}`);
+          this.authService.saveToken(response.token); // Almacena el token        
+          this.router.navigateByUrl(`/perfil/${btoa(this.correo_electronico)}`);
         } else {
           console.error('Respuesta inesperada del servidor:', response);
         }

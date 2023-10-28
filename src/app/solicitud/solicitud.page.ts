@@ -25,7 +25,7 @@ export class SolicitudPage implements OnInit {
   ngOnInit() {
 
     this.route.params.subscribe(params => {
-      this.correoElectronico_trabajador = params['correoElectronico'];
+      this.correoElectronico_trabajador = atob(params['correoElectronico']);
       this.loadServicio_solicitud(this.correoElectronico_trabajador);
 
     });
@@ -101,7 +101,7 @@ export class SolicitudPage implements OnInit {
     ).subscribe(
       (response: any) => {
         console.log('Solicitud enviada con éxito', response);
-        this.navigateToUserProfile(correoElectronico_trabajadorx);
+        this.navigateToUserProfile(btoa(correoElectronico_trabajadorx));
       },
       (error: any) => {
         console.error('Error al enviar la solicitud:', error);

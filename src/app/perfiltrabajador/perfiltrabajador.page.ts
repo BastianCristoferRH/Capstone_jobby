@@ -68,7 +68,7 @@ export class PerfiltrabajadorPage implements OnInit {
     this.starData2 = this.getStarDataAverageService(this.promedioServicio);
     console.log(this.promedioServicio);
     this.route.params.subscribe(params => {
-      this.correoElectronico = params['correoElectronico'];
+      this.correoElectronico = atob(params['correoElectronico']);
 
       // Obtener datos del trabajador
       this.authService.loadTrabajadorData(this.correoElectronico).subscribe(
@@ -325,7 +325,7 @@ export class PerfiltrabajadorPage implements OnInit {
   }
 
   navigateToSolicitud() {
-    this.router.navigate(['/solicitud', this.correoElectronico]);
+    this.router.navigate(['/solicitud', btoa(this.correoElectronico)]);
   }
 
   logout() {

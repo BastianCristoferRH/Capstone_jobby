@@ -21,7 +21,7 @@ export class ListarFavoritoPage implements OnInit {
     if (id_usuario !== null) {
       this.authService.listarFavoritos(id_usuario).subscribe(
         (data: any) => {
-          if (Array.isArray(data.favoritos)) { // Verifica si data.favoritos es un arreglo
+          if (Array.isArray(data.favoritos)) {
             this.favoritos = data.favoritos;
           } else {
             console.error('Los datos recibidos no son un arreglo.');

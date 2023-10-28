@@ -24,7 +24,7 @@ export class PerfilPage implements OnInit {
   ngOnInit() {
     
     this.route.params.subscribe((params) => {
-      this.correoElectronico = params['userId']; // Utiliza 'correoElectronico'
+      this.correoElectronico = atob(params['userId']); // Utiliza 'correoElectronico'
       this.loadUserProfile(this.correoElectronico);
       this.authService.SolicitudesRealizadas(this.correoElectronico).subscribe(
         (data: any) => {
