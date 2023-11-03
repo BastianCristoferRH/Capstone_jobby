@@ -273,17 +273,17 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) {
 
   // Consulta para los datos del trabajador
   const sqlTrabajador = `
-  SELECT trabajador.id_trabajador,
-  usuario.correo_electronico,
-  usuario.nombre,
-  usuario.apellidos,
-  TO_BASE64(UNHEX(img)) AS img_base64,
-  usuario.telefono,
-  usuario.fecha_nacimiento,
-  trabajador.des_perfil
-  FROM trabajador
-  JOIN usuario ON usuario.correo_electronico = trabajador.correo_electronico
-  WHERE trabajador.correo_electronico = ?
+    SELECT trabajador.id_trabajador,
+    usuario.correo_electronico,
+    usuario.nombre,
+    usuario.apellidos,
+    TO_BASE64(UNHEX(img)) AS img_base64,
+    usuario.telefono,
+    usuario.fecha_nacimiento,
+    trabajador.des_perfil
+    FROM trabajador
+    JOIN usuario ON usuario.correo_electronico = trabajador.correo_electronico
+    WHERE trabajador.correo_electronico = ?
   `;
 
   // Consulta para los datos de la galería
@@ -295,6 +295,18 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) {
     FROM foto_servicio
     JOIN trabajador ON trabajador.id_trabajador = foto_servicio.id_trabajador
     WHERE trabajador.correo_electronico = ?
+  `;
+
+  // Consulta para los datos de documentos
+  const sqlDocumentos = `
+    SELECT 
+    titulo,
+    documento,
+    t.id_trabajador,
+    t.correo_electronico
+    FROM documento_trabajador
+    JOIN trabajador t ON t.id_trabajador = documento_trabajador.id_trabajador  
+    WHERE t.correo_electronico = ?
   `;
 
   const valores = [correoElectronico];
@@ -316,14 +328,23 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) {
               console.error('Error al obtener los datos de la galería:', errGaleria);
               callback({ error: 'Error interno al obtener los datos de la galería', details: errGaleria.message }, null);
             } else {
-              console.log('Datos de servicio, trabajador y galería obtenidos con éxito');
-              // Aquí puedes combinar los datos de servicio, trabajador y galería como desees
-              const resultadoFinal = {
-                datosServicio: datosServicio,
-                datosTrabajador: datosTrabajador,
-                datosGaleria: datosGaleria
-              };
-              callback(null, resultadoFinal);
+              // Después de obtener los datos de la galería, realizamos la consulta para los datos de documentos
+              db.query(sqlDocumentos, valores, (errDocumentos, datosDocumentos) => {
+                if (errDocumentos) {
+                  console.error('Error al obtener los datos de documentos:', errDocumentos);
+                  callback({ error: 'Error interno al obtener los datos de documentos', details: errDocumentos.message }, null);
+                } else {
+                  console.log('Datos de servicio, trabajador, galería y documentos obtenidos con éxito');
+                  // Aquí puedes combinar los datos como desees
+                  const resultadoFinal = {
+                    datosServicio: datosServicio,
+                    datosTrabajador: datosTrabajador,
+                    datosGaleria: datosGaleria,
+                    datosDocumentos: datosDocumentos
+                  };
+                  callback(null, resultadoFinal);
+                }
+              });
             }
           });
         }
@@ -331,6 +352,7 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) {
     }
   });
 }
+
 
 
 function agregarServicio(serviceData, callback) {

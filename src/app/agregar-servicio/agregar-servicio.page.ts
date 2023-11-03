@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NgxImageCompressService } from 'ngx-image-compress';
@@ -38,6 +38,7 @@ export class AgregarServicioPage implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
     private alertController: AlertController,
     private sanitizer: DomSanitizer,
     private imageCompress: NgxImageCompressService
@@ -77,9 +78,7 @@ export class AgregarServicioPage implements OnInit {
     
   }
 
-  private navigateToServiceList() {
-    this.router.navigate(['/listar-servicios']);
-  }
+  
 
   
    // Selector de imagenes
@@ -152,7 +151,9 @@ export class AgregarServicioPage implements OnInit {
   
   
 
-  
+  perfil_trabajador() {
+    this.router.navigate(['/trabajador', this.authService.getCorreoElectronico()]);
+  }
 
 
   addService() {
@@ -197,7 +198,7 @@ export class AgregarServicioPage implements OnInit {
       (response) => {
         console.log('Servicio agregado con éxito', response);
         console.log("Datos del servicio agregado: ", this.servicio);
-        this.navigateToServiceList();
+        this.perfil_trabajador();
       },
       (error) => {
         console.error('Error al agregar el servicio:', error);

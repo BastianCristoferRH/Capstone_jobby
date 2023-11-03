@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NgxImageCompressService } from 'ngx-image-compress';
@@ -25,6 +25,7 @@ export class SubidaGaleriaPage implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
     private alertController: AlertController,
     private sanitizer: DomSanitizer
     ) { }
@@ -48,7 +49,7 @@ export class SubidaGaleriaPage implements OnInit {
 
   
 
-  private perfil_trabajador() {
+  perfil_trabajador() {
     this.router.navigate(['/trabajador', this.authService.getCorreoElectronico()]);
   }
 

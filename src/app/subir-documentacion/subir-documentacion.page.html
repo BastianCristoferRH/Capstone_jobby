@@ -1,31 +1,37 @@
 <ion-header [translucent]="true">
+
   <ion-toolbar>
-    <ion-title>subir-documentacion</ion-title>
+    <ion-buttons slot="start"> <!-- Utiliza el slot "start" para la esquina superior izquierda -->
+      <ion-back-button (click)="perfil_trabajador()"></ion-back-button>
+    </ion-buttons>
+    <ion-title>JOBBY</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">subir-documentacion</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="gradiante">
+  <br><br>
 
 
-  <form (ngSubmit)="submitForm()">
-    <ion-list>
-      <ion-item>
-        <ion-label position="stacked">Título del Documento</ion-label>
-        <ion-input type="text" [(ngModel)]="documentDataa.titulo" name="titulo"></ion-input>
-      </ion-item>
+  <form (ngSubmit)="submitForm()" class="service-form">
 
-      <ion-item>
-        <ion-label position="stacked">Seleccione un archivo (Imagen o PDF)</ion-label>
-        <input type="file" accept=".jpg, .jpeg, .png, .pdf" (change)="onFileSelected($event)" />
-      </ion-item>
-    </ion-list>
+    <h2 style="text-align: center;">Agregar Documento a perfil</h2>
 
-    <ion-button type="submit" [disabled]="!documentDataa.titulo || !selectedFile">Subir Documento</ion-button>
+
+    <div class="form-group">
+      <label for="descripcion">Seleccione un archivo (Imagen o PDF):</label>
+      <input type="file" accept=".jpg, .jpeg, .png, .pdf" (change)="onFileSelected($event)" />
+    </div>
+
+    <div class="form-group">
+      <label for="descripcion">Título del Documento:</label>
+      <ion-input type="text" [(ngModel)]="documentData.titulo" name="titulo"></ion-input>
+    </div>
+
+
+
+
+
+    <button type="submit" class="submit-button">Agregar Documento</button>
   </form>
 
 

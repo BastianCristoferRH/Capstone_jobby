@@ -20,12 +20,15 @@ export class PerfiltrabajadorPage implements OnInit {
   correoElectronico: string = '';
   //datosTrabajador: any = []; // Ahora inicializado como un arreglo
   id_trabajador: number = 0;
-  datosTrabajador: any[] = [];
+
   selectedTab: string = 'tab1';
 
   //promedio_trabajador: any[]=[];
+  datosTrabajador: any[] = [];
   datosServicio: any[] = [];
   datosGaleria: any[] = [];
+  datosDocumentos: any[] = [];
+
   esFavorito: boolean = false;
   promedioTrabajador: number = 0;
   promedioServicio: number = 0;
@@ -99,6 +102,8 @@ export class PerfiltrabajadorPage implements OnInit {
               console.log('Pasadas por buble conversor de imagenes');
               element.img_galeria_base64 = this.sanitizer.bypassSecurityTrustUrl('data:image/jpeg;base64,' + element.img_galeria_base64);
             }
+
+          
             
           }
 
@@ -113,10 +118,12 @@ export class PerfiltrabajadorPage implements OnInit {
 
           this.datosServicio = data.datosServicio;
           this.datosGaleria = data.datosGaleria;
+          this.datosDocumentos = data.datosDocumentos;
           console.log('promedio',this.promedioTrabajador);
           console.log('Datos Trabajador obtenidos', this.datosTrabajador);
           console.log('Datos servicios obtenidos', this.datosServicio);
           console.log('Datos de galeria obtenidos', this.datosGaleria);
+          console.log('Datos de Documentos obtenidos', this.datosDocumentos);
           console.log('Promedios servicio:',this.promedioServicio);
 
         // Verificar si el correo del trabajador coincide con el usuario autenticado

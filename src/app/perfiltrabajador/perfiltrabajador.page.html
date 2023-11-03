@@ -60,8 +60,9 @@
             class="star-filled"></ion-icon>
         </div>
         <p>Estado:{{datosServicio[0]?.disponibilidad}}</p>
-        <ion-button *ngIf="mostrarBotonAgregarDocumentacion && datosTrabajador.length>0" shape="round" class="button"
-          (click)="goToFormularioDocumentacion()">Subir documentacion</ion-button>
+
+        
+
           <ion-button *ngIf="datosTrabajador.length > 0 && mostrarBotonGestionarResenas" shape="round"
             class="button" (click)="gestionarResenas()">Gestionar reseñas
           </ion-button>
@@ -69,19 +70,41 @@
       </div>
       <!-- boton para actualizar estado -->
 
+      
 
       <div style="text-align: center; padding-bottom: 5px;">
         <ion-button *ngIf="datosTrabajador.length > 0 && mostrarBotonSolicitar" shape="round"
           class="button-solicitar-servicio custom-buttonx" (click)="navigateToSolicitud()">Solicitar</ion-button> <br>
-        <ion-button *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0" shape="round"
-          class="button-solicitar-servicio custom-buttonx" (click)="agregarServicio()">Agregar Servicio</ion-button>
-
-        <ion-button *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0" shape="round"
-          class="button-solicitar-servicio custom-buttonx" (click)="agregarGaleria()">Agregar Foto a
-          galeria</ion-button>
+        
       </div>
     </ion-card>
-    <br><br>
+
+    <!-- Acordeon de lista de documentos -->
+    <ion-accordion-group expand="inset" class="custom-accordion">
+      <ion-accordion value="first" class="custom-accordion-item">
+        <ion-item slot="header" style="--background: transparent; color: inherit;">
+          <ion-label>Documentos</ion-label>
+        </ion-item>
+        
+        
+          <div *ngFor="let datos of datosDocumentos" slot="content" class="custom-accordion-content" style="display: flex; justify-content: space-between;">
+            <div>{{ datos.titulo }}</div>
+            <ion-icon name="download" style="font-size: 30px; padding-right: 1%;"></ion-icon>
+          </div>
+
+          <div slot="content" class="custom-accordion-content" style="text-align: center; padding-bottom: 16%;">
+          
+          <ion-button *ngIf="mostrarBotonAgregarDocumentacion && datosTrabajador.length>0" shape="round" class="button"
+            (click)="goToFormularioDocumentacion()">Agregar documentacion</ion-button>
+          </div>
+          
+      
+      
+
+      </ion-accordion>
+    </ion-accordion-group>
+    
+    <!-- Fin de acordeon de lista de documentos -->
 
 
 
@@ -135,11 +158,7 @@
                   </div>
                 </div>
               </div>
-
-              <ion-button
-                *ngIf="datosTrabajador.length > 0 && mostrarBotonSolicitar && datosServicio[0]?.disponibilidad=='disponible'"
-                shape="round" class="button-solicitar-servicio custom-buttonx"
-                (click)="navigateToSolicitud()">Solicitar</ion-button> <br>
+              <br>
               <!-- <ion-button *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0" shape="round"
                 class="button-solicitar-servicio custom-buttonx" (click)="agregarServicio()">Agregar
                 Servicio</ion-button> -->
@@ -147,14 +166,29 @@
             </div>
             
           </ion-card>
-          <br><br>
-          
 
           
-
-          <div *ngIf="datosServicio.length === 0">
+          
+          <div *ngIf="datosServicio.length === 0" style="display: flex; flex-direction: column; align-items: center;">
             <h2 style="color: white; text-align: center;">NO POSEE SERVICIOS</h2>
           </div>
+          <div *ngIf="mostrarBotonAgregarServicio && datosServicio.length === 0" style="display: flex; justify-content: center; margin-bottom: 10%;">
+            <ion-fab>
+              <ion-fab-button (click)="agregarServicio()" color="tertiary">
+                <ion-icon name="add"></ion-icon>
+              </ion-fab-button>
+            </ion-fab>
+          </div>
+          
+          <ion-fab *ngIf="mostrarBotonAgregarServicio && datosServicio.length > 0"  slot="fixed" vertical="bottom"  horizontal="end" class="fixed-button">
+            <ion-fab-button (click)="agregarServicio()" color="tertiary">
+              <ion-icon name="add"></ion-icon>
+            </ion-fab-button>
+          </ion-fab>
+
+          <br><br>
+
+          
 
         </div> <!-- fin switch 1-->
 
@@ -180,11 +214,34 @@
                 </div>
               </div>
             </div>
+
+            
           </ion-card>
 
-          <div *ngIf="datosGaleria.length === 0">
+
+          <div *ngIf="datosGaleria.length === 0" style="display: flex; flex-direction: column; align-items: center;">
             <h2 style="color: white; text-align: center;">NO POSEE FOTOS EN GALERIA</h2>
           </div>
+          <div *ngIf="mostrarBotonAgregarServicio && datosGaleria.length === 0" style="display: flex; justify-content: center; margin-bottom: 10%;">
+            <ion-fab>
+              <ion-fab-button (click)="agregarGaleria()" color="warning">
+                <ion-icon name="add"></ion-icon>
+              </ion-fab-button>
+            </ion-fab>
+          </div>
+
+          <ion-fab *ngIf="mostrarBotonAgregarServicio && datosGaleria.length > 0"  slot="fixed" vertical="bottom"  horizontal="end" class="fixed-button">
+            <ion-fab-button (click)="agregarGaleria()" color="warning">
+              <ion-icon name="add"></ion-icon>
+            </ion-fab-button>
+          </ion-fab>
+
+          <br><br>
+
+          
+          
+
+          
 
 
         </div> <!-- fin switch 2-->
