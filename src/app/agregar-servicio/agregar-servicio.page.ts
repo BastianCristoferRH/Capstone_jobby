@@ -46,7 +46,7 @@ export class AgregarServicioPage implements OnInit {
 
   ngOnInit() {
     const correoElectronico = this.authService.getCorreoElectronico();
-
+    
     if (correoElectronico) {
       this.authService.getTrabajadorIdPorCorreo(correoElectronico).subscribe(
         (data: any) => {

@@ -18,7 +18,7 @@ export class ServiciosSolicitadosPage implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
-      this.correoTrabajador = params['correoElectronico'];
+      this.correoTrabajador = atob(params['correoElectronico']);
       this.authService.SolicitudesRecibidas(this.correoTrabajador).subscribe(
         (data: any) => {
           this.solicitudesRecibidas = data;

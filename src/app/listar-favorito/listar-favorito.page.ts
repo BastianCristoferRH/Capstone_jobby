@@ -21,7 +21,7 @@ export class ListarFavoritoPage implements OnInit {
     if (id_usuario !== null) {
       this.authService.listarFavoritos(id_usuario).subscribe(
         (data: any) => {
-          if (Array.isArray(data.favoritos)) { // Verifica si data.favoritos es un arreglo
+          if (Array.isArray(data.favoritos)) {
             this.favoritos = data.favoritos;
           } else {
             console.error('Los datos recibidos no son un arreglo.');
@@ -37,7 +37,7 @@ export class ListarFavoritoPage implements OnInit {
   navegarAFavorito(trabajador :string) {
    
     if (trabajador) {
-      this.router.navigate(['/trabajador', trabajador]);
+      this.router.navigate(['/trabajador', btoa(trabajador)]);
     } else {
       console.error('Correo electrónico no disponible.');
     }

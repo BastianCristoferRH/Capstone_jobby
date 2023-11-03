@@ -16,7 +16,7 @@ export class PerfiltrabajadorPage implements OnInit {
   mostrarBotonAgregarServicio: boolean = false;
   mostrarBotonAgregarDocumentacion: boolean = false;
   mostrarBotonSolicitar: boolean = true;
-  mostrarBotonGestionarResenas:boolean=false;
+  mostrarBotonGestionarResenas: boolean = false;
   correoElectronico: string = '';
   //datosTrabajador: any = []; // Ahora inicializado como un arreglo
   id_trabajador: number = 0;
@@ -71,7 +71,7 @@ export class PerfiltrabajadorPage implements OnInit {
     this.starData2 = this.getStarDataAverageService(this.promedioServicio);
     console.log(this.promedioServicio);
     this.route.params.subscribe(params => {
-      this.correoElectronico = params['correoElectronico'];
+      this.correoElectronico = atob(params['correoElectronico']);
 
       // Obtener datos del trabajador
       this.authService.loadTrabajadorData(this.correoElectronico).subscribe(
@@ -83,8 +83,8 @@ export class PerfiltrabajadorPage implements OnInit {
               trabajador.img_base64 = this.sanitizer.bypassSecurityTrustUrl('data:image/jpeg;base64,' + trabajador.img_base64);
             }
           }
-          
-        
+
+
           for (let i = 0; i < data.datosServicio.length; i++) {
             const element = data.datosServicio[i];
             if (element.img_portada_base64 !== null) {
@@ -92,7 +92,7 @@ export class PerfiltrabajadorPage implements OnInit {
               console.log('Pasadas por buble conversor de imagenes');
               element.img_portada_base64 = this.sanitizer.bypassSecurityTrustUrl('data:image/jpeg;base64,' + element.img_portada_base64);
             }
-            
+
           }
 
           for (let i = 0; i < data.datosGaleria.length; i++) {
@@ -103,16 +103,14 @@ export class PerfiltrabajadorPage implements OnInit {
               element.img_galeria_base64 = this.sanitizer.bypassSecurityTrustUrl('data:image/jpeg;base64,' + element.img_galeria_base64);
             }
 
-          
-            
           }
 
-          
-          
-          
 
 
-          
+
+
+
+
           this.datosTrabajador = data.datosTrabajador;
 
 
@@ -126,21 +124,22 @@ export class PerfiltrabajadorPage implements OnInit {
           console.log('Datos de Documentos obtenidos', this.datosDocumentos);
           console.log('Promedios servicio:',this.promedioServicio);
 
-        // Verificar si el correo del trabajador coincide con el usuario autenticado
-        const usuarioAutenticado = this.authService.getCorreoElectronico();
-        if (usuarioAutenticado === this.correoElectronico) {
-          this.mostrarBotonAgregarServicio = true;
-          this.mostrarBotonAgregarDocumentacion = true;
-          this.mostrarBotonSolicitar = false; // Ocultar el botón "Solicitar"
-          this.mostrarBotonGestionarResenas = true;
           // Verificar si el correo del trabajador coincide con el usuario autenticado
-          
-          
-          
+          const usuarioAutenticado = this.authService.getCorreoElectronico();
+          if (usuarioAutenticado === this.correoElectronico) {
+            this.mostrarBotonAgregarServicio = true;
+            this.mostrarBotonAgregarDocumentacion = true;
+            this.mostrarBotonSolicitar = false; // Ocultar el botón "Solicitar"
+            this.mostrarBotonGestionarResenas = true;
+            // Verificar si el correo del trabajador coincide con el usuario autenticado
+
+
+
           }
-          this.verificarFavorito();},
-        
-          
+          this.verificarFavorito();
+        },
+
+
         (error: any) => {
           console.error('Error al recibir los datos del trabajador', error);
         });
@@ -150,10 +149,10 @@ export class PerfiltrabajadorPage implements OnInit {
         //console.log(data);
         this.promedioTrabajador = data[0].promedio_calificacion;
         console.log(this.promedioTrabajador);
-        })
+      })
     });
   }
-  
+
   navigateToHistorialServicios() {
     this.router.navigate(['/trabajador', this.correoElectronico, 'historial-trabajador'])
   }
@@ -172,8 +171,8 @@ export class PerfiltrabajadorPage implements OnInit {
     }
   }
 
-  gestionarResenas(){
-    this.router.navigate(['/trabajador',this.correoElectronico,'gestionar-resenas'])
+  gestionarResenas() {
+    this.router.navigate(['/trabajador', btoa(this.correoElectronico), 'gestionar-resenas'])
   }
 
   getStarIconAvgService(index: number, promedioServicio: number): string {
@@ -187,7 +186,7 @@ export class PerfiltrabajadorPage implements OnInit {
     }
   }
 
-  
+
 
   goToFormularioDocumentacion() {
     const correoElectronico = this.authService.getCorreoElectronico();
@@ -260,11 +259,11 @@ export class PerfiltrabajadorPage implements OnInit {
   }
 
   perfil_trabajador() {
-    this.router.navigate(['/trabajador', this.correoElectronico]);
+    this.router.navigate(['/trabajador', btoa(this.correoElectronico)]);
   }
 
-  
-   eliminarServicio(id_des_serv: number) {
+
+  eliminarServicio(id_des_serv: number) {
     this.authService.eliminarServicio(id_des_serv).subscribe(
       (response: any) => {
         console.log('Servicio eliminado con éxito', response);
@@ -282,7 +281,7 @@ export class PerfiltrabajadorPage implements OnInit {
                 console.log('Pasadas por buble conversor de imagenes');
                 element.img_portada_base64 = this.sanitizer.bypassSecurityTrustUrl('data:image/jpeg;base64,' + element.img_portada_base64);
               }
-              
+
             }
             // Resto del código para manejar los datos actualizados.
           },
@@ -315,14 +314,14 @@ export class PerfiltrabajadorPage implements OnInit {
                 console.log('Pasadas por buble conversor de imagenes');
                 element.img_galeria_base64 = this.sanitizer.bypassSecurityTrustUrl('data:image/jpeg;base64,' + element.img_galeria_base64);
               }
-              
+
             }
             // Resto del código para manejar los datos actualizados.
           },
           (error: any) => {
             console.error('Error al recibir los datos del trabajador', error);
           }
-        ); 
+        );
       },
       (error: any) => {
         console.error('Error al eliminar la  foto de galeria', error);
@@ -332,7 +331,7 @@ export class PerfiltrabajadorPage implements OnInit {
   }
 
   navigateToSolicitud() {
-    this.router.navigate(['/solicitud', this.correoElectronico]);
+    this.router.navigate(['/solicitud', btoa(this.correoElectronico)]);
   }
 
   logout() {
@@ -352,7 +351,7 @@ export class PerfiltrabajadorPage implements OnInit {
   }
 
   private navigateToUserProfile(correoElectronico: string) {
-    this.router.navigate(['/perfil', correoElectronico]);
+    this.router.navigate(['/perfil', btoa(correoElectronico)]);
   }
 
 
@@ -360,25 +359,34 @@ export class PerfiltrabajadorPage implements OnInit {
   navegarAServicioSolicitado() {
     const correoElectronico = this.authService.getCorreoElectronico();
     if (correoElectronico) {
-      this.router.navigate(['/servicio-solicitado', correoElectronico]);
+      this.router.navigate(['/servicio-solicitado', btoa(correoElectronico)]);
     } else {
       console.error('Correo electrónico no disponible.');
     }
   }
 
   agregarServicio() {
-    this.router.navigate(['/agregar-servicio', this.authService.getCorreoElectronico()]);
-    console.log("click");
+    const correo = this.authService.getCorreoElectronico();
+    if (correo != null) {
+      this.router.navigate(['/agregar-servicio', btoa(correo)]);
+    }
   }
 
   agregarGaleria() {
-    this.router.navigate(['/subida-galeria', this.authService.getCorreoElectronico()]);
-    console.log("click");
+    const correo = this.authService.getCorreoElectronico();
+    if (correo != null) {
+      this.router.navigate(['/subida-galeria', btoa(correo)]);
+    }
+
+
   }
 
   navegarCrearPerfilTrabajador() {
     const correoElectronico = this.authService.getCorreoElectronico();
-    this.router.navigate(['/registrar-trabajado', correoElectronico]);
+    if (correoElectronico != null) {
+      this.router.navigate(['/registrar-trabajado', btoa(correoElectronico)]);
+    }
+
   }
 
   agregarFavorito(id_usuario: string, id_trabajador: number) {
@@ -461,13 +469,13 @@ export class PerfiltrabajadorPage implements OnInit {
   actualizarDisponibilidadUsuarioAutenticadoocupado() {
     const correoElectronico = this.authService.getCorreoElectronico();
     if (correoElectronico) {
-      console.log(correoElectronico); 
-      console.log('Cambiando disponibilidad a "ocupado"'); 
+      console.log(correoElectronico);
+      console.log('Cambiando disponibilidad a "ocupado"');
       this.authService.actualizarDisponibilidad(correoElectronico, 'ocupado')
         .subscribe(
           (response: any) => {
             console.log('Disponibilidad actualizada con éxito', response);
-            window.location.reload(); 
+            window.location.reload();
           },
           (error: any) => {
             console.error('Error al actualizar la disponibilidad', error);

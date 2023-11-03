@@ -27,7 +27,7 @@ export class ListarServiciosPage implements OnInit {
 
   perfil_trabajador(correoElectronico: string) {
     // Usar 'correoElectronico' para construir la URL y navegar
-    this.router.navigate(['/trabajador', correoElectronico]);
+    this.router.navigate(['/trabajador',correoElectronico]);
   }
 
   cargarListadoServicios() {
@@ -46,7 +46,7 @@ export class ListarServiciosPage implements OnInit {
   }
   
   navegarAPerfilTrabajador(correoElectronico: string) {
-    const perfilTrabajadorUrl = `/trabajador/${correoElectronico}`;
+    const perfilTrabajadorUrl = `/trabajador/${btoa(correoElectronico)}`;
     this.router.navigate([perfilTrabajadorUrl]);
   }
  
@@ -87,14 +87,7 @@ export class ListarServiciosPage implements OnInit {
     }
     
   }
-  // doRefresh(event) {
-  //   console.log('Begin async operation');
 
-  //   setTimeout(() => {
-  //     console.log('Async operation has ended');
-  //     event.target.complete();
-  //   }, 500);
-  // }
 
 }
 

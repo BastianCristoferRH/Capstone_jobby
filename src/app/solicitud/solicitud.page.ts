@@ -25,7 +25,7 @@ export class SolicitudPage implements OnInit {
   ngOnInit() {
 
     this.route.params.subscribe(params => {
-      this.correoElectronico_trabajador = params['correoElectronico'];
+      this.correoElectronico_trabajador = atob(params['correoElectronico']);
       this.loadServicio_solicitud(this.correoElectronico_trabajador);
 
     });
@@ -36,13 +36,13 @@ export class SolicitudPage implements OnInit {
     this.router.navigateByUrl('/login');
   }
   private navigateToUserProfile(correoElectronico: string) {
-    this.router.navigate(['/perfil', correoElectronico]);
+    this.router.navigate(['/perfil', btoa(correoElectronico)]);
   }
   perfil_menu() {
     if (this.authService.isAuthenticated()) {
       const correoElectronico = this.authService.getCorreoElectronico();
       if (correoElectronico) {
-        this.navigateToUserProfile(correoElectronico);
+        this.navigateToUserProfile(btoa(correoElectronico));
       }
     } else {
       this.router.navigateByUrl('/login');
@@ -101,7 +101,7 @@ export class SolicitudPage implements OnInit {
     ).subscribe(
       (response: any) => {
         console.log('Solicitud enviada con éxito', response);
-        this.navigateToUserProfile(correoElectronico_trabajadorx);
+        this.navigateToUserProfile(btoa(correoElectronico_trabajadorx));
       },
       (error: any) => {
         console.error('Error al enviar la solicitud:', error);

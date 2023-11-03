@@ -49,8 +49,12 @@ export class SubidaGaleriaPage implements OnInit {
 
   
 
-  perfil_trabajador() {
-    this.router.navigate(['/trabajador', this.authService.getCorreoElectronico()]);
+  private perfil_trabajador() {
+    const correo=this.authService.getCorreoElectronico();
+    if (correo != null) {
+      this.router.navigate(['/trabajador',btoa(correo)]);
+    }
+    
   }
 
 

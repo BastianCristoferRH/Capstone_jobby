@@ -41,7 +41,7 @@ export class AgendarVisitaServicioPage implements OnInit {
       }, (error: any) => {
         // Maneja el error aquí
       });
-      console.log("hola");
+     
     }
   }
 }

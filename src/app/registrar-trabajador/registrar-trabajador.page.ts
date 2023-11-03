@@ -20,7 +20,7 @@ export class RegistrarTrabajadorPage implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
-      this.correo = params['correo']; // Obtiene el correo electrónico de la URL
+      this.correo = atob(params['correo']); // Obtiene el correo electrónico de la URL
     });
   }
 

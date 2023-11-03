@@ -24,7 +24,7 @@ export class PerfilPage implements OnInit {
   ngOnInit() {
     
     this.route.params.subscribe((params) => {
-      this.correoElectronico = params['userId']; // Utiliza 'correoElectronico'
+      this.correoElectronico = atob(params['userId']); // Utiliza 'correoElectronico'
       this.loadUserProfile(this.correoElectronico);
       this.authService.SolicitudesRealizadas(this.correoElectronico).subscribe(
         (data: any) => {
@@ -38,7 +38,7 @@ export class PerfilPage implements OnInit {
     });
   }
   goToResena(solicitudId: number){
-    this.router.navigate(['/perfil',this.correoElectronico,'agregar-resena', solicitudId])
+    this.router.navigate(['/perfil',btoa(this.correoElectronico),'agregar-resena',solicitudId])
   }
   
 
