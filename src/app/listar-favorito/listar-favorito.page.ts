@@ -37,7 +37,7 @@ export class ListarFavoritoPage implements OnInit {
   navegarAFavorito(trabajador :string) {
    
     if (trabajador) {
-      this.router.navigate(['/trabajador', trabajador]);
+      this.router.navigate(['/trabajador', btoa(trabajador)]);
     } else {
       console.error('Correo electrónico no disponible.');
     }
