@@ -152,7 +152,16 @@ export class AgregarServicioPage implements OnInit {
   
 
   perfil_trabajador() {
-    this.router.navigate(['/trabajador', this.authService.getCorreoElectronico()]);
+    const correo =  this.authService.getCorreoElectronico();
+    if(correo != null){
+      this.navigateTo('/trabajador/' + btoa(correo));
+    }
+   
+  }
+
+  private navigateTo(url: string) {
+   
+    window.location.href = url;
   }
 
 

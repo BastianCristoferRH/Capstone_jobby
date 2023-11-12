@@ -1,41 +1,10 @@
-/* Estilos para el menú desplegable */
-ion-menu {
-    --ion-background-color: white;
-}
-
-.menu-content {
-    ion-list {
-        ion-item {
-            color: black;
-
-            &.logout-button {
-                background-color: transparent;
-                color: black;
-            }
-        }
-    }
-}
-
-p {
-    color: black;
-    text-align: center;
-}
-
-h3 {
-    text-align: center;
-    color: black;
-}
-
 ion-item.custom-menu-item {
-  --color: black;
+  --color: rgb(255, 255, 255);
   --background: transparent;
   border: solid red;
 }
 
-ion-list {
-  background-color: rgba(255, 255, 255, 0);
-  border: red;
-}
+
 
 ion-button.custom-button {
   --background: orange; 
@@ -47,6 +16,51 @@ ion-button.custom-button {
   margin-top: 2%;
 }
 
+.custom-accordion {
+  // Estilos generales del acordeón
+  // Puedes definir el color de fondo, el borde, etc.
+  background-color: rgba(255, 255, 255, 0.7); /* Cambia esto al color que desees */
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  color: black;
+  width: 90%;
+  max-width: 90%;
+  margin: 0 auto;
+  margin-top: 2%;
+
+  .custom-accordion-item {
+    // Estilos para los elementos del acordeón
+    // Aquí puedes definir el color de fondo, el borde, etc. para los elementos del acordeón
+    background-color: transparent; // Establece el fondo del ion-accordion como transparente
+    color: inherit; // Hereda el color de texto del elemento padre
+    
+
+    .custom-accordion-header {
+      // Estilos para los elementos de cabecera del acordeón
+      // Aquí puedes definir el color de fondo, el borde, etc. para los elementos de cabecera del acordeón
+      background-color: transparent; // Establece el fondo del ion-item como transparente
+      color: inherit; // Hereda el color de texto del elemento padre
+    }
+
+    .custom-accordion-content {
+      // Estilos para el contenido del acordeón
+      // Aquí puedes definir el color de fondo, el borde, etc. para el contenido del acordeón
+      background-color:  rgba(255, 255, 255, 0.432); // Establece el fondo del contenido como transparente
+      color: inherit; // Hereda el color de texto del elemento padre
+      padding-left: 2%;
+      padding-top: 1%;
+      height: 40px;
+      border-top:solid 1px #00000034;
+
+    }
+  }
+}
+
+
+
+
+
+
 .user-avatar {
   max-width: 250px;
   height: 250px;
@@ -56,16 +70,23 @@ ion-button.custom-button {
   border-radius: 50%;
 }
 
+.img-serv {
+  border-radius: 5px;
+}
+
 
 .datos {
   text-align: center;
   color: black;
 }
 
+
+
+
 .user-card {
 
-  width: 80%;
-  max-width: 80%;
+  width: 90%;
+  max-width: 90%;
   margin: 0 auto;
   margin-top: 5%;
   background-color: rgba(255, 255, 255, 0.7);
@@ -77,7 +98,20 @@ ion-button.custom-button {
 .custom-buttonx {
   --background: orange;
   color: red; 
-  width: 40%;
+}
+
+ion-fab {
+  margin-top: var(--ion-safe-area-top, 0);
+  margin-bottom: var(--ion-safe-area-bottom, 0);
+
+}
+
+
+.fixed-button {
+  position: fixed;
+  bottom: 20px; /* Ajusta la distancia desde el borde inferior de la página */
+  right: 10px;   /* Ajusta la distancia desde el borde izquierdo de la página */
+  z-index: 999; /* Ajusta el valor del índice z para que esté por encima de otros elementos */
 }
 
 
@@ -86,7 +120,7 @@ ion-button.custom-button {
   max-width: 90%;
   margin: 0 auto;
   margin-top: 2%;
-  margin-bottom: 2%;
+  margin-bottom: 1%;
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
@@ -104,6 +138,13 @@ ion-button.custom-button {
 
 }
 
+.bartab{
+  text-align: center;
+  color: rgb(0, 0, 0);
+
+
+}
+
 
 
 .div-tarjeta-servicio{
@@ -111,6 +152,8 @@ ion-button.custom-button {
   color:black;
   border: solid 1px red;
 }
+
+
 
 .tipo_servicio_h2{
   text-align: center;
@@ -124,20 +167,39 @@ ion-button.custom-button {
 .boton-crear{
   margin-left: 30%;
 }
-
-
-.button-reseña{
-  --background:orange;
-  color: red;
+ion-icon {
+  font-size: 24px; /* Tamaño de las estrellas */
 }
 
-.button-incompleto{
-  --background:red;
+.star-filled {
+  color: gold; /* Color de las estrellas llenas */
+  border-color: black;
+}
+
+.unfilled {
+  color: gray; /* Color de las estrellas vacías */
+}
+
+.btn-historial-servicios{
+ 
+  text-align: center;
+  --background: orange;
+  color: red;
+  
+  margin-bottom: 2%;
+}
+
+.contenedor-btn-historial-serv{
+  display: flex;
+  justify-content: center;
+}
+
+.btn-estado-ocupado{
+  --background: red;
   color: white;
-}
 
-.button-completado{
-  --background:orange;
+}
+.btn-estado-disponible{
+  --background: orange;
   color: red;
 }
-

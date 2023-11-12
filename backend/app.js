@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { loginAdmin,visitasAgendadas, horasAgendadasParaCliente, eliminarGaleria,agregarGaleria, agregarVisitaConSolicitud, actualizarDisponibilidad, listarFavoritos, verificarFavorito, eliminarServicio, agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador, agregarDocumentacionTrabajador, calcularPromedioCalificacionServicio, calcularPromedioCalificacionTrabajador,listarReseñaPorTrabajador, listarReseña, obtenerResenas,getReseñasAdmin, obtenerResenaEspecifica,modificarResena,emitirReporteResena } = require('./controller');
+const { loginAdmin,visitasAgendadas, horasAgendadasParaCliente,eliminarDocumento, eliminarGaleria,agregarGaleria, agregarVisitaConSolicitud, actualizarDisponibilidad, listarFavoritos, verificarFavorito, eliminarServicio, agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador, agregarDocumentacionTrabajador, calcularPromedioCalificacionServicio, calcularPromedioCalificacionTrabajador,listarReseñaPorTrabajador, listarReseña, obtenerResenas,getReseñasAdmin, obtenerResenaEspecifica,modificarResena,emitirReporteResena } = require('./controller');
 const { ifError } = require('assert');
 const controller = require('./controller.js');
 const jwt = require('jsonwebtoken');
@@ -116,6 +116,23 @@ app.delete('/eliminar_galeria/:id_foto', (req, res) => {
       res.status(500).json(error);
     } else {
       console.log('Foto eliminado con éxito');
+      res.status(200).json(resultado);
+    }
+  });
+});
+
+
+//Eliminar Documento
+app.delete('/eliminar_documento/:id_documento', (req, res) => {
+  const id_documento = req.params.id_documento;
+
+  // Llamar a la función eliminarDocumento con el id_documento 
+  eliminarDocumento(id_documento, (error, resultado) => {
+    if (error) {
+      console.error('Error al eliminar documento:', error);
+      res.status(500).json(error);
+    } else {
+      console.log('Documento eliminado con éxito');
       res.status(200).json(resultado);
     }
   });

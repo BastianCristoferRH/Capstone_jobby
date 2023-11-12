@@ -29,7 +29,7 @@
         </ion-row>
       </div>
   
-      <div class="user-details">
+      <div class="datos" style="text-align: center; flex: 1;">
         <h3>{{ datosUsuario.nombre }} {{ datosUsuario.apellidos }}</h3>
         <p>Fecha de creación: {{ datosUsuario.fecha_creacion | date:'dd-MM-yyyy' }}</p>
         <p>Fecha de nacimiento: {{ datosUsuario.fecha_nacimiento | date:'dd-MM-yyyy' }}</p>
@@ -38,7 +38,7 @@
     <br><br>
 
     <div *ngIf="SolicitudesRealizadas.length === 0">
-      <h2 style="color: white; text-align: center;">NO HA REALIZADO SOLICITUDES</h2>
+      <h2 style="color: white; text-align: center; padding-left: 2%; padding-right: 2%;">NO HA REALIZADO SOLICITUDES</h2>
     </div>
 
     <ion-label class="titulo">

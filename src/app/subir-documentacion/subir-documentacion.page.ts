@@ -17,7 +17,7 @@ export class SubirDocumentacionPage implements OnInit {
   };
 
   trabajadorId:any={};
-
+  documentSelected: boolean = false;
   selectedFile: File | null = null;
 
   constructor(
@@ -58,6 +58,8 @@ export class SubirDocumentacionPage implements OnInit {
     const selectedFile = event.target.files[0];
     const maxSizeInBytes = 5 * 1024 * 1024;
 
+
+
     if (selectedFile.size > maxSizeInBytes) {
       // Muestra un mensaje de error al usuario o realiza una acción apropiada.
       console.log("La imagen es demasiado grande. Debe ser menor de 5 MB.");
@@ -65,6 +67,12 @@ export class SubirDocumentacionPage implements OnInit {
       return;
     }
     else {
+
+      if (event.target.files.length > 0) {
+        this.documentSelected = true;
+      } else {
+        this.documentSelected = false;
+      }
 
       // Crear un nuevo objeto Blob con el archivo seleccionado
       const blob = new Blob([selectedFile], { type: selectedFile.type });
@@ -150,7 +158,16 @@ export class SubirDocumentacionPage implements OnInit {
   }
 
   perfil_trabajador() {
-    this.router.navigate(['/trabajador', this.authService.getCorreoElectronico()]);
+    const correo =  this.authService.getCorreoElectronico();
+    if(correo != null){
+      this.navigateTo('/trabajador/' + btoa(correo));
+    }
+   
+  }
+
+  private navigateTo(url: string) {
+   
+    window.location.href = url;
   }
 
   

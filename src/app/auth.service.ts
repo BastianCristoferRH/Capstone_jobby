@@ -145,6 +145,12 @@ export class AuthService {
     return this.http.delete(`${this.apiUrl}/eliminar_galeria/${id_foto}`);
   }
 
+  // Eliminar Documento
+  eliminarDocumento(id_documento: number): Observable<any> {
+
+    return this.http.delete(`${this.apiUrl}/eliminar_documento/${id_documento}`);
+  }
+
 
 
 

@@ -1,30 +1,29 @@
 <app-menu></app-menu>
+
 <div class="ion-page" id="main-content">
   <ion-header>
-
     <ion-toolbar>
-      <ion-title>JOBBY</ion-title>
+      <ion-title >JOBBY</ion-title>
       <ion-buttons slot="end">
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
-
     </ion-toolbar>
-
   </ion-header>
-  <ion-content [fullscreen]="true">
+
+
+  
+  <ion-content [fullscreen]="true" class="custom-content">
     <ion-searchbar [(ngModel)]="terminoBusqueda" (ionChange)="filtrarServicios()" (ionClear)="limpiarFiltro()"
       placeholder="Buscar"></ion-searchbar>
     <button class="btn-busqueda" (click)="buscarServicios()">Buscar</button>
-    <ion-header collapse="condense">
-    </ion-header>
-    <div class="row" *ngFor="let servicio of listaServicios">
-      <div class="column">
+    
+    <div class="user-card div-tarjeta-servicio" *ngFor="let servicio of listaServicios">
+      <div class="div-tarjeta-servicio-for">
         <h2 style="text-align: center;">{{ servicio.name_serv }}</h2>
         <img [src]="servicio.img_portada_base64" style="padding-top: 1%;" class="img-serv">
-        <p class="text-descripcion">{{ servicio.des_serv }}</p>
+        <p style="text-align: center;" class="text-descripcion">{{ servicio.des_serv }}</p>
         <p style="text-align: center;">⭐⭐⭐⭐⭐</p>
-        <p>Presencial: {{ servicio.presencial === '1' ? 'Sí' : 'No' }}</p>
-        <p>Disponibilidad: {{ servicio.disponibilidad }}</p>
+        <p style="text-align: center;">Presencial: {{ servicio.presencial === '1' ? 'Sí' : 'No' }}</p>
         <p style="text-align: center;">{{ servicio.name_comuna }},{{ servicio.name_region }}</p>
         <button shape="round" class="boton-look-perfil"
           (click)="navegarAPerfilTrabajador(servicio.correo_electronico)">Ver perfil</button>
@@ -32,7 +31,7 @@
 
     </div>
   </ion-content>
-
+  <br>
 
 </div>
 

@@ -105,6 +105,10 @@ export class PerfiltrabajadorPage implements OnInit {
 
           }
 
+          
+
+          
+
 
 
 
@@ -122,7 +126,9 @@ export class PerfiltrabajadorPage implements OnInit {
           console.log('Datos servicios obtenidos', this.datosServicio);
           console.log('Datos de galeria obtenidos', this.datosGaleria);
           console.log('Datos de Documentos obtenidos', this.datosDocumentos);
+          console.log('Datos de Documentos obtenidos', data.datosDocumentos.documento_hex);
           console.log('Promedios servicio:',this.promedioServicio);
+
 
           // Verificar si el correo del trabajador coincide con el usuario autenticado
           const usuarioAutenticado = this.authService.getCorreoElectronico();
@@ -258,6 +264,33 @@ export class PerfiltrabajadorPage implements OnInit {
     await alert.present();
   }
 
+
+
+  async confirmarEliminarDocumento(id_documento: number) {
+    const alert = await this.alertController.create({
+      header: 'Confirmar eliminación',
+      message: '¿Estás seguro de que deseas eliminar este documento?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Eliminación cancelada');
+          }
+        },
+        {
+          text: 'Aceptar',
+          handler: () => {
+            // Llama directamente a la función eliminarServicio
+            this.eliminarDocumento(id_documento);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
   perfil_trabajador() {
     this.router.navigate(['/trabajador', btoa(this.correoElectronico)]);
   }
@@ -325,6 +358,30 @@ export class PerfiltrabajadorPage implements OnInit {
       },
       (error: any) => {
         console.error('Error al eliminar la  foto de galeria', error);
+        // Maneja el error de acuerdo a tus necesidades
+      }
+    );
+  }
+
+
+  eliminarDocumento(id_documento: number) {
+    this.authService.eliminarDocumento(id_documento).subscribe(
+      (response: any) => {
+        console.log('Documento eliminado con exito', response);
+        this.perfil_trabajador();
+
+        this.authService.loadTrabajadorData(this.correoElectronico).subscribe(
+          (data: any) => {
+
+            this.datosDocumentos = data.datosDocumentos;
+          },
+          (error: any) => {
+            console.error('Error al recibir los datos del trabajador', error);
+          }
+        );
+      },
+      (error: any) => {
+        console.error('Error al eliminar documento', error);
         // Maneja el error de acuerdo a tus necesidades
       }
     );
@@ -485,6 +542,49 @@ export class PerfiltrabajadorPage implements OnInit {
       console.error('No se pudo obtener el correo electrónico del usuario autenticado.');
     }
   }
+
+  descargarDocumento(documentoBase64: string, titulo: string) {
+    // Decodifica el documento base64 a un Blob
+    const byteCharacters = atob(documentoBase64);
+    const byteNumbers = new Array(byteCharacters.length);
+  
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+  
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: 'application/pdf' }); // Cambia 'application/pdf' al tipo correcto del documento
+  
+    // Crea un enlace para la descarga
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = titulo; // Establece el nombre del archivo con el título
+    document.body.appendChild(a);
+  
+    // Inicia la descarga
+    a.click();
+  
+    // Limpia el enlace
+    window.URL.revokeObjectURL(url);
+  }
+  
+  
+  
+  
+
+  
+  
+
+
+
+  
+  
+
+ 
+  
+  
+  
 
 
 }

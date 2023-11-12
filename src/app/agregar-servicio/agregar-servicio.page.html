@@ -53,10 +53,25 @@
    
     <div class="form-group">
       <label for="imagen">Seleccionar Imagen:</label>
-      <input type="file" id="imagen" name="imagen" (change)="onFileSelected($event)" accept="image/*" required>
-      <img *ngIf="imagenPreview" [src]="imagenPreview" alt="Imagen seleccionada" class="preview-image">
+      <input type="file" id="imagen" name="imagen" (change)="onFileSelected($event)" accept="image/*" style="display: none;" required>
+      <br>
+      <label for="imagen" class="custom-file-input" style="text-align: center;">
+        <ion-fab-button  color="tertiary" *ngIf="!imagenPreview" style="margin: 0 auto;">
+          <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+        <img *ngIf="imagenPreview" [src]="imagenPreview" alt="Imagen seleccionada" class="preview-image">
+        <br>
+        <ion-fab-button  color="warning" *ngIf="imagenPreview" style="margin: 0 auto;">
+          <ion-icon name="sync-outline"></ion-icon>
+        </ion-fab-button>
+      </label>
+      
+      
       <div *ngIf="!imagenPreview" class="error-message">Debes seleccionar una imagen.</div>
     </div>
+    
+    
+    
     
     
     

@@ -11,8 +11,8 @@
   <div class="ion-padding">
     <ion-grid fixed class="ion-padding-top">
       <ion-row>
-        <ion-col size="1"></ion-col>
-        <ion-col size="10" class="ion-padding">
+       
+        <ion-col col-12 width-50 class="ion-padding">
           <div class="form-container">
             <form [formGroup]="registroForm" (ngSubmit)="registrar()" enctype="multipart/form-data">
               <div class="form-header">
@@ -63,16 +63,32 @@
 
               <div class="form-field">
                 <ion-item>
-                  <ion-label position="floating">Nacimiento</ion-label>
+                  <ion-label >Nacimiento</ion-label>
                   <ion-input type="date" name="fechaNacimiento" formControlName="fechaNacimiento"></ion-input>
                 </ion-item>
               </div>
 
-              <div class="form-field img-perfil">
-                <ion-label>Imagen:</ion-label>
-                <input type="file" (change)="onFileSelected($event)" accept="image/*">
-                <input type="hidden" name="imagen" formControlName="imagen">
-                <img *ngIf="imagenPreview" [src]="imagenPreview" alt="Vista previa de la imagen">
+              <br>
+
+              <div class="form-group">
+                <label for="imagen">Seleccionar Imagen:</label>
+                <input type="file" id="imagen" name="imagen" (change)="onFileSelected($event)" accept="image/*" style="display: none;" required>
+                <br>
+                <label for="imagen" class="custom-file-input" style="text-align: center;">
+                  <br>
+                  <ion-fab-button  color="tertiary" *ngIf="!imagenPreview" style="margin: 0 auto;">
+                    
+                    <ion-icon name="add"></ion-icon>
+                  </ion-fab-button>
+                  <img *ngIf="imagenPreview" [src]="imagenPreview" alt="Imagen seleccionada" class="preview-image">
+                  <br>
+                  <ion-fab-button  color="warning" *ngIf="imagenPreview" style="margin: 0 auto;">
+                    <ion-icon name="sync-outline"></ion-icon>
+                  </ion-fab-button>
+                </label>
+                
+                
+                <div *ngIf="!imagenPreview" class="error-message">Debes seleccionar una imagen.</div>
               </div>
 
 
@@ -85,7 +101,7 @@
             <ion-button shape="round" type="submit" class="volver-button" expand="block" routerLink="../login" >Volver</ion-button>
           </div>
         </ion-col>
-        <ion-col size="2"></ion-col>
+        
       </ion-row>
     </ion-grid>
   </div>

@@ -12,26 +12,46 @@
   <br><br>
 
 
-  <form (ngSubmit)="submitForm()" class="service-form">
+  <form (ngSubmit)="submitForm()" class="service-form " enctype="multipart/form-data">
 
     <h2 style="text-align: center;">Agregar Documento a perfil</h2>
-
-
-    <div class="form-group">
+    <br><br>
+    <div class="form-field" >
+      <ion-item >
+        <ion-label position="floating" for="descripcion">Título del Documento:</ion-label>
+        <ion-input  type="text" [(ngModel)]="documentData.titulo" name="titulo" required></ion-input>
+      </ion-item>
+    </div>
+    <br><br>
+    <div class="form-group" >
       <label for="descripcion">Seleccione un archivo (Imagen o PDF):</label>
-      <input type="file" accept=".jpg, .jpeg, .png, .pdf" (change)="onFileSelected($event)" />
+      <br><br>
+      <input type="file" accept=".pdf" (change)="onFileSelected($event)" style="display: none;" required>
+      
+      <label for="descripcion" class="custom-file-input" style="text-align: center;">
+        
+        <ion-fab-button [color]="documentSelected ? 'success' : 'tertiary'" style="margin: 0 auto; ">
+          <ion-icon [name]="documentSelected ? 'checkmark' : 'add'"></ion-icon>
+          <input type="file" accept=".pdf" (change)="onFileSelected($event)" style="opacity: 0; position: absolute; top: 0; left: 0; bottom: 0; right: 0;">
+        </ion-fab-button>
+        
+      </label>
     </div>
+    
 
-    <div class="form-group">
-      <label for="descripcion">Título del Documento:</label>
-      <ion-input type="text" [(ngModel)]="documentData.titulo" name="titulo"></ion-input>
+
+
+
+    
+    
+
+
+
+
+    <div  class="text-center">
+      <button type="submit" class="submit-button">Agregar Documento</button>
     </div>
-
-
-
-
-
-    <button type="submit" class="submit-button">Agregar Documento</button>
+    
   </form>
 
 

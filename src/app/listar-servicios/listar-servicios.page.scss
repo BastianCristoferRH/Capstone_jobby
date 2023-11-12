@@ -58,6 +58,13 @@ button {
   box-shadow: 5px 5px 2px 0px rgba(0, 0, 0, 0.75);
 }
 
+.titulo{
+  text-align: center;
+  color: white;
+
+
+}
+
 
 .text-descripcion{
   text-align: center;
@@ -80,3 +87,281 @@ ion-searchbar {
   color: red;
   
 }
+
+ion-item.custom-menu-item {
+  --color: rgb(255, 255, 255);
+  --background: transparent;
+  border: solid red;
+}
+
+
+
+ion-button.custom-button {
+  --background: orange; 
+  color: red; 
+  width: 100%; 
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  margin-top: 2%;
+}
+
+
+
+
+.user-avatar {
+  max-width: 250px;
+  height: 250px;
+  padding: 0.5em;
+  filter: drop-shadow(3px 4px 4px #444);
+  margin: 0 auto;
+  border-radius: 50%;
+}
+
+.img-serv {
+  border-radius: 5px;
+}
+
+
+.datos {
+  text-align: center;
+  color: black;
+}
+
+
+
+
+.user-card {
+
+  width: 90%;
+  max-width: 90%;
+  margin: 0 auto;
+  margin-top: 5%;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+
+}
+
+.custom-buttonx {
+  --background: orange;
+  color: red; 
+}
+
+ion-fab {
+  margin-top: var(--ion-safe-area-top, 0);
+  margin-bottom: var(--ion-safe-area-bottom, 0);
+
+}
+
+
+.fixed-button {
+  position: fixed;
+  bottom: 20px; /* Ajusta la distancia desde el borde inferior de la página */
+  right: 10px;   /* Ajusta la distancia desde el borde izquierdo de la página */
+  z-index: 999; /* Ajusta el valor del índice z para que esté por encima de otros elementos */
+}
+
+
+.custom-card{
+  width: 90%;
+  max-width: 90%;
+  margin: 0 auto;
+  margin-top: 2%;
+  margin-bottom: 1%;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.custom-list-item{
+  background-color: rgba(255,255,255,0.1);
+  color: red;
+}
+
+.titulo{
+  text-align: center;
+  color: white;
+
+
+}
+
+
+ion-item.custom-menu-item {
+  --color: rgb(255, 255, 255);
+  --background: transparent;
+  border: solid red;
+}
+
+
+
+ion-button.custom-button {
+  --background: orange; 
+  color: red; 
+  width: 100%; 
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  margin-top: 2%;
+}
+
+
+
+
+
+
+.user-avatar {
+  max-width: 250px;
+  height: 250px;
+  padding: 0.5em;
+  filter: drop-shadow(3px 4px 4px #444);
+  margin: 0 auto;
+  border-radius: 50%;
+}
+
+.img-serv {
+  border-radius: 5px;
+}
+
+
+.datos {
+  text-align: center;
+  color: black;
+}
+
+
+
+
+.user-card {
+
+  width: 90%;
+  max-width: 90%;
+  margin: 0 auto;
+  margin-top: 5%;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  margin-left: 5%;
+  margin-right: 5%;
+
+}
+
+.custom-buttonx {
+  --background: orange;
+  color: red; 
+}
+
+ion-fab {
+  margin-top: var(--ion-safe-area-top, 0);
+  margin-bottom: var(--ion-safe-area-bottom, 0);
+
+}
+
+
+.fixed-button {
+  position: fixed;
+  bottom: 20px; /* Ajusta la distancia desde el borde inferior de la página */
+  right: 10px;   /* Ajusta la distancia desde el borde izquierdo de la página */
+  z-index: 999; /* Ajusta el valor del índice z para que esté por encima de otros elementos */
+}
+
+
+.custom-card{
+  width: 90%;
+  max-width: 90%;
+  margin: 0 auto;
+  margin-top: 2%;
+  margin-bottom: 1%;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.custom-list-item{
+  background-color: rgba(255,255,255,0.1);
+  color: red;
+}
+
+.titulo{
+  text-align: center;
+  color: white;
+
+
+}
+
+.bartab{
+  text-align: center;
+  color: rgb(0, 0, 0);
+
+
+}
+
+
+
+.div-tarjeta-servicio{
+  color:black;
+  border: solid 1px red;
+  box-shadow: 5px 5px 3px 0px rgba(0, 0, 0, 0.75);
+  padding-bottom: 2%;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+
+
+.tipo_servicio_h2{
+  text-align: center;
+}
+
+.div-tarjeta-servicio-for{
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.boton-crear{
+  margin-left: 30%;
+}
+ion-icon {
+  font-size: 24px; /* Tamaño de las estrellas */
+}
+
+.star-filled {
+  color: gold; /* Color de las estrellas llenas */
+  border-color: black;
+}
+
+.unfilled {
+  color: gray; /* Color de las estrellas vacías */
+}
+
+.btn-historial-servicios{
+ 
+  text-align: center;
+  --background: orange;
+  color: red;
+  
+  margin-bottom: 2%;
+}
+
+.contenedor-btn-historial-serv{
+  display: flex;
+  justify-content: center;
+}
+
+.btn-estado-ocupado{
+  --background: red;
+  color: white;
+
+}
+.btn-estado-disponible{
+  --background: orange;
+  color: red;
+}
+
+
+
+
+
+
+
+

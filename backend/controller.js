@@ -157,8 +157,8 @@ function modificarServicio(id_des_serv, serviceData, callback) {
   // Validar el token del trabajador aquí (debe implementarse)
 
   // Actualizar el servicio en la base de datos
-  db.query('UPDATE `descrip_servicio` SET `id_des_serv`=?,`des_serv`=?,`presencial`=?,`id_trabajador`=?,`id_serv`=?,`id_comuna`=?,`id_region`=? WHERE id_des_serv=?',
-    [serviceData.id_des_serv, serviceData.des_serv, serviceData.presencial, serviceData.id_trabajador, serviceData.id_serv, serviceData.id_comuna, serviceData.id_region, id_des_serv],
+  db.query('UPDATE `descrip_servicio` SET `id_des_serv`=?,`des_serv`=?,`img_portada`=?,`presencial`=?,`id_trabajador`=?,`id_serv`=?,`id_comuna`=?,`id_region`=? WHERE id_des_serv=?',
+    [serviceData.id_des_serv, serviceData.des_serv, serviceData.img_portada,  serviceData.presencial, serviceData.id_trabajador, serviceData.id_serv, serviceData.id_comuna, serviceData.id_region, id_des_serv],
     (err, result) => {
       if (err) {
         console.error('Error al modificar el servicio:', err);
@@ -300,7 +300,8 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) {
   const sqlDocumentos = `
     SELECT 
     titulo,
-    documento,
+    id_documento,
+    TO_BASE64(UNHEX(documento)) AS documento_hex,
     t.id_trabajador,
     t.correo_electronico
     FROM documento_trabajador
@@ -423,6 +424,23 @@ function eliminarGaleria(id_foto, callback) {
 
 //Fin de funcion Agregar imagen a Galeria
 
+
+//Eliminar documento x id
+function eliminarDocumento(id_documento, callback) {
+  const sqlEliminarDocumento = 'DELETE FROM documento_trabajador WHERE id_documento = ?';
+  const valores = [id_documento];
+
+  db.query(sqlEliminarDocumento, valores, (err, resultado) => {
+    if (err) {
+      console.error('Error al eliminar el documento:', err);
+      callback({ error: 'Error interno al eliminar el documento', details: err.message });
+    } else {
+      console.log('Documento eliminado  con éxito');
+      callback(null, { mensaje: 'Documento eliminado con éxito' });
+    }
+  });
+}
+
 function obtenerServiciosSolicitadosPorTrabajador(correoElectronico, callback) {
   const sql = `
     SELECT 
@@ -504,7 +522,24 @@ function obtenerServiciosSolicitadosPorCliente(correoElectronico, callback) {
 
 
 function servEspecifico(id_des_serv, callback) {
-  const query = `SELECT ds.des_serv, ds.id_des_serv, ds.presencial, ds.id_trabajador, ds.id_serv, ds.id_region, ds.id_comuna, ds.presencial, t.correo_electronico, t.disponibilidad, name_serv, name_comuna, name_region 
+  const query = `
+  SELECT 	ds.des_serv,
+		ds.id_des_serv,
+        ds.presencial,
+        ds.id_trabajador,
+        ds.id_serv,
+        ds.id_region,
+        ds.id_comuna,
+        ds.presencial,
+        t.correo_electronico,
+        t.disponibilidad,
+        name_serv,
+        name_comuna,
+        name_region,
+        img_portada AS img_original,
+        TO_BASE64(img_portada) AS img_portada_1,
+        TO_BASE64(UNHEX(img_portada)) AS img_portada
+        
   FROM descrip_servicio ds JOIN trabajador t ON(ds.id_trabajador = t.id_trabajador) 
   JOIN servicio s ON(ds.id_serv = s.id_serv) 
   JOIN region r ON(ds.id_region = r.id_region)
@@ -1073,6 +1108,7 @@ module.exports = {
   agregarVisitaConSolicitud,
   visitasAgendadas,
   horasAgendadasParaCliente,
-  obtenerResenaEspecifica
+  obtenerResenaEspecifica,
+  eliminarDocumento
 
 };
