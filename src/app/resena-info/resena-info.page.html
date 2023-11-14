@@ -1,7 +1,7 @@
 <app-menu></app-menu>
 
 <div class="ion-page" id="main-content">
-<ion-content [fullscreen]="true">
+
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>JOBBY</ion-title>
@@ -11,11 +11,14 @@
   </ion-toolbar>
 </ion-header>
 
+<ion-content [fullscreen]="true">
 <div class="mt-6"*ngIf="resenaData.length == 0">
   <h1> Este servicio no cuenta con reseña </h1>
 </div>
-  <div class="row" *ngFor="let resena of resenaData">
-    <div class="column" style="margin-top:15%">
+
+<ion-card class="custom-card" style="margin-top:15%; padding-left: 3%;" *ngFor="let resena of resenaData">
+  
+    <div class="div-tarjeta-servicio">
       <h1>Comentario del cliente:</h1>
       <div *ngIf="resena.estado !='reportado'">
         <p >{{resena.descripcion}}</p>
@@ -29,6 +32,7 @@
           class="star-filled"></ion-icon>
       </div>
     </div>
-</div>
+</ion-card>
+
 </ion-content>
 </div>

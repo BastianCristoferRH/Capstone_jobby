@@ -257,6 +257,21 @@ export class AuthService {
     return this.http.put(url, serviceData);
   }
 
+  modificarServicio2(id_des_serv: string, serviceData: any): Observable<any> {
+    const url = `${this.apiUrl}/modificar_servicio2/${id_des_serv}`;
+    return this.http.put(url, serviceData);
+  }
+
+  modificarPerfil(correo_electronico: string, datosmod: any): Observable<any> {
+    const url = `${this.apiUrl}/modificar_perfil/${correo_electronico}`;
+    return this.http.put(url, datosmod);
+  }
+
+  modificarPerfil1(correo_electronico: string, datosmod: any): Observable<any> {
+    const url = `${this.apiUrl}/modificar_perfil1/${correo_electronico}`;
+    return this.http.put(url, datosmod);
+  }
+
   agregarVisitaConSolicitud(visitaData: any): Observable<any> {
     const url = `${this.apiUrl}/agregar-visita`;
     return this.http.post(url, visitaData);

@@ -23,7 +23,7 @@
             <ng-container *ngIf="!datosUsuario.img_base64 || datosUsuario.img_base64 === null || datosUsuario.img_base64 === undefined">
               <img class="user-avatar" src="../../assets/img/user.jpg">
             </ng-container>
-            <ion-icon name="create"></ion-icon>
+            <ion-icon (click)="navegarModificarPerfil()"  name="create"></ion-icon>
           </ion-col>
           
         </ion-row>
@@ -31,9 +31,11 @@
   
       <div class="datos" style="text-align: center; flex: 1;">
         <h3>{{ datosUsuario.nombre }} {{ datosUsuario.apellidos }}</h3>
+        <p>Telefono: {{ datosUsuario.telefono}}</p>
         <p>Fecha de creación: {{ datosUsuario.fecha_creacion | date:'dd-MM-yyyy' }}</p>
         <p>Fecha de nacimiento: {{ datosUsuario.fecha_nacimiento | date:'dd-MM-yyyy' }}</p>
       </div>
+      
     </ion-card>
     <br><br>
 
@@ -45,27 +47,29 @@
       <h1 *ngIf="SolicitudesRealizadas.length > 0">SOLICITUDES REALIZADAS</h1>
     </ion-label>
 
+
     <ion-card class="custom-card custom-white-background" *ngFor="let datos of SolicitudesRealizadas">
       <div class="div-tarjeta-servicio">
         <div class="div-tarjeta-servicio-for">
           <div>
             
-            <h4 class="tipo_servicio_h2">Solicitud: {{ datos.titulo_solicitud }}</h4>
-            <p style="text-align: center;">Descripcion: {{ datos.des_solicitud }}</p>
-            <h4 class="tipo_servicio_h2">Est. de solicitud: {{ datos.estado }}</h4>
-            <h5 style="text-align: center;">Datos Trabajador</h5>
-            <p style="text-align: center;">Trabajador: {{ datos.nombre }} {{ datos.apellidos }} ⭐⭐⭐⭐</p>
-            <p style="text-align: center;">Servicio solicitado: {{ datos.name_serv }}</p>
-            <p style="text-align: center;">Descripcion: {{ datos.des_serv }}</p>
-            <p style="text-align: center;">Ubicacion: {{ datos.name_comuna }},{{ datos.name_region }}</p>
-            <p style="text-align: center;">Fecha de solicitud: {{ datos.fecha_solicitud | date:'dd-MM-yyyy' }}</p>
+            <h1 class="tipo_servicio_h2">Solicitud: {{ datos.titulo_solicitud }}</h1>
+            <p >Descripcion: {{ datos.des_solicitud }}</p>
+            <h4 >Est. de solicitud: {{ datos.estado }}</h4>
+            <br>
+            <h2 style="text-align: center;">Datos Trabajador</h2>
+            <h6>Trabajador: {{ datos.nombre }} {{ datos.apellidos }} ⭐⭐⭐⭐</h6>
+            <p >Servicio solicitado: {{ datos.name_serv }}</p>
+            <h6>Descripcion: {{ datos.des_serv }}</h6>
+            <p >Ubicacion: {{ datos.name_comuna }},{{ datos.name_region }}</p>
+            <p >Fecha de solicitud: {{ datos.fecha_solicitud | date:'dd-MM-yyyy' }}</p>
             
             </div>
             
             </div>
-            <ion-button shape="round"  expand="full" *ngIf="datos.estado  === 'Finalizado'" class="button-incompleto" (click)="IncompletoEncargo(datos.id_solicitud)">Incompleto</ion-button>
-            <ion-button shape="round"  expand="full" *ngIf="datos.estado  === 'Finalizado'" class="button-reseña" (click)="goToResena(datos.id_solicitud)">Realizar reseña</ion-button>
-            <ion-button   *ngIf="datos.estado === 'gestionando' || datos.estado === 'Desarrollo'" class="custom-button" target="_blank" href="https://wa.me/569{{ datos.telefono }}">Hablar WhatsApp</ion-button>
+            <ion-button shape="round" color="danger" expand="full" style="margin-left: 10%;margin-right: 10%;" *ngIf="datos.estado  === 'Finalizado'" class="button-incompleto" (click)="IncompletoEncargo(datos.id_solicitud)">Incompleto</ion-button>
+            <ion-button shape="round"  expand="full" style="margin-left: 10%;margin-right: 10%;" *ngIf="datos.estado  === 'Finalizado'" class="button-reseña" (click)="goToResena(datos.id_solicitud)">Realizar reseña</ion-button>
+            <ion-button  color="success" style="margin-left: 10%;margin-right: 10%;" *ngIf="datos.estado === 'gestionando' || datos.estado === 'Desarrollo'" class="custom-button" target="_blank" href="https://wa.me/569{{ datos.telefono }}">Hablar WhatsApp<ion-icon style="padding-left: 5%;" name="logo-whatsapp"></ion-icon></ion-button>
       </div>
     </ion-card>
 

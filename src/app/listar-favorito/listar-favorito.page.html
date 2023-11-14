@@ -4,7 +4,7 @@
   <ion-header>
     
     <ion-toolbar>
-      <ion-title>JOBBY</ion-title>
+      <ion-title>Favoritos</ion-title>
       <ion-buttons slot="end">
         <ion-menu-button style="background: red;"></ion-menu-button>
       </ion-buttons>
@@ -15,12 +15,14 @@
 
   <ion-content>
     <ion-list *ngIf="favoritos.length > 0" class="lista-favorito">
-      <ion-card *ngFor="let favorito of favoritos">
-        <ion-card-content class="carta-favorito">
+      <ion-card class="carta-favorito" *ngFor="let favorito of favoritos">
+        <ion-card-content >
+          <h3 style="text-align: center;">Estado:{{favorito.disponibilidad}}</h3>
+          <img [src]="favorito.img_base64" class="user-avatar">
           <h2 style="text-align: center;">{{ favorito.nombre }} {{ favorito.apellidos }}</h2>
           <h3 style="text-align: center;">{{favorito.des_perfil}}</h3>
           <br>
-          <h3>Estado:{{favorito.disponibilidad}}</h3>
+          
 
           <!-- Agrega otros detalles del favorito que desees mostrar -->
           <ion-button class="button-perfil" (click)="navegarAFavorito(favorito.correo_electronico)">Ver perfil</ion-button>
@@ -28,6 +30,6 @@
       </ion-card>
     </ion-list>
 
-    <ion-label *ngIf="favoritos.length === 0">No tienes trabajadores en favoritos.</ion-label>
+    <h2 style="margin-left: 5%; margin-right: 5%;"  *ngIf="favoritos.length === 0">No tienes trabajadores en favoritos.</h2>
   </ion-content>
 </div>

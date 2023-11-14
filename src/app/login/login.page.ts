@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,9 @@ export class LoginPage implements OnInit {
   correo_electronico: string = '';
   password: string = '';
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService,
+              private router: Router,
+              private alertController: AlertController) { }
 
   ngOnInit() {
     
@@ -38,9 +41,23 @@ export class LoginPage implements OnInit {
       },
       (error) => {
         console.error('Error al iniciar sesión:', error);
+        this.presentAlert('Revise los datos ingresados.');
+        return;
       }
     );
   }
+
+  async presentAlert(mensaje: string) {
+    const alert = await this.alertController.create({
+      cssClass: 'personalizada',
+      header: 'Credencial incorrecta',
+      message: mensaje,
+      buttons: [{ text: 'OK'}]
+    });
+
+    await alert.present();
+  }
+
 }
 
 

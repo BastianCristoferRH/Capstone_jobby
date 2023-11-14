@@ -78,6 +78,11 @@ export class PerfilPage implements OnInit {
     }
   }
 
+  
+
+  navegarModificarPerfil() {
+    this.router.navigate(['/modperfil',btoa(this.correoElectronico)])
+  }
 
   perfil_trabajador() {
     this.router.navigate(['/trabajador', this.correoElectronico]); // Usar 'this.correoElectronico'
