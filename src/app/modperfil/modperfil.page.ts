@@ -14,7 +14,7 @@ export class ModperfilPage implements OnInit {
   datosUsuario: any = {};
   datosmod: any = {};
   imagenPreview: any;
-  flagmodsev: number = 0;
+  flagmodper: number = 0;
 
   constructor(
     private authService: AuthService,
@@ -66,8 +66,7 @@ export class ModperfilPage implements OnInit {
     // Agregar el console.log para mostrar el formulario actual
     console.log('Formulario a enviar:', this.datosmod);
   
-    // Verificar la lógica del flagmodsev según tus necesidades
-    if (this.flagmodsev === 1) {
+    if (this.flagmodper === 1) {
       console.log('Flag1');
       this.presentConfirmAlert();
       // Detener la ejecución si la validación falla
@@ -105,7 +104,7 @@ export class ModperfilPage implements OnInit {
         this.blobToHexString(arrayBuffer).then((hexString) => {
 
           this.datosmod.img = hexString;
-          this.flagmodsev = 1;
+          this.flagmodper = 1;
           // Registrar datos del formulario
           console.log("Datos del formulario al cargar la imagen:", this.datosmod);
 

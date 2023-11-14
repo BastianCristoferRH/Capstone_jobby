@@ -127,13 +127,13 @@ export class ModificarServicioPage implements OnInit {
     this.serviceData.id_serv = this.obtenerIdServicio(this.serviceData.name_serv);
     this.serviceData.id_comuna = this.obtenerIdComuna(this.serviceData.name_comuna);
     this.serviceData.id_region = this.obtenerIdRegion(this.serviceData.name_region);
-
+    console.log(this.flagmodsev);
 
 
 
     // Agregar el console.log para mostrar el formulario actual
     console.log('Formulario a enviar:', this.serviceData);
-    if (this.flagmodsev = 1) {
+    if (this.flagmodsev === 1) {
       console.log('Flag1');
       this.presentConfirmAlert();
        // Detener la ejecución si la validación falla
