@@ -2,7 +2,7 @@
 <div class="ion-page" id="main-content">
 
   <ion-content [fullscreen]="true">
-    <ion-header collapse="condense">
+    <ion-header [translucent]="true">
       <ion-toolbar>
         <ion-title>JOBBY</ion-title>
         <ion-buttons slot="end">
@@ -11,32 +11,34 @@
 
       </ion-toolbar>
     </ion-header>
-    <div class="div-2">
-      <h1 style="text-align: center;">Calificación trabajador</h1>
-      <div class="div-form">
+
+    <div class="div-form">
+      <h2 style="text-align: center;">Calificación trabajador</h2>
+      <div >
 
         <form (submit)="agregarResena()" class="formulario-resena">
           <ion-item class="opinion-item">
-            <ion-label position="floating">Danos tu opinion</ion-label>
+            <ion-label position="floating">Danos tu opinión:</ion-label>
             <ion-textarea [(ngModel)]="resenaa.descripcion" name="descripcion" required></ion-textarea>
           </ion-item>
 
+          <!-- ... (otro código) ... -->
+          <br>
           <ion-item class="item-resena">
-            <ion-label>Calificación</ion-label>
-            <ion-radio-group [(ngModel)]="resenaa.calificacion" name="calificacion" required>
-              <ion-row>
-                <ion-col *ngFor="let star of [1, 2, 3, 4, 5]" class="star-col">
-                  <ion-item class="star-item">
-                    <ion-label>
-                      <ion-icon class="star" [name]="star <= resenaa.calificacion ? 'star' : 'star-outline'"></ion-icon>
-                    </ion-label>
-                    <ion-radio class="radio-star" [value]="star"></ion-radio>
-                  </ion-item>
-                </ion-col>
-              </ion-row>
-            </ion-radio-group>
+            <ion-label position="floating" style="padding-bottom: 2%;">Calificación</ion-label>
+            <br>
+            <br>
+            <ion-row>
+              <ion-col *ngFor="let star of [1, 2, 3, 4, 5]" class="star-col">
+                <ion-icon class="star" [name]="star <= resenaa.calificacion ? 'star' : 'star-outline'"
+                  (click)="resenaa.calificacion = star"></ion-icon>
+              </ion-col>
+            </ion-row>
           </ion-item>
 
+          <!-- ... (otro código) ... -->
+
+          <br><br>
           <ion-button type="submit" expand="full" class="button-enviar">Enviar Reseña</ion-button>
         </form>
       </div>

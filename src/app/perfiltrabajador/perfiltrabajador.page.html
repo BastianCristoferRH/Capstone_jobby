@@ -32,7 +32,6 @@
               *ngIf="!datosTrabajador[0]?.img_base64 || datosTrabajador[0]?.img_base64 === null || datosTrabajador[0]?.img_base64 === undefined">
               <img class="user-avatar" src="../../assets/img/user.jpg">
             </ng-container>
-            <ion-icon name="create"></ion-icon>
           </ion-col>
 
         </ion-row>
@@ -53,6 +52,7 @@
           </div>
 
         </div>
+        <p>Telefono de contacto: {{datosTrabajador[0]?.telefono}}</p>
         <p>Fecha de nacimiento: {{ datosTrabajador[0]?.fecha_nacimiento | date:'dd-MM-yyyy' }}</p>
         <p>{{datosTrabajador[0]?.des_perfil}}</p>
         <div class="star-container">
@@ -65,6 +65,10 @@
 
           <ion-button *ngIf="datosTrabajador.length > 0 && mostrarBotonGestionarResenas" shape="round"
             class="button" (click)="gestionarResenas()">Gestionar reseñas
+          </ion-button>
+
+          <ion-button *ngIf="datosTrabajador.length > 0 && mostrarBotonGestionarResenas" shape="round"
+            class="button" (click)="navigateToHistorialServicios()">Historial de trabajos
           </ion-button>
 
       </div>
@@ -142,10 +146,7 @@
                   <img [src]="datos.img_portada_base64" style="padding-top: 1%;" class="img-serv">
                   <p style="text-align: center;">{{ datos.des_serv }}</p>
                   <p style="text-align: center;">{{ datos.name_comuna }},{{ datos.name_region }}</p>
-                  <div class="star-container" style="text-align: center;">
-                    <ion-icon *ngFor="let i of getStarArray()" [name]="getStarIconAvgService(i, promedioServicio)"
-                      class="star-filled"></ion-icon>
-                  </div>
+                  
 
                   <div style="text-align: center;">
                     <!-- Utilizamos Angular RouterLink para la navegación -->

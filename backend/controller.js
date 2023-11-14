@@ -127,6 +127,7 @@ function iniciarSesion(datosUsuario, callback) {
 function obtenerDatosUsuarioPorCorreo(correoElectronico, callback) {
   const sql = `SELECT correo_electronico,
   nombre,
+  correo_electronico,
   TO_BASE64(UNHEX(img)) AS img_base64,
   apellidos,
   telefono,
@@ -152,6 +153,52 @@ WHERE correo_electronico = ?;`;
   });
 }
 
+function modificarPerfil(correo_electronico, datosmod, callback) {
+  // Validar el token del trabajador aquí (debe implementarse)
+
+  // Actualizar el perfil en la base de datos
+  db.query('UPDATE `usuario` SET `nombre`=?,`apellidos`=?,`telefono`=?,`img`=? WHERE correo_electronico=?',
+    [datosmod.nombre, datosmod.apellidos, datosmod.telefono,  datosmod.img, datosmod.correo_electronico],
+    (err, result) => {
+      if (err) {
+        console.error('Error al modificar el perfil:', err);
+        callback({ error: 'Error interno al modificar el perfil', details: err.message }, null);
+      } else {
+        if (result.affectedRows === 0) {
+          // Si no se encontró ningún registro para actualizar
+          callback({ error: 'perfil no encontrado', details: 'No se encontró el perfil para modificar' }, null);
+        } else {
+          console.log('perfil modificado con éxito');
+          callback(null, { message: 'perfil modificado con éxito' });
+        }
+      }
+    }
+  );
+}
+
+function modificarPerfil1(correo_electronico, datosmod, callback) {
+  // Validar el token del trabajador aquí (debe implementarse)
+
+  // Actualizar el perfil en la base de datos
+  db.query('UPDATE `usuario` SET `nombre`=?,`apellidos`=?,`telefono`=? WHERE correo_electronico=?',
+    [datosmod.nombre, datosmod.apellidos, datosmod.telefono, datosmod.correo_electronico],
+    (err, result) => {
+      if (err) {
+        console.error('Error al modificar el perfil:', err);
+        callback({ error: 'Error interno al modificar el perfil', details: err.message }, null);
+      } else {
+        if (result.affectedRows === 0) {
+          // Si no se encontró ningún registro para actualizar
+          callback({ error: 'perfil no encontrado', details: 'No se encontró el perfil para modificar' }, null);
+        } else {
+          console.log('perfil modificado con éxito');
+          callback(null, { message: 'perfil modificado con éxito' });
+        }
+      }
+    }
+  );
+}
+
 
 function modificarServicio(id_des_serv, serviceData, callback) {
   // Validar el token del trabajador aquí (debe implementarse)
@@ -175,6 +222,30 @@ function modificarServicio(id_des_serv, serviceData, callback) {
     }
   );
 }
+
+function modificarServicio2(id_des_serv, serviceData, callback) {
+  // Validar el token del trabajador aquí (debe implementarse)
+
+  // Actualizar el servicio en la base de datos
+  db.query('UPDATE `descrip_servicio` SET `id_des_serv`=?,`des_serv`=?,`presencial`=?,`id_trabajador`=?,`id_serv`=?,`id_comuna`=?,`id_region`=? WHERE id_des_serv=?',
+    [serviceData.id_des_serv, serviceData.des_serv,  serviceData.presencial, serviceData.id_trabajador, serviceData.id_serv, serviceData.id_comuna, serviceData.id_region, id_des_serv],
+    (err, result) => {
+      if (err) {
+        console.error('Error al modificar el servicio:', err);
+        callback({ error: 'Error interno al modificar el servicio', details: err.message }, null);
+      } else {
+        if (result.affectedRows === 0) {
+          // Si no se encontró ningún registro para actualizar
+          callback({ error: 'Servicio no encontrado', details: 'No se encontró el servicio para modificar' }, null);
+        } else {
+          console.log('Servicio modificado con éxito');
+          callback(null, { message: 'Servicio modificado con éxito' });
+        }
+      }
+    }
+  );
+}
+
 
 // Eliminar servicio por id de servicio
 function eliminarServicio(id_des_serv, callback) {
@@ -536,9 +607,9 @@ function servEspecifico(id_des_serv, callback) {
         name_serv,
         name_comuna,
         name_region,
-        img_portada AS img_original,
-        TO_BASE64(img_portada) AS img_portada_1,
-        TO_BASE64(UNHEX(img_portada)) AS img_portada
+        img_portada AS img_portada_real_2,
+        UNHEX(img_portada) AS img_portada_real,
+        TO_BASE64(UNHEX(COALESCE(img_portada, ''))) AS img_portada
         
   FROM descrip_servicio ds JOIN trabajador t ON(ds.id_trabajador = t.id_trabajador) 
   JOIN servicio s ON(ds.id_serv = s.id_serv) 
@@ -823,6 +894,7 @@ function listarFavoritos(req, res) {
            trabajador.correo_electronico,
            trabajador.disponibilidad,
            usuario.nombre,
+           TO_BASE64(UNHEX(usuario.img)) AS img_base64,
            usuario.apellidos,
            trabajador.des_perfil
     FROM favorito
@@ -1071,7 +1143,10 @@ module.exports = {
   iniciarSesion,
   agregarServicio,
   agregarGaleria,
+  modificarPerfil,
+  modificarPerfil1,
   modificarServicio,
+  modificarServicio2,
   obtenerDatosUsuarioPorCorreo,
   enviarSolicitud,
   obtenerDatosTrabajadorPorCorreo,

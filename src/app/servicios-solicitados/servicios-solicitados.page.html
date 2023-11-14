@@ -13,42 +13,57 @@
   </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="custom-list">
-    <div *ngFor="let solicitud of solicitudesRecibidas" class="list-soli">
-      <div class="custom-label">
-        <h2 class="datos-servicio">{{ solicitud.name_serv }}, {{ solicitud.titulo_solicitud }}</h2>
-        <p class="fecha">{{ solicitud.fecha_solicitud | date:'dd-MM-yyyy' }}</p>
-       
-        <p>Enviado por: {{ solicitud.nombre }} {{ solicitud.apellidos }}</p>
-       <p>Correo: {{ solicitud.correo_cliente}} </p>    
-        <p>Telefono: {{ solicitud.telefono }}</p> 
-        <p style="text-align: center;">{{ solicitud.des_solicitud }}</p>
-        <p class="estado">{{ solicitud.estado }}</p>
-      </div>
-      
-      <ion-button class="custom-button" *ngIf="solicitud.estado === 'pendiente'" (click)="aceptarSolicitud(solicitud.id_solicitud)">
-        Aceptar Solicitud
-      </ion-button>
-      <ion-button class="custom-button" *ngIf="solicitud.estado !== 'pendiente' && solicitud.estado !== 'Cerrado' && solicitud.estado !== 'Rechazado'" (click)="agendarVisita(solicitud.id_solicitud) ">
-        Agendar visita
-      </ion-button>
-      <ion-button class="custom-button" *ngIf="solicitud.estado === 'gestionando'" (click)="aceptarEncargo(solicitud.id_solicitud)">
-        Aceptar Encargo
-      </ion-button>
   
-      <ion-button class="custom-button-rechazo" *ngIf="solicitud.estado === 'gestionando'" (click)="rechazarEncargo(solicitud.id_solicitud)">
-        Rechazar Encargo
-      </ion-button>
-      <ion-button   *ngIf="solicitud.estado === 'gestionando' || solicitud.estado === 'Desarrollo'" class="custom-button" target="_blank" href="https://wa.me/569{{ solicitud.telefono }}">
-        Hablar WhatsApp
-      </ion-button>
-  
-      <ion-button class="custom-button" *ngIf="solicitud.estado === 'Desarrollo'" (click)="finalizarSolicitud(solicitud.id_solicitud)">
-        Solicitud completada
-      </ion-button>
-    </div>
-  </div>
-</ion-content>
 
+  <ion-card class="custom-card custom-white-background" *ngFor="let solicitud of solicitudesRecibidas">
+    <div class="div-tarjeta-servicio">
+      <div class="div-tarjeta-servicio-for">
+        <div>
+
+          <h2 class="tipo_servicio_h2">{{ solicitud.name_serv }}, {{ solicitud.titulo_solicitud }}</h2>
+          <p class="fecha">Fecha de solicitud: {{ solicitud.fecha_solicitud | date:'dd-MM-yyyy' }}</p>
+          <p>Enviado por: {{ solicitud.nombre }} {{ solicitud.apellidos }}</p>
+          <p>Correo: {{ solicitud.correo_cliente}} </p> 
+          <p style="text-align: center;">Descripcion de solicitud: {{ solicitud.des_solicitud }}</p>
+          <p class="estado">Status: {{ solicitud.estado }}</p>
+          </div>
+
+          <div style="text-align: center;">
+            <!-- Utilizamos Angular RouterLink para la navegación -->
+            <ion-button class="custom-button" *ngIf="solicitud.estado === 'pendiente'" (click)="aceptarSolicitud(solicitud.id_solicitud)">
+              Aceptar Solicitud
+            </ion-button>
+            <ion-button class="custom-button" color="secondary" *ngIf="solicitud.estado === 'gestionando' || solicitud.estado === 'Desarrollo'" (click)="agendarVisita(solicitud.id_solicitud) ">
+              Agendar visita <ion-icon style="padding-left: 5%;" name="alert-outline"></ion-icon>
+            </ion-button>
+            <ion-button  color="tertiary" *ngIf="solicitud.estado === 'gestionando' || solicitud.estado === 'Desarrollo'" class="custom-button" target="_blank" href="https://wa.me/569{{ solicitud.telefono }}">
+              Hablar WhatsApp  <ion-icon style="padding-left: 5%;" name="logo-whatsapp"></ion-icon>
+            </ion-button>
+            <ion-button class="custom-button" color="success" *ngIf="solicitud.estado === 'gestionando'" (click)="aceptarEncargo(solicitud.id_solicitud)">
+              Aceptar Encargo <ion-icon style="padding-left: 5%;" name="checkmark-outline"></ion-icon>
+            </ion-button>
+        
+            <ion-button class="custom-button" color="danger" *ngIf="solicitud.estado === 'gestionando'" (click)="rechazarEncargo(solicitud.id_solicitud)">
+              Rechazar Encargo <ion-icon style="padding-left: 5%;" name="close-outline"></ion-icon>
+            </ion-button>
+            
+        
+            <ion-button class="custom-button" *ngIf="solicitud.estado === 'Desarrollo'" (click)="finalizarSolicitud(solicitud.id_solicitud)">
+              Solicitud completada
+            </ion-button>
+          </div>
+
+        </div>
+      </div>
+      <br>
+      <!-- <ion-button *ngIf="mostrarBotonAgregarServicio && datosTrabajador.length > 0" shape="round"
+        class="button-solicitar-servicio custom-buttonx" (click)="agregarServicio()">Agregar
+        Servicio</ion-button> -->
+     
+    
+    
+  </ion-card>
+</ion-content>
+</div>
 
 

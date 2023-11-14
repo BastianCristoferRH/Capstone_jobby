@@ -11,10 +11,10 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  
-<div class="row" *ngFor="let resena of resenaData">
-  <div *ngIf="resena.estado != 'reportado'">
-    <div class="column" style="margin-top:10%">
+<ion-card class="custom-card "  *ngFor="let resena of resenaData">
+
+
+    <div class="column" style="margin-top:10%; padding-left: 2%;">
       <h1>Comentario del cliente:</h1>
       <p>{{ resena.descripcion }}</p>
       <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -24,8 +24,9 @@
         <ion-button (click)="emitirReporte(resena.id_resena)"><ion-icon name="alert-circle"></ion-icon>Emitir reporte</ion-button>
       </div>
 
-    </div>
+    
 </div>
-</div>
+</ion-card>
  
 </ion-content>
+</div>
