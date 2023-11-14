@@ -245,6 +245,20 @@ function enviarSolicitud(solicitudData, callback) {
     } else {
       console.log('Solicitud agregada con éxito');
       callback(null, { message: 'Solicitud enviada con éxito' });
+      let mailOptions = {
+        from: 'tuCorreo@gmail.com',
+        to:  solicitudData.correo_electronico,
+        subject: '¡Bienvenido a Jobby!',
+        text: 'Enviaste una solicitud de , ' + solicitudData.titulo_solicitud + 'con la descripción ' +  solicitudData.des_solicitud
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log('Error al enviar correo:', error);
+        } else {
+          console.log('Correo enviado:', info.response);
+        }
+      });
     }
   });
 }
@@ -755,6 +769,20 @@ const registrarTrabajador = (disponibilidad, des_perfil, correo_electronico, cal
       return callback(error, null);
     }
     callback(null, result);
+    let mailOptions = {
+      from: 'tuCorreo@gmail.com',
+      to: correo_electronico,
+      subject: '¡Bienvenido trabajador a Jobby!',
+      text: 'Gracias por registrarte como trabajador, ' + '. ¡Esperamos que disfrutes al promocionar tus servicios.!'
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log('Error al enviar correo:', error);
+      } else {
+        console.log('Correo enviado:', info.response);
+      }
+    });
   });
 };
 
@@ -924,6 +952,20 @@ function actualizarDisponibilidad(correo_electronico, disponibilidad, callback) 
     } else {
       console.log('Actualización exitosa:', results);
       callback(null, results);
+      let mailOptions = {
+        from: 'tuCorreo@gmail.com',
+        to: correo_electronico,
+        subject: '¡Cambiaste tu estado de trabajador en jobby!',
+        text: 'Cambiaste recientemente tu estado de disponibilidad en jobby a '+ disponibilidad
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log('Error al enviar correo:', error);
+        } else {
+          console.log('Correo enviado:', info.response);
+        }
+      });
     }
   });
 }
@@ -1041,8 +1083,8 @@ function obtenerResenaEspecifica(resenaId, callback) {
 }
 
 function modificarResena(resenaId, resenaData, callback) {
-  db.query('UPDATE reseña SET id_reseña = ?, descripcion = ?, calificacion = ?, estado = ?, id_solicitud = ?, created_at = ?, updated_at = ? WHERE id_reseña = ?',
-    [resenaData.id_reseña, resenaData.descripcion, resenaData.calificacion, resenaData.estado, resenaData.id_solicitud, resenaData.created_at, resenaData.updated_at, resenaId],
+  db.query('UPDATE reseña SET id_reseña = ?, descripcion = ?,  estado = ?, id_solicitud = ? WHERE id_reseña = ?',
+    [resenaData.id_reseña, resenaData.descripcion,resenaData.estado, resenaData.id_solicitud, resenaId],
     (err, result) => {
       if (err) {
         console.error('Error al modificar la reseña:', err);
@@ -1109,6 +1151,6 @@ module.exports = {
   visitasAgendadas,
   horasAgendadasParaCliente,
   obtenerResenaEspecifica,
-  eliminarDocumento
+  eliminarDocumento,
 
 };

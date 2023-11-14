@@ -101,7 +101,7 @@ export class SolicitudPage implements OnInit {
     ).subscribe(
       (response: any) => {
         console.log('Solicitud enviada con éxito', response);
-        this.navigateToUserProfile(btoa(correoElectronico_trabajadorx));
+        this.navigateToUserProfile((correo_electronico));
       },
       (error: any) => {
         console.error('Error al enviar la solicitud:', error);
