@@ -66,6 +66,7 @@
           <ion-button *ngIf="datosTrabajador.length > 0 && mostrarBotonGestionarResenas" shape="round"
             class="button" (click)="gestionarResenas()">Gestionar reseñas
           </ion-button>
+          <ion-button *ngIf="datosTrabajador.length > 0" class="button"  shape="round"(click)="navigateToHistorialServicios()">Historial trabajador</ion-button>
 
           <ion-button *ngIf="datosTrabajador.length > 0 && mostrarBotonGestionarResenas" shape="round"
             class="button" (click)="navigateToHistorialServicios()">Historial de trabajos
