@@ -116,6 +116,20 @@ function iniciarSesion(datosUsuario, callback) {
         if (hash == usuario.contrasena) {
           const token = jwt.sign({ usuarioId: usuario.correo_electronico }, 'tu_secreto', { expiresIn: '1h' }); //cambie el usuario id
           callback(null, { mensaje: "Inicio de sesión exitoso", token });
+          let mailOptions = {
+            from: 'tuCorreo@gmail.com',
+            to: usuario.correo_electronico,
+            subject: 'INICIASTE SESIÓN EN JOBBY',
+            text: 'Sí no ingresaste sesión tu , te recomendamos cambiar tus datos'
+          };
+    
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              console.log('Error al enviar correo:', error);
+            } else {
+              console.log('Correo enviado:', info.response);
+            }
+          });
         } else {
           callback({ mensaje: "Contraseña incorrecta" }, null);
         }
@@ -170,6 +184,20 @@ function modificarPerfil(correo_electronico, datosmod, callback) {
         } else {
           console.log('perfil modificado con éxito');
           callback(null, { message: 'perfil modificado con éxito' });
+          let mailOptions = {
+            from: 'tuCorreo@gmail.com',
+            to: datosmod.correo_electronico,
+            subject: '¡MODIFICASTE TUS DATOS EN JOBBY!',
+            text: datosmod.nombre+' modificaste tus datos con exito'
+          };
+    
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              console.log('Error al enviar correo:', error);
+            } else {
+              console.log('Correo enviado:', info.response);
+            }
+          });
         }
       }
     }
@@ -191,8 +219,23 @@ function modificarPerfil1(correo_electronico, datosmod, callback) {
           // Si no se encontró ningún registro para actualizar
           callback({ error: 'perfil no encontrado', details: 'No se encontró el perfil para modificar' }, null);
         } else {
+          
           console.log('perfil modificado con éxito');
           callback(null, { message: 'perfil modificado con éxito' });
+          let mailOptions = {
+            from: 'tuCorreo@gmail.com',
+            to: datosmod.correo_electronico,
+            subject: '¡MODIFICASTE EL TUS DATOS!',
+            text: datosmod.nombre+' modificaste tus datos con exito'
+          };
+    
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              console.log('Error al enviar correo:', error);
+            } else {
+              console.log('Correo enviado:', info.response);
+            }
+          });
         }
       }
     }
