@@ -301,7 +301,7 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) {
     SELECT 
     titulo,
     id_documento,
-    TO_BASE64(UNHEX(documento)) AS documento_hex,
+TO_BASE64(UNHEX(documento)) AS documento_hex,
     t.id_trabajador,
     t.correo_electronico
     FROM documento_trabajador
@@ -539,7 +539,7 @@ function servEspecifico(id_des_serv, callback) {
         img_portada AS img_original,
         TO_BASE64(img_portada) AS img_portada_1,
         TO_BASE64(UNHEX(img_portada)) AS img_portada
-        
+         
   FROM descrip_servicio ds JOIN trabajador t ON(ds.id_trabajador = t.id_trabajador) 
   JOIN servicio s ON(ds.id_serv = s.id_serv) 
   JOIN region r ON(ds.id_region = r.id_region)
@@ -1041,8 +1041,8 @@ function obtenerResenaEspecifica(resenaId, callback) {
 }
 
 function modificarResena(resenaId, resenaData, callback) {
-  db.query('UPDATE reseña SET id_reseña = ?, descripcion = ?, calificacion = ?, estado = ?, id_solicitud = ?, created_at = ?, updated_at = ? WHERE id_reseña = ?',
-    [resenaData.id_reseña, resenaData.descripcion, resenaData.calificacion, resenaData.estado, resenaData.id_solicitud, resenaData.created_at, resenaData.updated_at, resenaId],
+  db.query('UPDATE reseña SET id_reseña = ?, descripcion = ?,  estado = ?, id_solicitud = ? WHERE id_reseña = ?',
+    [resenaData.id_reseña, resenaData.descripcion,resenaData.estado, resenaData.id_solicitud, resenaId],
     (err, result) => {
       if (err) {
         console.error('Error al modificar la reseña:', err);
