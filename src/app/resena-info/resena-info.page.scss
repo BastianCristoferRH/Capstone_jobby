@@ -5,10 +5,69 @@
   }
   
   .star-filled {
-    color: gold; /* Color de las estrellas llenas */
+    color: rgb(255, 136, 0); /* Color de las estrellas llenas */
     border-color: black;
   }
   
   .unfilled {
     color: gray; /* Color de las estrellas vacías */
   }
+
+  .button-enviar{
+    --background:orange;
+    color: red;
+  }
+ 
+  
+  
+  
+  .star {
+    background-color: transparent !important;
+  }
+  
+  
+  .radio-star{
+    background-color: rgb(255, 102, 0);
+  }
+  
+  h2{
+    color: black;
+  }
+  
+  .star{
+    background-color: rgb(255, 94, 0);
+  }
+  h1{
+    color: white;
+  }
+  
+  .custom-card{
+    width: 90%;
+    max-width: 90%;
+    margin: 0 auto;
+    margin-top: 2%;
+    margin-bottom: 1%;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  }
+  
+
+  h1{ color: black; }
+
+  .div-tarjeta-servicio{
+    background-color: rgba(255,255,255,0.1);
+    color:black;
+  }
+  
+  .div-2{
+    margin: 2%;
+    background-color: red;
+    padding-bottom: 1%;
+  }
+  
+
+  
+  
+  
+  

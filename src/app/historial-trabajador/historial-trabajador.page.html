@@ -18,14 +18,16 @@
 
   <div class="row" *ngFor="let servicio of servicios">
       <div class="column" *ngIf="servicio.estado !='Rechazado'">
-        <h1>Datos del cliente:</h1>
+        <h1 style="text-align: center;">Datos del cliente:</h1>
         <p>{{servicio.nombre}} {{servicio.apellidos}}</p>
         <p>Correo:{{servicio.correo_cliente}}</p>
-        <h1>Servicio solicitado:</h1>
+        <h1 style="text-align: center;">Servicio solicitado:</h1>
         <p>{{servicio.name_serv}}</p>
         <p>Descripcion de la solicitud: {{servicio.des_solicitud}}</p>
         <p>Fecha: {{servicio.fecha_solicitud | date:'dd-MM-yyyy'}}</p>
+        <div style="text-align: center;">
         <ion-button (click)="goToResenaInfo(servicio.id_solicitud)">Ver reseña</ion-button>
+        </div>
       </div>
   </div>
 

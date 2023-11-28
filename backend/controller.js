@@ -116,6 +116,20 @@ function iniciarSesion(datosUsuario, callback) {
         if (hash == usuario.contrasena) {
           const token = jwt.sign({ usuarioId: usuario.correo_electronico }, 'tu_secreto', { expiresIn: '1h' }); //cambie el usuario id
           callback(null, { mensaje: "Inicio de sesión exitoso", token });
+          let mailOptions = {
+            from: 'tuCorreo@gmail.com',
+            to: usuario.correo_electronico,
+            subject: 'INICIASTE SESIÓN EN JOBBY',
+            text: 'Sí no ingresaste sesión tu , te recomendamos cambiar tus datos'
+          };
+    
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              console.log('Error al enviar correo:', error);
+            } else {
+              console.log('Correo enviado:', info.response);
+            }
+          });
         } else {
           callback({ mensaje: "Contraseña incorrecta" }, null);
         }
@@ -127,6 +141,7 @@ function iniciarSesion(datosUsuario, callback) {
 function obtenerDatosUsuarioPorCorreo(correoElectronico, callback) {
   const sql = `SELECT correo_electronico,
   nombre,
+  correo_electronico,
   TO_BASE64(UNHEX(img)) AS img_base64,
   apellidos,
   telefono,
@@ -152,6 +167,81 @@ WHERE correo_electronico = ?;`;
   });
 }
 
+function modificarPerfil(correo_electronico, datosmod, callback) {
+  // Validar el token del trabajador aquí (debe implementarse)
+
+  // Actualizar el perfil en la base de datos
+  db.query('UPDATE `usuario` SET `nombre`=?,`apellidos`=?,`telefono`=?,`img`=? WHERE correo_electronico=?',
+    [datosmod.nombre, datosmod.apellidos, datosmod.telefono,  datosmod.img, datosmod.correo_electronico],
+    (err, result) => {
+      if (err) {
+        console.error('Error al modificar el perfil:', err);
+        callback({ error: 'Error interno al modificar el perfil', details: err.message }, null);
+      } else {
+        if (result.affectedRows === 0) {
+          // Si no se encontró ningún registro para actualizar
+          callback({ error: 'perfil no encontrado', details: 'No se encontró el perfil para modificar' }, null);
+        } else {
+          console.log('perfil modificado con éxito');
+          callback(null, { message: 'perfil modificado con éxito' });
+          let mailOptions = {
+            from: 'tuCorreo@gmail.com',
+            to: datosmod.correo_electronico,
+            subject: '¡MODIFICASTE TUS DATOS EN JOBBY!',
+            text: datosmod.nombre+' modificaste tus datos con exito'
+          };
+    
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              console.log('Error al enviar correo:', error);
+            } else {
+              console.log('Correo enviado:', info.response);
+            }
+          });
+        }
+      }
+    }
+  );
+}
+
+function modificarPerfil1(correo_electronico, datosmod, callback) {
+  // Validar el token del trabajador aquí (debe implementarse)
+
+  // Actualizar el perfil en la base de datos
+  db.query('UPDATE `usuario` SET `nombre`=?,`apellidos`=?,`telefono`=? WHERE correo_electronico=?',
+    [datosmod.nombre, datosmod.apellidos, datosmod.telefono, datosmod.correo_electronico],
+    (err, result) => {
+      if (err) {
+        console.error('Error al modificar el perfil:', err);
+        callback({ error: 'Error interno al modificar el perfil', details: err.message }, null);
+      } else {
+        if (result.affectedRows === 0) {
+          // Si no se encontró ningún registro para actualizar
+          callback({ error: 'perfil no encontrado', details: 'No se encontró el perfil para modificar' }, null);
+        } else {
+          
+          console.log('perfil modificado con éxito');
+          callback(null, { message: 'perfil modificado con éxito' });
+          let mailOptions = {
+            from: 'tuCorreo@gmail.com',
+            to: datosmod.correo_electronico,
+            subject: '¡MODIFICASTE EL TUS DATOS!',
+            text: datosmod.nombre+' modificaste tus datos con exito'
+          };
+    
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              console.log('Error al enviar correo:', error);
+            } else {
+              console.log('Correo enviado:', info.response);
+            }
+          });
+        }
+      }
+    }
+  );
+}
+
 
 function modificarServicio(id_des_serv, serviceData, callback) {
   // Validar el token del trabajador aquí (debe implementarse)
@@ -175,6 +265,30 @@ function modificarServicio(id_des_serv, serviceData, callback) {
     }
   );
 }
+
+function modificarServicio2(id_des_serv, serviceData, callback) {
+  // Validar el token del trabajador aquí (debe implementarse)
+
+  // Actualizar el servicio en la base de datos
+  db.query('UPDATE `descrip_servicio` SET `id_des_serv`=?,`des_serv`=?,`presencial`=?,`id_trabajador`=?,`id_serv`=?,`id_comuna`=?,`id_region`=? WHERE id_des_serv=?',
+    [serviceData.id_des_serv, serviceData.des_serv,  serviceData.presencial, serviceData.id_trabajador, serviceData.id_serv, serviceData.id_comuna, serviceData.id_region, id_des_serv],
+    (err, result) => {
+      if (err) {
+        console.error('Error al modificar el servicio:', err);
+        callback({ error: 'Error interno al modificar el servicio', details: err.message }, null);
+      } else {
+        if (result.affectedRows === 0) {
+          // Si no se encontró ningún registro para actualizar
+          callback({ error: 'Servicio no encontrado', details: 'No se encontró el servicio para modificar' }, null);
+        } else {
+          console.log('Servicio modificado con éxito');
+          callback(null, { message: 'Servicio modificado con éxito' });
+        }
+      }
+    }
+  );
+}
+
 
 // Eliminar servicio por id de servicio
 function eliminarServicio(id_des_serv, callback) {
@@ -245,6 +359,20 @@ function enviarSolicitud(solicitudData, callback) {
     } else {
       console.log('Solicitud agregada con éxito');
       callback(null, { message: 'Solicitud enviada con éxito' });
+      let mailOptions = {
+        from: 'tuCorreo@gmail.com',
+        to:  solicitudData.correo_electronico,
+        subject: '¡Bienvenido a Jobby!',
+        text: 'Enviaste una solicitud de , ' + solicitudData.titulo_solicitud + 'con la descripción ' +  solicitudData.des_solicitud
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log('Error al enviar correo:', error);
+        } else {
+          console.log('Correo enviado:', info.response);
+        }
+      });
     }
   });
 }
@@ -536,10 +664,10 @@ function servEspecifico(id_des_serv, callback) {
         name_serv,
         name_comuna,
         name_region,
-        img_portada AS img_original,
-        TO_BASE64(img_portada) AS img_portada_1,
-        TO_BASE64(UNHEX(img_portada)) AS img_portada
-         
+        img_portada AS img_portada_real_2,
+        UNHEX(img_portada) AS img_portada_real,
+        TO_BASE64(UNHEX(COALESCE(img_portada, ''))) AS img_portada
+        
   FROM descrip_servicio ds JOIN trabajador t ON(ds.id_trabajador = t.id_trabajador) 
   JOIN servicio s ON(ds.id_serv = s.id_serv) 
   JOIN region r ON(ds.id_region = r.id_region)
@@ -755,6 +883,20 @@ const registrarTrabajador = (disponibilidad, des_perfil, correo_electronico, cal
       return callback(error, null);
     }
     callback(null, result);
+    let mailOptions = {
+      from: 'tuCorreo@gmail.com',
+      to: correo_electronico,
+      subject: '¡Bienvenido trabajador a Jobby!',
+      text: 'Gracias por registrarte como trabajador, ' + '. ¡Esperamos que disfrutes al promocionar tus servicios.!'
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log('Error al enviar correo:', error);
+      } else {
+        console.log('Correo enviado:', info.response);
+      }
+    });
   });
 };
 
@@ -823,6 +965,7 @@ function listarFavoritos(req, res) {
            trabajador.correo_electronico,
            trabajador.disponibilidad,
            usuario.nombre,
+           TO_BASE64(UNHEX(usuario.img)) AS img_base64,
            usuario.apellidos,
            trabajador.des_perfil
     FROM favorito
@@ -924,6 +1067,20 @@ function actualizarDisponibilidad(correo_electronico, disponibilidad, callback) 
     } else {
       console.log('Actualización exitosa:', results);
       callback(null, results);
+      let mailOptions = {
+        from: 'tuCorreo@gmail.com',
+        to: correo_electronico,
+        subject: '¡Cambiaste tu estado de trabajador en jobby!',
+        text: 'Cambiaste recientemente tu estado de disponibilidad en jobby a '+ disponibilidad
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log('Error al enviar correo:', error);
+        } else {
+          console.log('Correo enviado:', info.response);
+        }
+      });
     }
   });
 }
@@ -1071,7 +1228,10 @@ module.exports = {
   iniciarSesion,
   agregarServicio,
   agregarGaleria,
+  modificarPerfil,
+  modificarPerfil1,
   modificarServicio,
+  modificarServicio2,
   obtenerDatosUsuarioPorCorreo,
   enviarSolicitud,
   obtenerDatosTrabajadorPorCorreo,
@@ -1109,6 +1269,6 @@ module.exports = {
   visitasAgendadas,
   horasAgendadasParaCliente,
   obtenerResenaEspecifica,
-  eliminarDocumento
+  eliminarDocumento,
 
 };

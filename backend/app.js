@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./db');
-const { loginAdmin,visitasAgendadas, horasAgendadasParaCliente,eliminarDocumento, eliminarGaleria,agregarGaleria, agregarVisitaConSolicitud, actualizarDisponibilidad, listarFavoritos, verificarFavorito, eliminarServicio, agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador, agregarDocumentacionTrabajador, calcularPromedioCalificacionServicio, calcularPromedioCalificacionTrabajador,listarReseñaPorTrabajador, listarReseña, obtenerResenas,getReseñasAdmin, obtenerResenaEspecifica,modificarResena,emitirReporteResena } = require('./controller');
+const { loginAdmin,visitasAgendadas,modificarPerfil,modificarPerfil1, horasAgendadasParaCliente,eliminarDocumento, eliminarGaleria,agregarGaleria, agregarVisitaConSolicitud, actualizarDisponibilidad, listarFavoritos, verificarFavorito, eliminarServicio, agregarFavorito, quitarFavorito, registroUsuario, iniciarSesion, obtenerDatosUsuarioPorCorreo, agregarServicio, enviarSolicitud, servEspecifico, modificarServicio, modificarServicio2, obtenerDatosTrabajadorPorCorreo, obtenerServiciosSolicitadosPorTrabajador, obtenerServiciosSolicitadosPorCliente, aceptarSolicitud, obtenerRegiones, obtenerComunas, obtenerServicios, listarServicios, agregarReseña, obtenerTrabajadorIdPorCorreo, obtenerSolicitudIdPorTrabajadorId, registrarTrabajador, agregarDocumentacionTrabajador, calcularPromedioCalificacionServicio, calcularPromedioCalificacionTrabajador,listarReseñaPorTrabajador, listarReseña, obtenerResenas,getReseñasAdmin, obtenerResenaEspecifica,modificarResena,emitirReporteResena } = require('./controller');
 const { ifError } = require('assert');
 const controller = require('./controller.js');
 const jwt = require('jsonwebtoken');
@@ -138,6 +138,37 @@ app.delete('/eliminar_documento/:id_documento', (req, res) => {
   });
 });
 
+app.put('/modificar_perfil/:correo_electronico', (req, res) => {
+  const correo_electronico = req.params.correo_electronico;
+  const datosmod = req.body;
+
+  // Llamar a la función modificarServicio con el id_des_serv y los nuevos datos
+  modificarPerfil(correo_electronico, datosmod, (error, resultado) => {
+    if (error) {
+      console.error('Error al modificar el perfil:', error);
+      res.status(500).json(error);
+    } else {
+      console.log('Servicio perfil con éxito');
+      res.status(200).json(resultado);
+    }
+  });
+});
+
+app.put('/modificar_perfil1/:correo_electronico', (req, res) => {
+  const correo_electronico = req.params.correo_electronico;
+  const datosmod = req.body;
+
+  // Llamar a la función modificarServicio con el id_des_serv y los nuevos datos
+  modificarPerfil1(correo_electronico, datosmod, (error, resultado) => {
+    if (error) {
+      console.error('Error al modificar el perfil:', error);
+      res.status(500).json(error);
+    } else {
+      console.log('Servicio perfil con éxito');
+      res.status(200).json(resultado);
+    }
+  });
+});
 
 
 app.put('/modificar_servicio/:id_des_serv', (req, res) => {
@@ -146,6 +177,22 @@ app.put('/modificar_servicio/:id_des_serv', (req, res) => {
 
   // Llamar a la función modificarServicio con el id_des_serv y los nuevos datos
   modificarServicio(id_des_serv, serviceData, (error, resultado) => {
+    if (error) {
+      console.error('Error al modificar el servicio:', error);
+      res.status(500).json(error);
+    } else {
+      console.log('Servicio modificado con éxito');
+      res.status(200).json(resultado);
+    }
+  });
+});
+
+app.put('/modificar_servicio2/:id_des_serv', (req, res) => {
+  const id_des_serv = req.params.id_des_serv;
+  const serviceData = req.body;
+
+  // Llamar a la función modificarServicio con el id_des_serv y los nuevos datos
+  modificarServicio2(id_des_serv, serviceData, (error, resultado) => {
     if (error) {
       console.error('Error al modificar el servicio:', error);
       res.status(500).json(error);

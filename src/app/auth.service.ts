@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 export class AuthService {
   private tokenKey = 'auth_token';
   private emailKey = 'auth_email'; // Clave para almacenar el correo electrónico
-  private apiUrl = 'http://localhost:4001';//'http://192.168.1.9:4001'
+  private apiUrl = 'http://192.168.1.4:4001';//'http://192.168.1.9:4001'
   constructor(private http: HttpClient) { }
 
   registrarUsuario(usuario: any) {
@@ -255,6 +255,21 @@ export class AuthService {
   modificarServicio(id_des_serv: string, serviceData: any): Observable<any> {
     const url = `${this.apiUrl}/modificar_servicio/${id_des_serv}`;
     return this.http.put(url, serviceData);
+  }
+
+  modificarServicio2(id_des_serv: string, serviceData: any): Observable<any> {
+    const url = `${this.apiUrl}/modificar_servicio2/${id_des_serv}`;
+    return this.http.put(url, serviceData);
+  }
+
+  modificarPerfil(correo_electronico: string, datosmod: any): Observable<any> {
+    const url = `${this.apiUrl}/modificar_perfil/${correo_electronico}`;
+    return this.http.put(url, datosmod);
+  }
+
+  modificarPerfil1(correo_electronico: string, datosmod: any): Observable<any> {
+    const url = `${this.apiUrl}/modificar_perfil1/${correo_electronico}`;
+    return this.http.put(url, datosmod);
   }
 
   agregarVisitaConSolicitud(visitaData: any): Observable<any> {

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+
 @Component({
   selector: 'app-listar-favorito',
   templateUrl: './listar-favorito.page.html',
@@ -10,7 +12,9 @@ export class ListarFavoritoPage implements OnInit {
   favoritos: any[] = [];
   correo = this.authService.getCorreoElectronico();
 
-  constructor(private authService: AuthService,private router: Router) { }
+  constructor(private authService: AuthService,
+    private router: Router,
+    private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
     this.listar_favoritos();
@@ -22,6 +26,12 @@ export class ListarFavoritoPage implements OnInit {
       this.authService.listarFavoritos(id_usuario).subscribe(
         (data: any) => {
           if (Array.isArray(data.favoritos)) {
+            data.favoritos.forEach((favorito: any) => {
+              if (favorito.img_base64 !== null) {
+                // Crear una URL segura a partir de los datos base64
+                favorito.img_base64 = this.sanitizer.bypassSecurityTrustUrl('data:image/jpeg;base64,' + favorito.img_base64);
+              }
+            });
             this.favoritos = data.favoritos;
           } else {
             console.error('Los datos recibidos no son un arreglo.');
@@ -33,6 +43,7 @@ export class ListarFavoritoPage implements OnInit {
       );
     }
   }
+  
 
   navegarAFavorito(trabajador :string) {
    

@@ -121,6 +121,12 @@ const routes: Routes = [
     loadChildren: () => import('./agenda/agenda.module').then( m => m.AgendaPageModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'modperfil/:userId',
+    loadChildren: () => import('./modperfil/modperfil.module').then( m => m.ModperfilPageModule),
+    canActivate: [AuthGuard],
+  },
+
 
 
 
