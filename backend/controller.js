@@ -116,6 +116,20 @@ function iniciarSesion(datosUsuario, callback) {
         if (hash == usuario.contrasena) {
           const token = jwt.sign({ usuarioId: usuario.correo_electronico }, 'tu_secreto', { expiresIn: '1h' }); //cambie el usuario id
           callback(null, { mensaje: "Inicio de sesión exitoso", token });
+          let mailOptions = {
+            from: 'tuCorreo@gmail.com',
+            to: usuario.correo_electronico,
+            subject: 'INICIASTE SESIÓN EN JOBBY',
+            text: 'Sí no ingresaste sesión tu , te recomendamos cambiar tus datos'
+          };
+    
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              console.log('Error al enviar correo:', error);
+            } else {
+              console.log('Correo enviado:', info.response);
+            }
+          });
         } else {
           callback({ mensaje: "Contraseña incorrecta" }, null);
         }
@@ -170,6 +184,20 @@ function modificarPerfil(correo_electronico, datosmod, callback) {
         } else {
           console.log('perfil modificado con éxito');
           callback(null, { message: 'perfil modificado con éxito' });
+          let mailOptions = {
+            from: 'tuCorreo@gmail.com',
+            to: datosmod.correo_electronico,
+            subject: '¡MODIFICASTE TUS DATOS EN JOBBY!',
+            text: datosmod.nombre+' modificaste tus datos con exito'
+          };
+    
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              console.log('Error al enviar correo:', error);
+            } else {
+              console.log('Correo enviado:', info.response);
+            }
+          });
         }
       }
     }
@@ -191,8 +219,23 @@ function modificarPerfil1(correo_electronico, datosmod, callback) {
           // Si no se encontró ningún registro para actualizar
           callback({ error: 'perfil no encontrado', details: 'No se encontró el perfil para modificar' }, null);
         } else {
+          
           console.log('perfil modificado con éxito');
           callback(null, { message: 'perfil modificado con éxito' });
+          let mailOptions = {
+            from: 'tuCorreo@gmail.com',
+            to: datosmod.correo_electronico,
+            subject: '¡MODIFICASTE EL TUS DATOS!',
+            text: datosmod.nombre+' modificaste tus datos con exito'
+          };
+    
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              console.log('Error al enviar correo:', error);
+            } else {
+              console.log('Correo enviado:', info.response);
+            }
+          });
         }
       }
     }
@@ -316,6 +359,20 @@ function enviarSolicitud(solicitudData, callback) {
     } else {
       console.log('Solicitud agregada con éxito');
       callback(null, { message: 'Solicitud enviada con éxito' });
+      let mailOptions = {
+        from: 'tuCorreo@gmail.com',
+        to:  solicitudData.correo_electronico,
+        subject: '¡Bienvenido a Jobby!',
+        text: 'Enviaste una solicitud de , ' + solicitudData.titulo_solicitud + 'con la descripción ' +  solicitudData.des_solicitud
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log('Error al enviar correo:', error);
+        } else {
+          console.log('Correo enviado:', info.response);
+        }
+      });
     }
   });
 }
@@ -372,7 +429,7 @@ function obtenerDatosTrabajadorPorCorreo(correoElectronico, callback) {
     SELECT 
     titulo,
     id_documento,
-    TO_BASE64(UNHEX(documento)) AS documento_hex,
+TO_BASE64(UNHEX(documento)) AS documento_hex,
     t.id_trabajador,
     t.correo_electronico
     FROM documento_trabajador
@@ -826,6 +883,20 @@ const registrarTrabajador = (disponibilidad, des_perfil, correo_electronico, cal
       return callback(error, null);
     }
     callback(null, result);
+    let mailOptions = {
+      from: 'tuCorreo@gmail.com',
+      to: correo_electronico,
+      subject: '¡Bienvenido trabajador a Jobby!',
+      text: 'Gracias por registrarte como trabajador, ' + '. ¡Esperamos que disfrutes al promocionar tus servicios.!'
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log('Error al enviar correo:', error);
+      } else {
+        console.log('Correo enviado:', info.response);
+      }
+    });
   });
 };
 
@@ -996,6 +1067,20 @@ function actualizarDisponibilidad(correo_electronico, disponibilidad, callback) 
     } else {
       console.log('Actualización exitosa:', results);
       callback(null, results);
+      let mailOptions = {
+        from: 'tuCorreo@gmail.com',
+        to: correo_electronico,
+        subject: '¡Cambiaste tu estado de trabajador en jobby!',
+        text: 'Cambiaste recientemente tu estado de disponibilidad en jobby a '+ disponibilidad
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log('Error al enviar correo:', error);
+        } else {
+          console.log('Correo enviado:', info.response);
+        }
+      });
     }
   });
 }
@@ -1113,8 +1198,8 @@ function obtenerResenaEspecifica(resenaId, callback) {
 }
 
 function modificarResena(resenaId, resenaData, callback) {
-  db.query('UPDATE reseña SET id_reseña = ?, descripcion = ?, calificacion = ?, estado = ?, id_solicitud = ?, created_at = ?, updated_at = ? WHERE id_reseña = ?',
-    [resenaData.id_reseña, resenaData.descripcion, resenaData.calificacion, resenaData.estado, resenaData.id_solicitud, resenaData.created_at, resenaData.updated_at, resenaId],
+  db.query('UPDATE reseña SET id_reseña = ?, descripcion = ?,  estado = ?, id_solicitud = ? WHERE id_reseña = ?',
+    [resenaData.id_reseña, resenaData.descripcion,resenaData.estado, resenaData.id_solicitud, resenaId],
     (err, result) => {
       if (err) {
         console.error('Error al modificar la reseña:', err);
@@ -1184,6 +1269,6 @@ module.exports = {
   visitasAgendadas,
   horasAgendadasParaCliente,
   obtenerResenaEspecifica,
-  eliminarDocumento
+  eliminarDocumento,
 
 };

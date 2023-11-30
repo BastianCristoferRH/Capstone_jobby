@@ -105,7 +105,7 @@ export class RegistroPage implements OnInit {
       nombre: this.registroForm.get('primerNombre')?.value,
       apellidos: this.registroForm.get('apellidos')?.value,
       telefono: telefono,
-      fecha_creacion: new Date(),
+      fecha_creacion: new Date().toISOString().split('T')[0],
       fecha_nacimiento: fechaNacimiento,
       password: contrasena,
       img: await this.blobToHexString(this.registroForm.get('imagen')?.value) // Convierte el Blob a cadena hexadecimal
