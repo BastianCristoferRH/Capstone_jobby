@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { ServiciosSolicitadosPageRoutingModule } from './servicios-solicitados-routing.module';
-import { SharedModule } from '../shared/shared.module';
 import { ServiciosSolicitadosPage } from './servicios-solicitados.page';
 
 @NgModule({
@@ -13,8 +12,7 @@ import { ServiciosSolicitadosPage } from './servicios-solicitados.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    ServiciosSolicitadosPageRoutingModule,
-    SharedModule
+    ServiciosSolicitadosPageRoutingModule
   ],
   declarations: [ServiciosSolicitadosPage]
 })

@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { AgendarVisitaServicioPageRoutingModule } from './agendar-visita-servicio-routing.module';
-import { SharedModule } from '../shared/shared.module';
+
 import { AgendarVisitaServicioPage } from './agendar-visita-servicio.page';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -15,8 +15,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     IonicModule,
     AgendarVisitaServicioPageRoutingModule,
-    ReactiveFormsModule,
-    SharedModule
+    ReactiveFormsModule
   ],
   declarations: [AgendarVisitaServicioPage]
 })

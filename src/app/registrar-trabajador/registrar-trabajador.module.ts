@@ -7,15 +7,13 @@ import { IonicModule } from '@ionic/angular';
 import { RegistrarTrabajadorPageRoutingModule } from './registrar-trabajador-routing.module';
 
 import { RegistrarTrabajadorPage } from './registrar-trabajador.page';
-import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    RegistrarTrabajadorPageRoutingModule,
-    SharedModule
+    RegistrarTrabajadorPageRoutingModule
   ],
   declarations: [RegistrarTrabajadorPage]
 })

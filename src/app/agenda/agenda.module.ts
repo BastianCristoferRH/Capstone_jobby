@@ -7,15 +7,13 @@ import { IonicModule } from '@ionic/angular';
 import { AgendaPageRoutingModule } from './agenda-routing.module';
 
 import { AgendaPage } from './agenda.page';
-import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    AgendaPageRoutingModule,
-    SharedModule
+    AgendaPageRoutingModule
   ],
   declarations: [AgendaPage]
 })

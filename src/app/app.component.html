@@ -1,3 +1,50 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-split-pane side="end" contentId="main">
+    <ion-menu side="end" contentId="main">
+      <ion-header>
+        <ion-toolbar >
+          <ion-title>Menu</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content [fullscreen]="true" class="gradiante">
+        <ion-list>
+          <ion-button  style="margin-left: 1%; --background: orange;
+          color: rgb(0, 0, 0);
+          width:100%;" (click)="inicio()">
+            <ion-icon name="home-outline" style="font-size: 2em;"></ion-icon>
+            Inicio
+          </ion-button>
+
+          
+          <ion-button class="custom-button" (click)="perfil_menu()">
+            <ion-icon slot="start" name="person-outline" style="font-size: 2em;"></ion-icon>
+            Perfil
+          </ion-button>
+          <ion-button class="custom-button" (click)="perfil_trabajador()">
+            <ion-icon slot="start" name="briefcase-outline" style="font-size: 2em;"></ion-icon>
+            Perfil Trabajador
+          </ion-button>
+          <ion-button class="custom-button" (click)="navegarAServicioSolicitado()">
+            <ion-icon slot="start" name="list-outline" style="font-size: 2em;"></ion-icon>
+            Listado Servicio
+          </ion-button>
+          <ion-button class="custom-button" (click)="NavegarAgenda()">
+            <ion-icon slot="start" name="calendar-number-outline" style="font-size: 2em;"></ion-icon>
+            Agenda
+          </ion-button>
+          <ion-button class="custom-button" (click)="navegarAFavorito()">
+            <ion-icon slot="start" name="star-outline" style="font-size: 2em;"></ion-icon>
+            Favoritos
+          </ion-button>
+        </ion-list>
+
+        <ion-button class="custom-button" (click)="logout()">
+          <ion-icon slot="start" name="close-circle-outline" style="font-size: 2em;"></ion-icon>
+          Cerrar Sesión
+        </ion-button>
+
+      </ion-content>
+    </ion-menu>
+    <ion-router-outlet id="main"></ion-router-outlet>
+  </ion-split-pane>
 </ion-app>

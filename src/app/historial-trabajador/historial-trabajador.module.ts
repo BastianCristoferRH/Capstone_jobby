@@ -7,15 +7,13 @@ import { IonicModule } from '@ionic/angular';
 import { HistorialTrabajadorPageRoutingModule } from './historial-trabajador-routing.module';
 
 import { HistorialTrabajadorPage } from './historial-trabajador.page';
-import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    HistorialTrabajadorPageRoutingModule,
-    SharedModule
+    HistorialTrabajadorPageRoutingModule
   ],
   declarations: [HistorialTrabajadorPage]
 })

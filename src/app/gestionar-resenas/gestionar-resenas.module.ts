@@ -7,15 +7,13 @@ import { IonicModule } from '@ionic/angular';
 import { GestionarResenasPageRoutingModule } from './gestionar-resenas-routing.module';
 
 import { GestionarResenasPage } from './gestionar-resenas.page';
-import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    GestionarResenasPageRoutingModule,
-    SharedModule
+    GestionarResenasPageRoutingModule
   ],
   declarations: [GestionarResenasPage]
 })

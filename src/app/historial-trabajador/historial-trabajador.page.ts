@@ -28,6 +28,10 @@ export class HistorialTrabajadorPage implements OnInit {
     
   }
 
+  perfil_trabajador() {
+    const perfilTrabajadorUrl = `/trabajador/${btoa(this.correoElectronico!)}`;
+    this.router.navigate([perfilTrabajadorUrl]);
+  }
 
 
   goToResenaInfo(solicitudId:number) {  

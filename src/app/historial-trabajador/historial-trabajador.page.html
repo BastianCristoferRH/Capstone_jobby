@@ -1,8 +1,12 @@
-<app-menu></app-menu>
+
 
 <div class="ion-page" id="main-content">
 <ion-header [translucent]="true">
+  
   <ion-toolbar>
+    <ion-buttons slot="start"> <!-- Utiliza el slot "start" para la esquina superior izquierda -->
+      <ion-back-button (click)="perfil_trabajador()"></ion-back-button>
+    </ion-buttons>
     <ion-title>JOBBY</ion-title>
     <ion-buttons slot="end">
       <ion-menu-button></ion-menu-button>

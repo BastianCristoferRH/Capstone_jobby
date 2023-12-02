@@ -11,12 +11,24 @@ const jwt = require('jsonwebtoken');
 
 // Configura un límite de carga más grande (por ejemplo, 50 MB)
 
+const puerto = 4001;
 
 const app = express();
-app.use(cors());
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*'); // Permite solicitudes desde localhost:8100
+  res.header('Access-Control-Allow-Headers', '*');
+  res.header('Access-Control-Allow-Methods', '*'); // Puedes ajustar los métodos permitidos según tus necesidades
+  next();
+});
+
+app.use(cors());
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
+app.listen(puerto, () => {
+  console.log(`api funcionando en el puerto ${puerto}`);
+});
 
 
 app.post('/registro', (req, res) => {
@@ -699,16 +711,6 @@ app.get('/listar-resena-especifica/:id_resena', (req,res)=>{
 
 
 
-const puerto = 4001;
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*'); // Permite solicitudes desde localhost:8100
-  res.header('Access-Control-Allow-Headers', '*');
-  res.header('Access-Control-Allow-Methods', '*'); // Puedes ajustar los métodos permitidos según tus necesidades
-  next();
-});
 
-app.listen(puerto, () => {
-  console.log(`api funcionando en el puerto ${puerto}`);
-});
 

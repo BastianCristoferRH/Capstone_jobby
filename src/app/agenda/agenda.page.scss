@@ -2,7 +2,7 @@
     margin-top: 2%;
     background-color: orange;
     text-align: center;
-    
+
 }
 
 ion-card {
@@ -13,3 +13,17 @@ ion-card {
 ion-list {
     background-color : transparent  ;
 }
+
+.user-card {
+
+    width: 90%;
+    max-width: 90%;
+    margin: 0 auto;
+    margin-top: 5%;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+
+  }
+
+  p{color: black;}

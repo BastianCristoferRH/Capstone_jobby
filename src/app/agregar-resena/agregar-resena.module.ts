@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { AgregarResenaPageRoutingModule } from './agregar-resena-routing.module';
-import { SharedModule } from '../shared/shared.module';
+
 import { AgregarResenaPage } from './agregar-resena.page';
 
 @NgModule({
@@ -13,8 +13,7 @@ import { AgregarResenaPage } from './agregar-resena.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    AgregarResenaPageRoutingModule,
-    SharedModule
+    AgregarResenaPageRoutingModule
   ],
   declarations: [AgregarResenaPage]
 })

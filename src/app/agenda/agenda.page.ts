@@ -13,6 +13,7 @@ export class AgendaPage implements OnInit {
   VisitasAgendadas: any[]=[];
   public showVisitasAgendas = true;
   public showVisitasAgenda = false;
+  selectedTab1: string = 'tab1';
   ngOnInit() {
     const correo = this.authService.getCorreoElectronico();
     if (correo) {
@@ -42,7 +43,7 @@ export class AgendaPage implements OnInit {
     }
   }
 
-  
+
   toggleList() {
     this.showVisitasAgendas = false;
     this.showVisitasAgenda = true;

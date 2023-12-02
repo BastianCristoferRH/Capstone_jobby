@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { ListarFavoritoPageRoutingModule } from './listar-favorito-routing.module';
-import { SharedModule } from '../shared/shared.module';
 import { ListarFavoritoPage } from './listar-favorito.page';
 
 @NgModule({
@@ -13,8 +12,7 @@ import { ListarFavoritoPage } from './listar-favorito.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    ListarFavoritoPageRoutingModule,
-    SharedModule
+    ListarFavoritoPageRoutingModule
   ],
   declarations: [ListarFavoritoPage]
 })

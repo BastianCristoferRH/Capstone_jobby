@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule   } from '@ionic/angular';
 
 import { SolicitudPageRoutingModule } from './solicitud-routing.module';
-import { SharedModule } from '../shared/shared.module';
 import { SolicitudPage } from './solicitud.page';
 
 @NgModule({
@@ -13,8 +12,7 @@ import { SolicitudPage } from './solicitud.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    SolicitudPageRoutingModule,
-    SharedModule
+    SolicitudPageRoutingModule
   ],
   declarations: [SolicitudPage]
 })

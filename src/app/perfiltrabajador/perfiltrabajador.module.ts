@@ -7,14 +7,12 @@ import { IonicModule } from '@ionic/angular';
 import { PerfiltrabajadorPageRoutingModule } from './perfiltrabajador-routing.module';
 
 import { PerfiltrabajadorPage } from './perfiltrabajador.page';
-import { SharedModule } from '../shared/shared.module';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    PerfiltrabajadorPageRoutingModule,
-    SharedModule
+    PerfiltrabajadorPageRoutingModule
   ],
   declarations: [PerfiltrabajadorPage]
 })

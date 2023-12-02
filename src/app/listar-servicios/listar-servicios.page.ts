@@ -30,10 +30,7 @@ export class ListarServiciosPage implements OnInit {
 
   }
 
-  perfil_trabajador(correoElectronico: string) {
-    // Usar 'correoElectronico' para construir la URL y navegar
-    this.router.navigate(['/trabajador',correoElectronico]);
-  }
+  
 
   cargarListadoServicios() {
     this.authService.cargarListadoServicios().subscribe((data: any) => {
